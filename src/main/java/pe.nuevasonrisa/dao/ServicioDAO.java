@@ -8,6 +8,7 @@ import java.util.List;
 public interface ServicioDAO {
 
     List<ServicioTabla> listarServicios();
+    List<ServicioTabla> listarServiciosPorDoctor(int doctorid);
 
     boolean crearServicio(Servicio servicio);
 

@@ -76,13 +76,33 @@ public class NuevoPacienteController {
             return false;
         }
 
-        if (!telefono.isBlank() && !telefono.matches("\\d{9}")) {
-            mostrarError("El teléfono debe tener 9 dígitos.");
+        if (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{2,50}$")) {
+            mostrarError("El nombre solo puede contener letras.");
             return false;
         }
 
-        if (!correo.isBlank() && !correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
-            mostrarError("El correo no tiene un formato válido.");
+        if (!apellido.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{2,50}$")) {
+            mostrarError("El apellido solo puede contener letras.");
+            return false;
+        }
+
+        if (!telefono.isBlank() &&
+                !telefono.matches("^9\\d{8}$")) {
+
+            mostrarError(
+                    "El celular debe tener 9 dígitos y empezar con 9."
+            );
+            return false;
+        }
+
+        if (!correo.isBlank() &&
+                !correo.matches(
+                        "^[A-Za-z][A-Za-z0-9._%+-]{2,}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+                )) {
+
+            mostrarError(
+                    "Ingrese un correo válido."
+            );
             return false;
         }
 

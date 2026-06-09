@@ -4,6 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import java.time.LocalTime;
+import java.time.LocalDate;
+import java.time.ZoneId;
+
 import pe.nuevasonrisa.dao.impl.CitaDAOImpl;
 import pe.nuevasonrisa.dao.impl.OdontologoDAOImpl;
 import pe.nuevasonrisa.dao.impl.PacienteDAOImpl;
@@ -50,6 +54,26 @@ public class EditarCitaController {
         ));
 
         configurarVistaCombos();
+
+        cbDoctor.setOnAction(event -> {
+
+            OdontologoTabla doctor =
+                    cbDoctor.getValue();
+
+            if (doctor == null) {
+                return;
+            }
+
+            cbServicio.setItems(
+                    FXCollections.observableArrayList(
+                            servicioService.obtenerServiciosPorDoctor(
+                                    doctor.getId()
+                            )
+                    )
+            );
+
+            cbServicio.getSelectionModel().clearSelection();
+        });
     }
 
     public void cargarCita(CitaTabla cita) {
@@ -98,6 +122,29 @@ public class EditarCitaController {
                 cbServicio.getValue() == null || dpFecha.getValue() == null ||
                 cbHora.getValue() == null || cbEstado.getValue() == null) {
             mostrarError("Complete paciente, doctor, servicio, fecha, hora y estado.");
+            return;
+        }
+
+        LocalDate fecha = dpFecha.getValue();
+        LocalTime hora = LocalTime.parse(cbHora.getValue());
+
+        LocalDate hoy = LocalDate.now(ZoneId.of("America/Lima"));
+        LocalTime ahora = LocalTime.now(ZoneId.of("America/Lima"))
+                .withSecond(0)
+                .withNano(0);
+
+        if (fecha.isBefore(hoy)) {
+            mostrarError("No puede registrar una cita en una fecha anterior a hoy.");
+            return;
+        }
+
+        if (fecha.isEqual(hoy) && !hora.isAfter(ahora)) {
+            mostrarError("No puede registrar una cita en una hora anterior o igual a la actual.");
+            return;
+        }
+
+        if ("Realizado".equalsIgnoreCase(citaActual.getEstado())) {
+            mostrarError("No se puede modificar una cita ya realizada.");
             return;
         }
 
@@ -210,7 +257,7 @@ public class EditarCitaController {
             protected void updateItem(ServicioTabla item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? null :
-                        item.getNombre() + " (" + item.getDuracion() + " h)");
+                        item.getNombre() + " (" + item.getDuracion() + " min)");
             }
         });
 
@@ -219,8 +266,9 @@ public class EditarCitaController {
             protected void updateItem(ServicioTabla item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? null :
-                        item.getNombre() + " (" + item.getDuracion() + " h)");
+                        item.getNombre() + " (" + item.getDuracion() + " min)");
             }
         });
     }
+
 }

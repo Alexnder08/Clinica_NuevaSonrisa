@@ -18,6 +18,10 @@ public class ServicioService {
         return dao.listarServicios();
     }
 
+    public List<ServicioTabla> obtenerServiciosPorDoctor(int doctorid) {
+        return dao.listarServiciosPorDoctor(doctorid);
+    }
+
     public boolean crearServicio(Servicio servicio) {
         return dao.crearServicio(servicio);
     }

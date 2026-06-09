@@ -4,6 +4,9 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import java.time.LocalTime;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import pe.nuevasonrisa.dao.impl.CitaDAOImpl;
 import pe.nuevasonrisa.dao.impl.OdontologoDAOImpl;
@@ -18,9 +21,6 @@ import pe.nuevasonrisa.service.OdontologoService;
 import pe.nuevasonrisa.service.PacienteService;
 import pe.nuevasonrisa.service.ServicioService;
 import pe.nuevasonrisa.service.AuditoriaService;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class NuevaCitaController {
 
@@ -61,11 +61,6 @@ public class NuevaCitaController {
                 )
         );
 
-        cbServicio.setItems(
-                FXCollections.observableArrayList(
-                        servicioService.obtenerServicios()
-                )
-        );
 
         cbHora.setItems(FXCollections.observableArrayList(
                 "08:00", "09:00", "10:00", "11:00",
@@ -74,6 +69,26 @@ public class NuevaCitaController {
         ));
 
         configurarVistaCombos();
+
+        cbDoctor.setOnAction(event -> {
+
+            OdontologoTabla doctor =
+                    cbDoctor.getValue();
+
+            if (doctor == null) {
+                return;
+            }
+
+            cbServicio.setItems(
+                    FXCollections.observableArrayList(
+                            servicioService.obtenerServiciosPorDoctor(
+                                    doctor.getId()
+                            )
+                    )
+            );
+
+            cbServicio.getSelectionModel().clearSelection();
+        });
     }
 
     private void configurarVistaCombos() {
@@ -118,7 +133,7 @@ public class NuevaCitaController {
             protected void updateItem(ServicioTabla item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? null :
-                        item.getNombre() + " (" + item.getDuracion() + " h)");
+                        item.getNombre() + " (" + item.getDuracion() + " min)");
             }
         });
 
@@ -127,7 +142,7 @@ public class NuevaCitaController {
             protected void updateItem(ServicioTabla item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? null :
-                        item.getNombre() + " (" + item.getDuracion() + " h)");
+                        item.getNombre() + " (" + item.getDuracion() + " min)");
             }
         });
     }
@@ -156,11 +171,21 @@ public class NuevaCitaController {
             return;
         }
 
-        if (fecha.isBefore(LocalDate.now())) {
-            mostrarError("No se puede registrar una cita en una fecha pasada.");
+
+        LocalDate hoy = LocalDate.now(ZoneId.of("America/Lima"));
+        LocalTime ahora = LocalTime.now(ZoneId.of("America/Lima"))
+                .withSecond(0)
+                .withNano(0);
+
+        if (fecha.isBefore(hoy)) {
+            mostrarError("No puede registrar una cita en una fecha anterior a hoy.");
             return;
         }
 
+        if (fecha.isEqual(hoy) && !hora.isAfter(ahora)) {
+            mostrarError("No puede registrar una cita en una hora anterior o igual a la actual.");
+            return;
+        }
         Cita cita = new Cita();
         cita.setPacienteId(paciente.getId());
         cita.setDoctorId(doctor.getId());
@@ -214,4 +239,5 @@ public class NuevaCitaController {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+
 }

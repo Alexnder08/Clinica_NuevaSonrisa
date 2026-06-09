@@ -100,4 +100,49 @@ public class ServicioDAOImpl implements ServicioDAO {
             return false;
         }
     }
+
+    public List<ServicioTabla> listarServiciosPorDoctor(int doctorId) {
+
+        List<ServicioTabla> lista = new ArrayList<>();
+
+        String sql = """
+        SELECT
+            s.id,
+            s.nombre,
+            s.duracion,
+            s.costo
+        FROM doctor_servicios ds
+        INNER JOIN servicios s
+            ON s.id = ds.servicio_id
+        WHERE ds.doctor_id = ?
+        ORDER BY s.nombre
+    """;
+
+        try (
+                Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)
+        ) {
+
+            ps.setInt(1, doctorId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                lista.add(
+                        new ServicioTabla(
+                                rs.getInt("id"),
+                                rs.getString("nombre"),
+                                rs.getInt("duracion"),
+                                rs.getBigDecimal("costo")
+                        )
+                );
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
     }
+}
