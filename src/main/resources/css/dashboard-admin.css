@@ -1,0 +1,40 @@
+.root {
+    -fx-background-color: transparent;
+}
+
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #E2E8F0;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 50px;
+    -fx-max-width: Infinity;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 0 0 20;
+    -fx-background-radius: 14;
+    -fx-cursor: hand;
+}
+
+.menu-button:hover {
+    -fx-background-color: #23314F;
+}
+.logout-button {
+    -fx-background-color: #DC2626;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 12 15;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.logout-button:hover {
+    -fx-background-color: #B91C1C;
+}
+
+.menu-button:selected,
+.menu-button-active {
+    -fx-background-color: #14B8A6;
+    -fx-text-fill: white;
+}
+

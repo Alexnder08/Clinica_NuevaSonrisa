@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="pe.nuevasonrisa.controller.ServiciosController"
+      spacing="0"
+      style="-fx-background-color: #F1F5F9;">
+
+    <padding>
+        <Insets top="25" right="30" bottom="25" left="30"/>
+    </padding>
+
+    <HBox spacing="10">
+
+        <FontIcon iconLiteral="fas-tooth"
+                  iconSize="24"
+                  iconColor="#14B8A6"/>
+
+        <Label text="Servicios Dentales"
+               style="-fx-font-size:30px;
+                  -fx-font-weight:bold;
+                  -fx-text-fill:#0F172A;"/>
+
+    </HBox>
+
+    <Label text="Catálogo de tratamientos odontológicos"
+           style="-fx-font-size: 14px; -fx-text-fill: #546e7a; -fx-padding: 0 0 15 0;"/>
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <TextField fx:id="txtBuscar"
+                   promptText="Buscar servicio..."
+                   prefWidth="300"
+                   onKeyReleased="#buscarServicios"
+                   style="-fx-pref-height: 42px; -fx-font-size: 14px; -fx-padding: 0 12 0 12; -fx-background-radius: 8; -fx-border-color: #cfd8dc; -fx-border-radius: 8;"/>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button text="Nuevo Servicio"
+                 onAction="#nuevoServicio"
+                 style="-fx-background-color:#14B8A6;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+        <graphic>
+            <FontIcon iconLiteral="fas-user-plus"
+                      iconSize="14"
+                      iconColor="WHITE"/>
+        </graphic>
+        </Button>
+
+        <Button text="Editar"
+                onAction="#editarServicio"
+                style="-fx-background-color:#2563EB;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-edit"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+
+        <Button text="Refrescar"
+                onAction="#cargarServicios"
+                style="-fx-background-color:#64748B;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-sync"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <TableView fx:id="tablaServicios"
+               VBox.vgrow="ALWAYS">
+
+        <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="80" sortable="true"/>
+            <TableColumn fx:id="colNombre" text="Servicio" prefWidth="280" sortable="true"/>
+            <TableColumn fx:id="colDuracion" text="Duración (min)" prefWidth="150" sortable="true"/>
+            <TableColumn fx:id="colCosto" text="Costo (S/.)" prefWidth="150" sortable="true"/>
+        </columns>
+    </TableView>
+
+</VBox>

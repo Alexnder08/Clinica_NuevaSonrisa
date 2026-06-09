@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="pe.nuevasonrisa.controller.AccesosController"
+      spacing="15">
+
+    <padding>
+        <Insets top="20"
+                right="20"
+                bottom="20"
+                left="20"/>
+    </padding>
+
+    <Label text="Historial de Accesos"
+           style="-fx-font-size:24px; -fx-font-weight:bold;"/>
+
+    <TableView fx:id="tablaAccesos">
+
+        <columns>
+
+            <TableColumn fx:id="colUsuario"
+                         text="Usuario"
+                         prefWidth="180"/>
+
+            <TableColumn fx:id="colRol"
+                         text="Rol"
+                         prefWidth="180"/>
+
+            <TableColumn fx:id="colEstado"
+                         text="Estado"
+                         prefWidth="120"/>
+
+            <TableColumn fx:id="colFecha"
+                         text="Fecha y Hora"
+                         prefWidth="220"/>
+
+        </columns>
+
+    </TableView>
+
+</VBox>

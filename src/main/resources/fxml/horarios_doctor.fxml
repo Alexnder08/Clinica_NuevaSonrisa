@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="pe.nuevasonrisa.controller.HorariosDoctorController"
+      spacing="0"
+      style="-fx-background-color: #f5f7fa;">
+
+    <padding>
+        <Insets top="25" right="30" bottom="25" left="30"/>
+    </padding>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <FontIcon iconLiteral="fas-clock"
+                  iconSize="28"
+                  iconColor="#14B8A6"/>
+        <Label text="Horarios de Doctores"
+               style="-fx-font-size:28px;
+                  -fx-font-weight:bold;
+                  -fx-text-fill:#0F172A;"/>
+    </HBox>
+
+    <Label text="Gestión de horarios de atención"
+           style="-fx-font-size:14px; -fx-text-fill:#546e7a; -fx-padding:0 0 15 0;"/>
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button text="Nuevo Horario"
+                onAction="#nuevoHorario"
+                style="-fx-background-color: #0d47a1; -fx-text-fill: white; -fx-font-weight: 600; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;">
+            <graphic>
+                <FontIcon iconLiteral="fas-plus" iconSize="14" iconColor="WHITE"/>
+            </graphic>
+        </Button>
+
+        <Button text="Editar"
+                onAction="#editarHorario"
+                style="-fx-background-color: #1976d2; -fx-text-fill: white; -fx-font-weight: 600; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;">
+            <graphic>
+                <FontIcon iconLiteral="fas-edit" iconSize="14" iconColor="WHITE"/>
+            </graphic>
+        </Button>
+
+        <Button text="Eliminar"
+                onAction="#eliminarHorario"
+                style="-fx-background-color: #ff5252; -fx-text-fill: white; -fx-font-weight: 600; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;">
+            <graphic>
+                <FontIcon iconLiteral="fas-trash-alt" iconSize="14" iconColor="WHITE"/>
+            </graphic>
+        </Button>
+
+        <Button text="Refrescar"
+                onAction="#cargarHorarios"
+                style="-fx-background-color: #546e7a; -fx-text-fill: white; -fx-font-weight: 600; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;">
+            <graphic>
+                <FontIcon iconLiteral="fas-sync" iconSize="14" iconColor="WHITE"/>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <TableView fx:id="tablaHorarios"
+               VBox.vgrow="ALWAYS"
+               style="-fx-background-radius: 10; -fx-border-color: #e0e0e0; -fx-border-radius: 10; -fx-pref-height: 450;">
+
+        <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="60" sortable="true"/>
+            <TableColumn fx:id="colDoctor" text="Doctor" prefWidth="200" sortable="true"/>
+            <TableColumn fx:id="colDia" text="Día" prefWidth="130" sortable="true"/>
+            <TableColumn fx:id="colInicio" text="Inicio" prefWidth="120" sortable="true"/>
+            <TableColumn fx:id="colFin" text="Fin" prefWidth="120" sortable="true"/>
+        </columns>
+    </TableView>
+
+</VBox>

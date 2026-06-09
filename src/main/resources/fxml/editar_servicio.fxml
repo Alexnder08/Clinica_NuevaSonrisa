@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="pe.nuevasonrisa.controller.EditarServicioController"
+      spacing="15"
+      prefWidth="450"
+      style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 12;">
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <FontIcon iconLiteral="fas-tooth"
+                  iconSize="24"
+                  iconColor="#14B8A6"/>
+        <Label text="Editar Servicio"
+               style="-fx-font-size:24px;
+                  -fx-font-weight:bold;
+                  -fx-text-fill:#0F172A;"/>
+    </HBox>
+
+    <Label text="Modifique los datos del servicio dental"
+           style="-fx-font-size:13px; -fx-text-fill:#546e7a; -fx-padding:0 0 15 0;"/>
+
+    <GridPane hgap="15" vgap="12">
+        <rowConstraints>
+            <RowConstraints minHeight="45"/>
+            <RowConstraints minHeight="45"/>
+            <RowConstraints minHeight="45"/>
+        </rowConstraints>
+
+        <Label text="Servicio:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="0"/>
+        <TextField fx:id="txtNombre" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Duración:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="1"/>
+        <TextField fx:id="txtDuracion" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Costo:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="2"/>
+        <TextField fx:id="txtCosto" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="12" alignment="CENTER_RIGHT">
+        <Button text="Guardar"
+                onAction="#guardar"
+                defaultButton="true"
+                style="-fx-background-color:#14B8A6;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-save"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+
+        <Button text="Cancelar"
+                onAction="#cancelar"
+                cancelButton="true"
+                style="-fx-background-color:#64748B;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-ban"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+    </HBox>
+
+</VBox>

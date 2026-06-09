@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="pe.nuevasonrisa.controller.NuevoUsuarioController"
+      spacing="15"
+      prefWidth="450"
+      style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 12;">
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <FontIcon iconLiteral="fas-user-plus"
+                  iconSize="24"
+                  iconColor="#14B8A6"/>
+        <Label text="Nuevo Usuario"
+               style="-fx-font-size:24px;
+                  -fx-font-weight:bold;
+                  -fx-text-fill:#0F172A;"/>
+    </HBox>
+
+    <Label text="Registre un nuevo usuario del sistema"
+           style="-fx-font-size:13px; -fx-text-fill:#546e7a; -fx-padding:0 0 15 0;"/>
+
+    <GridPane hgap="15" vgap="12">
+        <rowConstraints>
+            <RowConstraints minHeight="45"/>
+            <RowConstraints minHeight="45"/>
+            <RowConstraints minHeight="45"/>
+            <RowConstraints minHeight="45"/>
+            <RowConstraints minHeight="45"/>
+            <RowConstraints minHeight="45"/>
+            <RowConstraints minHeight="45"/>
+        </rowConstraints>
+
+        <Label text="Usuario:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="0"/>
+        <TextField fx:id="txtUsuario" promptText="Usuario" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Contraseña:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="1"/>
+        <PasswordField fx:id="txtPassword" promptText="Contraseña" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Nombre:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="2"/>
+        <TextField fx:id="txtNombre" promptText="Nombre" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Apellido:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="3"/>
+        <TextField fx:id="txtApellido" promptText="Apellido" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="DNI:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="4"/>
+        <TextField fx:id="txtDni" promptText="DNI" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <Label text="Celular:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="5"/>
+        <TextField fx:id="txtCelular" promptText="Celular" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+        <Label text="Rol:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="6"/>
+        <ComboBox fx:id="cbRol" promptText="Seleccione rol" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="12" alignment="CENTER_RIGHT">
+        <Button text="Guardar"
+                onAction="#guardar"
+                defaultButton="true"
+                style="-fx-background-color:#14B8A6;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-save"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+
+        <Button text="Cancelar"
+                onAction="#cancelar"
+                cancelButton="true"
+                style="-fx-background-color:#64748B;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-ban"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+    </HBox>
+
+</VBox>

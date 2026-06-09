@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="pe.nuevasonrisa.controller.UsuariosController"
+      spacing="0"
+      style="-fx-background-color: #F1F5F9;">
+
+    <padding>
+        <Insets top="25" right="30" bottom="25" left="30"/>
+    </padding>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+
+        <FontIcon iconLiteral="fas-users"
+                  iconSize="24"
+                  iconColor="#14B8A6"/>
+
+        <Label text="Usuarios del Sistema"
+               style="-fx-font-size:30px;
+                  -fx-font-weight:bold;
+                  -fx-text-fill:#0F172A;"/>
+
+    </HBox>
+
+    <Label text="Gestión de usuarios y roles de acceso"
+           style="-fx-font-size: 14px; -fx-text-fill: #546e7a; -fx-padding: 0 0 15 0;"/>
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button text="Nuevo Usuario"
+                onAction="#nuevoUsuario"
+                style="-fx-background-color:#14B8A6;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-user-plus"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+
+        <Button text="Editar"
+                onAction="#editarUsuario"
+                style="-fx-background-color:#2563EB;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-edit"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+
+        <Button text="Estado"
+                onAction="#cambiarEstado"
+                style="-fx-background-color:#F59E0B;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-lock"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+
+        <Button text="Refrescar"
+                onAction="#cargarUsuarios"
+                style="-fx-background-color:#64748B;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-sync"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+
+    </HBox>
+
+    <TableView fx:id="tablaUsuarios"
+               VBox.vgrow="ALWAYS">
+
+        <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="60" sortable="true"/>
+            <TableColumn fx:id="colUsuario" text="Usuario" prefWidth="130" sortable="true"/>
+            <TableColumn fx:id="colNombre" text="Nombre" prefWidth="150" sortable="true"/>
+            <TableColumn fx:id="colApellido" text="Apellido" prefWidth="150" sortable="true"/>
+            <TableColumn fx:id="colRol" text="Rol" prefWidth="130" sortable="true"/>
+            <TableColumn fx:id="colEstado" text="Estado" prefWidth="110" sortable="true"/>
+        </columns>
+    </TableView>
+
+</VBox>

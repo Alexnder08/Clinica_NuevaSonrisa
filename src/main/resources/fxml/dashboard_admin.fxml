@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="pe.nuevasonrisa.controller.DashboardAdminController"
+            prefWidth="1200"
+            prefHeight="720"
+            style="-fx-background-color:#F8FAFC;"
+            stylesheets="@../css/dashboard-admin.css">
+
+    <left>
+        <VBox prefWidth="250"
+              spacing="12"
+              style="-fx-background-color:#0F172A; -fx-padding:25;">
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <FontIcon iconLiteral="fas-tooth" iconSize="26" iconColor="#14B8A6"/>
+                <Label text="NUEVA SONRISA"
+                       style="-fx-font-size:20px; -fx-font-weight:bold; -fx-text-fill:white;"/>
+            </HBox>
+
+            <Label fx:id="lblUsuario"
+                   text="Administrador"
+                   wrapText="true"
+                   style="-fx-text-fill:#CBD5E1; -fx-font-size:12px;"/>
+
+            <Separator/>
+
+            <Button text=" Inicio" maxWidth="Infinity" onAction="#mostrarInicio" styleClass="menu-button">
+                <graphic><FontIcon iconLiteral="fas-home" iconSize="15" iconColor="#14B8A6"/></graphic>
+            </Button>
+
+            <Button text=" Usuarios" maxWidth="Infinity" onAction="#mostrarUsuarios" styleClass="menu-button">
+                <graphic><FontIcon iconLiteral="fas-users" iconSize="15" iconColor="#14B8A6"/></graphic>
+            </Button>
+
+            <Button text=" Servicios" maxWidth="Infinity" onAction="#mostrarServicios" styleClass="menu-button">
+                <graphic><FontIcon iconLiteral="fas-tooth" iconSize="15" iconColor="#14B8A6"/></graphic>
+            </Button>
+
+            <Button text=" Pacientes" maxWidth="Infinity" onAction="#mostrarPacientes" styleClass="menu-button">
+                <graphic><FontIcon iconLiteral="fas-user-injured" iconSize="15" iconColor="#14B8A6"/></graphic>
+            </Button>
+
+            <Button text=" Odontólogos" maxWidth="Infinity" onAction="#mostrarOdontologos" styleClass="menu-button">
+                <graphic><FontIcon iconLiteral="fas-user-md" iconSize="15" iconColor="#14B8A6"/></graphic>
+            </Button>
+
+            <Button text=" Citas" maxWidth="Infinity" onAction="#mostrarCitas" styleClass="menu-button">
+                <graphic><FontIcon iconLiteral="fas-calendar-alt" iconSize="15" iconColor="#14B8A6"/></graphic>
+            </Button>
+
+            <Button text=" Reportes" maxWidth="Infinity" onAction="#mostrarReportes" styleClass="menu-button">
+                <graphic><FontIcon iconLiteral="fas-chart-bar" iconSize="15" iconColor="#14B8A6"/></graphic>
+            </Button>
+
+            <Button text=" Accesos" maxWidth="Infinity" onAction="#mostrarAccesos" styleClass="menu-button">
+                <graphic><FontIcon iconLiteral="fas-sign-in-alt" iconSize="15" iconColor="#14B8A6"/></graphic>
+            </Button>
+
+            <Button text=" Auditoría" maxWidth="Infinity" onAction="#mostrarAuditoria" styleClass="menu-button">
+                <graphic><FontIcon iconLiteral="fas-clipboard-list" iconSize="15" iconColor="#14B8A6"/></graphic>
+            </Button>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Button text=" Cerrar Sesión" maxWidth="Infinity" onAction="#cerrarSesion" styleClass="logout-button">
+                <graphic><FontIcon iconLiteral="fas-sign-out-alt" iconSize="15" iconColor="WHITE"/></graphic>
+            </Button>
+
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="20">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+
+            <Label fx:id="lblTitulo"
+                   text="Dashboard Administrador"
+                   style="-fx-font-size:30px; -fx-font-weight:bold; -fx-text-fill:#0F172A;"/>
+
+            <StackPane fx:id="contenedorContenido"
+                       VBox.vgrow="ALWAYS"
+                       style="-fx-background-color:white;
+                              -fx-background-radius:18;
+                              -fx-padding:25;
+                              -fx-effect:dropshadow(gaussian, rgba(15,23,42,0.12), 16, 0, 0, 5);"/>
+        </VBox>
+    </center>
+
+</BorderPane>

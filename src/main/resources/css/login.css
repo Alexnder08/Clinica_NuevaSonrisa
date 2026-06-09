@@ -1,0 +1,16 @@
+.root {
+    -fx-background-color: transparent;
+}
+
+.button {
+    -fx-pref-height: 42px;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-opacity: 0.9;
+}

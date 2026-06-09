@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="pe.nuevasonrisa.controller.OdontologosController"
+      spacing="0"
+      style="-fx-background-color: #f5f7fa;">
+
+    <padding>
+        <Insets top="25" right="30" bottom="25" left="30"/>
+    </padding>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <FontIcon iconLiteral="fas-user-md"
+                  iconSize="28"
+                  iconColor="#14B8A6"/>
+        <Label text="Odontólogos"
+               style="-fx-font-size:28px;
+                  -fx-font-weight:bold;
+                  -fx-text-fill:#0F172A;"/>
+    </HBox>
+
+    <Label text="Gestión de doctores y especialidades"
+           style="-fx-font-size:14px; -fx-text-fill:#546e7a; -fx-padding:0 0 15 0;"/>
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <TextField fx:id="txtBuscar"
+                   promptText="Buscar odontólogo..."
+                   prefWidth="300"
+                   onKeyReleased="#buscarOdontologos"
+                   style="-fx-pref-height: 42px; -fx-font-size: 14px; -fx-padding: 0 12 0 12; -fx-background-radius: 8; -fx-border-color: #cfd8dc; -fx-border-radius: 8;"/>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button text="Refrescar"
+                onAction="#cargarOdontologos"
+                style="-fx-background-color:#64748B;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-sync"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+        <Button text="Ver Horarios"
+                onAction="#verHorarios"
+                style="-fx-background-color:#14B8A6;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-calendar-alt"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <TableView fx:id="tablaOdontologos"
+               VBox.vgrow="ALWAYS"
+               style="-fx-background-radius: 10; -fx-border-color: #e0e0e0; -fx-border-radius: 10; -fx-pref-height: 450;">
+
+        <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="60" sortable="true"/>
+            <TableColumn fx:id="colUsuario" text="Usuario" prefWidth="120" sortable="true"/>
+            <TableColumn fx:id="colNombre" text="Nombre" prefWidth="140" sortable="true"/>
+            <TableColumn fx:id="colApellido" text="Apellido" prefWidth="140" sortable="true"/>
+            <TableColumn fx:id="colDni" text="DNI" prefWidth="100" sortable="true"/>
+            <TableColumn fx:id="colCelular" text="Celular" prefWidth="120" sortable="true"/>
+            <TableColumn fx:id="colServicio" text="Especialidad" prefWidth="180" sortable="true"/>
+            <TableColumn fx:id="colEstado" text="Estado" prefWidth="100" sortable="true"/>
+        </columns>
+    </TableView>
+
+</VBox>

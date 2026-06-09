@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="pe.nuevasonrisa.controller.ReportesController"
+      spacing="0"
+      style="-fx-background-color: #f5f7fa;">
+
+    <padding>
+        <Insets top="25" right="30" bottom="25" left="30"/>
+    </padding>
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <FontIcon iconLiteral="fas-chart-bar"
+                  iconSize="28"
+                  iconColor="#14B8A6"/>
+        <Label text="Reportes"
+               style="-fx-font-size:28px;
+                  -fx-font-weight:bold;
+                  -fx-text-fill:#0F172A;"/>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button text="Refrescar"
+                onAction="#cargarReportes"
+                style="-fx-background-color:#64748B;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-sync"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+
+        <Button text="Exportar Excel"
+                onAction="#exportarExcel"
+                style="-fx-background-color:#14B8A6;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-file-excel"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <TabPane VBox.vgrow="ALWAYS">
+        <tabs>
+            <Tab text="Citas por Doctor">
+                <TableView fx:id="tablaDoctores">
+                    <columns>
+                        <TableColumn fx:id="colDoctor" text="Doctor" prefWidth="220" sortable="true"/>
+                        <TableColumn fx:id="colTotal" text="Total" prefWidth="100" sortable="true"/>
+                        <TableColumn fx:id="colRealizadas" text="Realizadas" prefWidth="100" sortable="true"/>
+                        <TableColumn fx:id="colCanceladas" text="Canceladas" prefWidth="100" sortable="true"/>
+                        <TableColumn fx:id="colNoAsistio" text="No Asistió" prefWidth="100" sortable="true"/>
+                    </columns>
+                </TableView>
+            </Tab>
+            <Tab text="Servicios">
+                <TableView fx:id="tablaServicios">
+                    <columns>
+                        <TableColumn fx:id="colServicio" text="Servicio" prefWidth="250" sortable="true"/>
+                        <TableColumn fx:id="colTotalServicio" text="Total" prefWidth="100" sortable="true"/>
+                        <TableColumn fx:id="colRealizadasServicio" text="Realizadas" prefWidth="100" sortable="true"/>
+                        <TableColumn fx:id="colCanceladasServicio" text="Canceladas" prefWidth="100" sortable="true"/>
+                    </columns>
+                </TableView>
+            </Tab>
+            <Tab text="Estados">
+                <TableView fx:id="tablaEstados">
+                    <columns>
+                        <TableColumn fx:id="colEstado" text="Estado" prefWidth="250" sortable="true"/>
+                        <TableColumn fx:id="colCantidad" text="Cantidad" prefWidth="150" sortable="true"/>
+                    </columns>
+                </TableView>
+            </Tab>
+        </tabs>
+    </TabPane>
+</VBox>
