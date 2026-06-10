@@ -12,6 +12,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import pe.nuevasonrisa.dao.impl.CitaDAOImpl;
 import pe.nuevasonrisa.model.CitaTabla;
 import pe.nuevasonrisa.service.CitaService;
+import pe.nuevasonrisa.service.AuditoriaService;
+import pe.nuevasonrisa.util.ExcelExporter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,9 @@ public class CitasController {
 
     private List<CitaTabla> citasCache =
             new ArrayList<>();
+
+    private final AuditoriaService auditoriaService =
+            new AuditoriaService();
 
     @FXML
     public void initialize() {
@@ -159,55 +164,44 @@ public class CitasController {
 
     @FXML
     private void cancelarCita() {
-
-        CitaTabla cita =
-                tablaCitas.getSelectionModel()
-                        .getSelectedItem();
+        CitaTabla cita = tablaCitas.getSelectionModel().getSelectedItem();
 
         if (cita == null) {
-            mostrarInfo(
-                    "Aviso",
-                    "Seleccione una cita."
-            );
+            mostrarInfo("Aviso", "Seleccione una cita.");
             return;
         }
 
-        TextInputDialog dialog =
-                new TextInputDialog();
+        if ("Realizado".equalsIgnoreCase(cita.getEstado())
+                || "Cancelado".equalsIgnoreCase(cita.getEstado())) {
+            mostrarInfo("Aviso", "No se puede cancelar una cita realizada o ya cancelada.");
+            return;
+        }
 
+        TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Cancelar cita");
-        dialog.setHeaderText(null);
-        dialog.setContentText(
-                "Motivo de cancelación:"
-        );
+        dialog.setHeaderText("Ingrese el motivo de cancelaciÃ³n");
+        dialog.setContentText("Motivo:");
 
         dialog.showAndWait().ifPresent(motivo -> {
+            if (motivo.trim().isBlank()) {
+                mostrarInfo("Aviso", "El motivo de cancelaciÃ³n es obligatorio.");
+                return;
+            }
 
-            boolean ok =
-                    service.cancelarCita(
-                            cita.getId(),
-                            motivo
-                    );
+            boolean ok = service.cancelarCita(cita.getId(), motivo.trim());
 
             if (ok) {
-
-                mostrarInfo(
-                        "Éxito",
-                        "Cita cancelada."
+                auditoriaService.registrar(
+                        "CANCELAR",
+                        "CITAS",
+                        "Cita #" + cita.getId() + " cancelada. Motivo: " + motivo
                 );
-
                 cargarCitas();
-
             } else {
-
-                mostrarInfo(
-                        "Error",
-                        "No se pudo cancelar."
-                );
+                mostrarInfo("Error", "No se pudo cancelar la cita.");
             }
         });
     }
-
     private void mostrarInfo(
             String titulo,
             String mensaje
@@ -223,4 +217,30 @@ public class CitasController {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+
+    @FXML private DatePicker dpFiltroFecha;
+
+    @FXML
+    private void filtrarPorFecha() {
+        if (dpFiltroFecha.getValue() == null) {
+            mostrarInfo("Aviso", "Seleccione una fecha.");
+            return;
+        }
+
+        tablaCitas.setItems(
+                FXCollections.observableArrayList(
+                        citasCache.stream()
+                                .filter(c -> c.getFecha().equals(dpFiltroFecha.getValue()))
+                                .toList()
+                )
+        );
+    }
+
+    @FXML
+    private void exportarExcel() {
+        ExcelExporter.exportarCitas(
+                tablaCitas.getItems()
+        );
+    }
+
 }

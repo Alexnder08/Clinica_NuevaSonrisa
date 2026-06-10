@@ -49,14 +49,14 @@ public class EditarPacienteController {
         paciente.setCorreo(txtCorreo.getText().trim());
 
         if (!paciente.getNombre().matches(
-                "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{2,50}$")) {
+                "^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]{2,50}$")) {
 
             mostrarError("El nombre solo puede contener letras.");
             return;
         }
 
         if (!paciente.getApellido().matches(
-                "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{2,50}$")) {
+                "^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]{2,50}$")) {
 
             mostrarError("El apellido solo puede contener letras.");
             return;
@@ -64,14 +64,14 @@ public class EditarPacienteController {
 
         if (!paciente.getDni().matches("\\d{8}")) {
 
-            mostrarError("El DNI debe tener 8 dígitos.");
+            mostrarError("El DNI debe tener 8 dÃ­gitos.");
             return;
         }
 
         if (!paciente.getTelefono().matches("^9\\d{8}$")) {
 
             mostrarError(
-                    "El celular debe tener 9 dígitos y empezar con 9."
+                    "El celular debe tener 9 dÃ­gitos y empezar con 9."
             );
             return;
         }
@@ -80,7 +80,7 @@ public class EditarPacienteController {
                 "^[A-Za-z][A-Za-z0-9._%+-]{2,}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
         )) {
 
-            mostrarError("Ingrese un correo válido.");
+            mostrarError("Ingrese un correo vÃ¡lido.");
             return;
         }
 

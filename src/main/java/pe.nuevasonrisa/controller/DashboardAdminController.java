@@ -41,31 +41,31 @@ public class DashboardAdminController {
 
     @FXML
     private void mostrarUsuarios() {
-        lblTitulo.setText("Gestión de Usuarios");
+        lblTitulo.setText("GestiÃ³n de Usuarios");
         cargarVista("/fxml/usuarios.fxml");
     }
 
     @FXML
     private void mostrarServicios() {
-        lblTitulo.setText("Gestión de Servicios");
+        lblTitulo.setText("GestiÃ³n de Servicios");
         cargarVista("/fxml/servicios.fxml");
     }
 
     @FXML
     private void mostrarPacientes() {
-        lblTitulo.setText("Gestión de Pacientes");
+        lblTitulo.setText("GestiÃ³n de Pacientes");
         cargarVista("/fxml/pacientes.fxml");
     }
 
     @FXML
     private void mostrarOdontologos() {
-        lblTitulo.setText("Gestión de Odontólogos");
+        lblTitulo.setText("GestiÃ³n de OdontÃ³logos");
         cargarVista("/fxml/odontologos.fxml");
     }
 
     @FXML
     private void mostrarCitas() {
-        lblTitulo.setText("Gestión de Citas");
+        lblTitulo.setText("GestiÃ³n de Citas");
         cargarVista("/fxml/citas.fxml");
     }
 
@@ -83,7 +83,7 @@ public class DashboardAdminController {
 
     @FXML
     private void mostrarAuditoria() {
-        lblTitulo.setText("Auditoría");
+        lblTitulo.setText("AuditorÃ­a");
         cargarVista("/fxml/auditoria.fxml");
     }
 

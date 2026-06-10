@@ -41,7 +41,7 @@ public class EditarServicioController {
             }
 
             if (duracion <= 0) {
-                mostrarError("La duración debe ser mayor a 0.");
+                mostrarError("La duraciÃ³n debe ser mayor a 0.");
                 return;
             }
 
@@ -60,7 +60,7 @@ public class EditarServicioController {
             }
 
         } catch (NumberFormatException e) {
-            mostrarError("Duración y costo deben ser numéricos.");
+            mostrarError("DuraciÃ³n y costo deben ser numÃ©ricos.");
         }
     }
 

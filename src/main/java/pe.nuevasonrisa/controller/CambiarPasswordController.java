@@ -39,7 +39,7 @@ public class CambiarPasswordController {
                 .equals(txtConfirmar.getText())) {
 
             lblMensaje.setText(
-                    "Las contraseñas no coinciden."
+                    "Las contraseÃ±as no coinciden."
             );
 
             return;
@@ -59,16 +59,16 @@ public class CambiarPasswordController {
             );
 
             lblMensaje.setText(
-                    "Contraseña actualizada."
+                    "ContraseÃ±a actualizada."
             );
 
             Alert alert =
                     new Alert(Alert.AlertType.INFORMATION);
 
-            alert.setTitle("Éxito");
+            alert.setTitle("Ã‰xito");
             alert.setHeaderText(null);
             alert.setContentText(
-                    "Contraseña actualizada correctamente."
+                    "ContraseÃ±a actualizada correctamente."
             );
 
             alert.showAndWait();
@@ -87,7 +87,7 @@ public class CambiarPasswordController {
             );
 
             lblMensaje.setText(
-                    "Usuario o contraseña actual incorrecta."
+                    "Usuario o contraseÃ±a actual incorrecta."
             );
         }
     }

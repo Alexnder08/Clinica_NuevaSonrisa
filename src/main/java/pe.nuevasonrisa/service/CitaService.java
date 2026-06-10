@@ -36,7 +36,7 @@ public class CitaService {
     public String validarCita(Cita cita) {
 
         if (!dao.dentroHorarioDoctor(cita.getDoctorId(), cita.getFecha(), cita.getHora())) {
-            return "El doctor no atiende en ese día u horario.";
+            return "El doctor no atiende en ese dÃ­a u horario.";
         }
 
         if (!dao.doctorDisponible(cita.getDoctorId(), cita.getFecha(), cita.getHora())) {
@@ -55,7 +55,7 @@ public class CitaService {
         if (
                 cita.getEstado().equalsIgnoreCase("Realizado")
                         || cita.getEstado().equalsIgnoreCase("Cancelado")
-                        || cita.getEstado().equalsIgnoreCase("No asistió")
+                        || cita.getEstado().equalsIgnoreCase("No asistiÃ³")
         ) {
             return null;
         }
@@ -65,7 +65,7 @@ public class CitaService {
                 cita.getFecha(),
                 cita.getHora()
         )) {
-            return "El doctor no atiende en ese día u horario.";
+            return "El doctor no atiende en ese dÃ­a u horario.";
         }
 
         return null;

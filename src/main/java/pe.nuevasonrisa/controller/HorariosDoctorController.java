@@ -64,12 +64,12 @@ public class HorariosDoctorController {
 
         ChoiceDialog<String> diaDialog = new ChoiceDialog<>(
                 seleccionado.getDia(),
-                "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"
+                "Lunes", "Martes", "MiÃ©rcoles", "Jueves", "Viernes", "SÃ¡bado", "Domingo"
         );
 
-        diaDialog.setTitle("Editar día");
+        diaDialog.setTitle("Editar dÃ­a");
         diaDialog.setHeaderText(null);
-        diaDialog.setContentText("Día:");
+        diaDialog.setContentText("DÃ­a:");
 
         diaDialog.showAndWait().ifPresent(dia -> {
             TextInputDialog inicioDialog =
@@ -121,18 +121,18 @@ public class HorariosDoctorController {
     private void nuevoHorario() {
 
         if (doctorId <= 0) {
-            mostrarInfo("Error", "No se encontró el doctor seleccionado.");
+            mostrarInfo("Error", "No se encontrÃ³ el doctor seleccionado.");
             return;
         }
 
         ChoiceDialog<String> diaDialog = new ChoiceDialog<>(
                 "Lunes",
-                "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"
+                "Lunes", "Martes", "MiÃ©rcoles", "Jueves", "Viernes", "SÃ¡bado", "Domingo"
         );
 
         diaDialog.setTitle("Nuevo Horario");
         diaDialog.setHeaderText(null);
-        diaDialog.setContentText("Seleccione el día:");
+        diaDialog.setContentText("Seleccione el dÃ­a:");
 
         diaDialog.showAndWait().ifPresent(dia -> {
 
@@ -170,7 +170,7 @@ public class HorariosDoctorController {
                     );
 
                     if (validacion != null) {
-                        mostrarInfo("Validación", validacion);
+                        mostrarInfo("ValidaciÃ³n", validacion);
                         return;
                     }
 
@@ -204,10 +204,10 @@ public class HorariosDoctorController {
         return switch (dia) {
             case "Lunes" -> 1;
             case "Martes" -> 2;
-            case "Miércoles" -> 3;
+            case "MiÃ©rcoles" -> 3;
             case "Jueves" -> 4;
             case "Viernes" -> 5;
-            case "Sábado" -> 6;
+            case "SÃ¡bado" -> 6;
             case "Domingo" -> 7;
             default -> 1;
         };
@@ -226,7 +226,7 @@ public class HorariosDoctorController {
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Eliminar horario");
         confirmacion.setHeaderText(null);
-        confirmacion.setContentText("¿Desea eliminar este horario?");
+        confirmacion.setContentText("Â¿Desea eliminar este horario?");
 
         confirmacion.showAndWait().ifPresent(respuesta -> {
             if (respuesta == ButtonType.OK) {

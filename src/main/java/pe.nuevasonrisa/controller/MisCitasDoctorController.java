@@ -82,7 +82,7 @@ public class MisCitasDoctorController {
 
         dialog.setTitle("Notas");
         dialog.setHeaderText(
-                "Agregar / Editar nota clínica"
+                "Agregar / Editar nota clÃ­nica"
         );
 
         dialog.showAndWait()

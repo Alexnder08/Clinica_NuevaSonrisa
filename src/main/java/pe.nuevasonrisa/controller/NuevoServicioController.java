@@ -34,7 +34,7 @@ public class NuevoServicioController {
             BigDecimal costo = new BigDecimal(costoTexto);
 
             if (duracion <= 0) {
-                mostrarError("La duración debe ser mayor a 0.");
+                mostrarError("La duraciÃ³n debe ser mayor a 0.");
                 return;
             }
 
@@ -57,7 +57,7 @@ public class NuevoServicioController {
             }
 
         } catch (NumberFormatException e) {
-            mostrarError("Duración y costo deben ser valores numéricos.");
+            mostrarError("DuraciÃ³n y costo deben ser valores numÃ©ricos.");
         }
     }
 

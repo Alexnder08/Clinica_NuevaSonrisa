@@ -111,6 +111,11 @@ public class AsignarServiciosDoctorController {
             }
         }
 
+        if (seleccionados.isEmpty()) {
+            mostrarError("Debe asignar al menos un servicio al odontÃ³logo.");
+            return;
+        }
+
         boolean ok =
                 doctorServicioService
                         .guardarServiciosDoctor(
@@ -163,5 +168,13 @@ public class AsignarServiciosDoctorController {
                         .getWindow();
 
         stage.close();
+    }
+
+    @FXML
+    private void mostrarError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }

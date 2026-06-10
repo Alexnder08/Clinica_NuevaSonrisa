@@ -12,7 +12,7 @@
       style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 12;">
 
     <HBox spacing="10" alignment="CENTER_LEFT">
-        <FontIcon iconLiteral="fas-calendar-edit"
+        <FontIcon iconLiteral="fas-calendar"
                   iconSize="24"
                   iconColor="#14B8A6"/>
         <Label text="Editar Cita"

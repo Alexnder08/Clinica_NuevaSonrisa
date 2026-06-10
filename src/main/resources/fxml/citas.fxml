@@ -36,6 +36,14 @@
 
         <Region HBox.hgrow="ALWAYS"/>
 
+        <DatePicker fx:id="dpFiltroFecha"
+                    promptText="Filtrar por Fecha"/>
+        <Button text="Filtrar"
+                onAction="#filtrarPorFecha"/>
+
+        <Button text="Limpiar"
+                onAction="#cargarCitas"/>
+
         <Button text="Nueva Cita"
                 onAction="#nuevaCita"
                 style="-fx-background-color:#14B8A6;
@@ -87,6 +95,9 @@
                           iconColor="WHITE"/>
             </graphic>
         </Button>
+
+        <Button text="Exportat Citas"
+                onAction="#exportarCitas"/>
     </HBox>
 
     <TableView fx:id="tablaCitas"

@@ -53,7 +53,7 @@ public class NuevoPacienteController {
                     "Paciente " + nombre + " " + apellido + " creado"
             );
 
-            mostrarInfo("Éxito", "Paciente registrado correctamente.");
+            mostrarInfo("Ã‰xito", "Paciente registrado correctamente.");
             cerrar();
         } else {
             mostrarError("No se pudo registrar. Verifique si el DNI ya existe.");
@@ -72,16 +72,16 @@ public class NuevoPacienteController {
         }
 
         if (!dni.matches("\\d{8}")) {
-            mostrarError("El DNI debe tener 8 dígitos.");
+            mostrarError("El DNI debe tener 8 dÃ­gitos.");
             return false;
         }
 
-        if (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{2,50}$")) {
+        if (!nombre.matches("^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]{2,50}$")) {
             mostrarError("El nombre solo puede contener letras.");
             return false;
         }
 
-        if (!apellido.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{2,50}$")) {
+        if (!apellido.matches("^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]{2,50}$")) {
             mostrarError("El apellido solo puede contener letras.");
             return false;
         }
@@ -90,7 +90,7 @@ public class NuevoPacienteController {
                 !telefono.matches("^9\\d{8}$")) {
 
             mostrarError(
-                    "El celular debe tener 9 dígitos y empezar con 9."
+                    "El celular debe tener 9 dÃ­gitos y empezar con 9."
             );
             return false;
         }
@@ -101,7 +101,7 @@ public class NuevoPacienteController {
                 )) {
 
             mostrarError(
-                    "Ingrese un correo válido."
+                    "Ingrese un correo vÃ¡lido."
             );
             return false;
         }

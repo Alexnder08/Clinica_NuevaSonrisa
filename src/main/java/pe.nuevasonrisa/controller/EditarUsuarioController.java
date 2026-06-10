@@ -24,7 +24,7 @@ public class EditarUsuarioController {
         cbRol.setItems(FXCollections.observableArrayList(
                 "Administrador",
                 "Doctor",
-                "Recepción"
+                "RecepciÃ³n"
         ));
     }
 
@@ -62,7 +62,7 @@ public class EditarUsuarioController {
             cerrar();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("No se pudo actualizar. Verifique que el DNI o usuario no estén repetidos.");
+            alert.setContentText("No se pudo actualizar. Verifique que el DNI o usuario no estÃ©n repetidos.");
             alert.showAndWait();
         }
     }

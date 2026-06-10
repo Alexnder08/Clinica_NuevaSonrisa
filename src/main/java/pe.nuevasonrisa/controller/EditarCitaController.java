@@ -48,9 +48,7 @@ public class EditarCitaController {
     public void initialize() {
         cbEstado.setItems(FXCollections.observableArrayList(
                 "Pendiente",
-                "Realizado",
-                "Cancelado",
-                "No asistió"
+                "Realizado"
         ));
 
         configurarVistaCombos();
@@ -118,12 +116,19 @@ public class EditarCitaController {
     private void guardar() {
         if (citaActual == null) return;
 
+        if ("Realizado".equalsIgnoreCase(citaActual.getEstado())
+                || "Cancelado".equalsIgnoreCase(citaActual.getEstado())) {
+            mostrarError("No se puede modificar una cita realizada o cancelada.");
+            return;
+        }
+
         if (cbPaciente.getValue() == null || cbDoctor.getValue() == null ||
                 cbServicio.getValue() == null || dpFecha.getValue() == null ||
                 cbHora.getValue() == null || cbEstado.getValue() == null) {
             mostrarError("Complete paciente, doctor, servicio, fecha, hora y estado.");
             return;
         }
+
 
         LocalDate fecha = dpFecha.getValue();
         LocalTime hora = LocalTime.parse(cbHora.getValue());
@@ -176,7 +181,7 @@ public class EditarCitaController {
                         cita.getEstado().toUpperCase(),
                         "CITAS",
                         "Cita #" + cita.getId() +
-                                " cambió de estado: " +
+                                " cambiÃ³ de estado: " +
                                 estadoAnterior + " -> " +
                                 cita.getEstado()
                 );

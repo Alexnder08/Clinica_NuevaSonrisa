@@ -22,7 +22,7 @@ public class NuevoUsuarioController {
         cbRol.setItems(FXCollections.observableArrayList(
                 "Administrador",
                 "Doctor",
-                "Recepción"
+                "RecepciÃ³n"
         ));
     }
 
@@ -56,17 +56,17 @@ public class NuevoUsuarioController {
         }
 
         if (!dni.matches("\\d{8}")) {
-            mostrarError("El DNI debe tener 8 dígitos.");
+            mostrarError("El DNI debe tener 8 dÃ­gitos.");
             return;
         }
 
         if (!celular.matches("^9\\d{8}$")) {
-            mostrarError("El celular debe tener 9 dígitos y empezar con 9.");
+            mostrarError("El celular debe tener 9 dÃ­gitos y empezar con 9.");
             return;
         }
 
         if (password.length() < 6) {
-            mostrarError("La contraseña debe tener mínimo 6 caracteres.");
+            mostrarError("La contraseÃ±a debe tener mÃ­nimo 6 caracteres.");
             return;
         }
 
@@ -96,7 +96,7 @@ public class NuevoUsuarioController {
 
     private boolean textoValido(String texto) {
         return texto != null &&
-                texto.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{2,50}$");
+                texto.matches("^[A-Za-zÃÃ‰ÃÃ“ÃšÃ¡Ã©Ã­Ã³ÃºÃ‘Ã± ]{2,50}$");
     }
 
     private void mostrarError(String mensaje) {

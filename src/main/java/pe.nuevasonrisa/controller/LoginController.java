@@ -54,7 +54,7 @@ public class LoginController {
 
             if (user.getRol().equalsIgnoreCase("Administrador")) {
                 abrirPantalla("/fxml/dashboard_admin.fxml");
-            } else if (user.getRol().equalsIgnoreCase("Recepción")) {
+            } else if (user.getRol().equalsIgnoreCase("RecepciÃ³n")) {
                 abrirPantalla("/fxml/dashboard_recepcion.fxml");
             } else if (user.getRol().equalsIgnoreCase("Doctor")) {
                 abrirPantalla("/fxml/dashboard_doctor.fxml");
@@ -69,7 +69,7 @@ public class LoginController {
 
             if (intentosFallidos >= 3) {
                 lblMensaje.setStyle("-fx-text-fill: #d32f2f;");
-                lblMensaje.setText("Demasiados intentos fallidos. El sistema se cerrará.");
+                lblMensaje.setText("Demasiados intentos fallidos. El sistema se cerrarÃ¡.");
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Acceso bloqueado");
@@ -83,7 +83,7 @@ public class LoginController {
 
             lblMensaje.setStyle("-fx-text-fill: #d32f2f;");
             lblMensaje.setText(
-                    "Usuario o contraseña incorrectos. Intento "
+                    "Usuario o contraseÃ±a incorrectos. Intento "
                             + intentosFallidos
                             + " de 3."
             );
@@ -121,13 +121,13 @@ public class LoginController {
                     new Scene(loader.load());
 
             Stage stage = new Stage();
-            stage.setTitle("Cambiar contraseña");
+            stage.setTitle("Cambiar contraseÃ±a");
             stage.setScene(scene);
             stage.showAndWait();
 
         } catch (Exception e) {
             e.printStackTrace();
-            lblMensaje.setText("No se pudo abrir cambio de contraseña.");
+            lblMensaje.setText("No se pudo abrir cambio de contraseÃ±a.");
         }
     }
 }

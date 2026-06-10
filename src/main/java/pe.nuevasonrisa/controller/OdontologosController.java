@@ -85,7 +85,7 @@ public class OdontologosController {
                 tablaOdontologos.getSelectionModel().getSelectedItem();
 
         if (doctor == null) {
-            mostrarInfo("Aviso", "Seleccione un odontólogo.");
+            mostrarInfo("Aviso", "Seleccione un odontÃ³logo.");
             return;
         }
 
@@ -132,7 +132,7 @@ public class OdontologosController {
         if (doctor == null){
             mostrarInfo(
                     "Aviso",
-                    "Seleccione un odontólogo"
+                    "Seleccione un odontÃ³logo"
             );
             return;
         }

@@ -18,6 +18,32 @@ public class CitaDAOImpl implements CitaDAO {
     public List<CitaTabla> listarCitas(){
         List<CitaTabla> lista = new ArrayList<>();
 
+        String actualizarNoAsistio = """
+                                    UPDATE citas
+                                    SET estado = 'No asistiÃ³'
+                                    WHERE estado = 'Pendiente'
+                                    AND fecha = CURRENT_DATE
+                                    AND (
+                                        hora + INTERVAL '2 hour'
+                                    ) <= CURRENT_TIME
+                                    """;
+
+                                    try (
+                                            Connection conn =
+                                                    DatabaseConnection.getConnection()
+                                    ) {
+
+                                        PreparedStatement psUpdate =
+                                                conn.prepareStatement(
+                                                        actualizarNoAsistio
+                                                );
+
+                                        psUpdate.executeUpdate();
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+        }
+
         String sql = """
                     SELECT
                         c.id,
@@ -120,7 +146,7 @@ public class CitaDAOImpl implements CitaDAO {
             WHERE doctor_id = ?
               AND fecha = ?
               AND hora = ?
-              AND estado NOT IN ('Cancelado', 'No asistió')
+              AND estado NOT IN ('Cancelado', 'No asistiÃ³')
         """;
 
         try (
@@ -152,7 +178,7 @@ public class CitaDAOImpl implements CitaDAO {
             WHERE paciente_id = ?
               AND fecha = ?
               AND hora = ?
-              AND estado NOT IN ('Cancelado', 'No asistió')
+              AND estado NOT IN ('Cancelado', 'No asistiÃ³')
         """;
 
         try (

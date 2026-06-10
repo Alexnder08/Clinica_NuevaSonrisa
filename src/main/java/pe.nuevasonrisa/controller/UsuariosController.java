@@ -167,13 +167,13 @@ public class UsuariosController {
                     "USUARIOS",
                     "Usuario "
                             + usuario.getUsuario()
-                            + " cambió de estado"
+                            + " cambiÃ³ de estado"
             );
 
             cargarUsuarios();
 
             mostrarInfo(
-                    "Éxito",
+                    "Ã‰xito",
                     "Estado del usuario actualizado."
             );
         } else {
