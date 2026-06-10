@@ -27,77 +27,103 @@
     <Label text="Gestión de citas y tratamientos odontológicos"
            style="-fx-font-size:14px; -fx-text-fill:#546e7a; -fx-padding:0 0 15 0;"/>
 
-    <HBox spacing="12" alignment="CENTER_LEFT">
+    <HBox spacing="10" alignment="CENTER_LEFT">
+
         <TextField fx:id="txtBuscar"
                    promptText="Buscar cita..."
-                   prefWidth="300"
-                   onKeyReleased="#buscarCitas"
-                   style="-fx-pref-height: 42px; -fx-font-size: 14px; -fx-padding: 0 12 0 12; -fx-background-radius: 8; -fx-border-color: #cfd8dc; -fx-border-radius: 8;"/>
-
-        <Region HBox.hgrow="ALWAYS"/>
+                   prefWidth="280"
+                   prefHeight="40"
+                   styleClass="campo-busqueda"/>
 
         <DatePicker fx:id="dpFiltroFecha"
-                    promptText="Filtrar por Fecha"/>
+                    prefWidth="150"
+                    prefHeight="40"
+                    styleClass="date-picker-modern"/>
+
         <Button text="Filtrar"
-                onAction="#filtrarPorFecha"/>
+                onAction="#filtrarPorFecha"
+                prefWidth="120"
+                prefHeight="40"
+                styleClass="btn-success">
+
+            <graphic>
+                <FontIcon iconLiteral="fas-filter"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+
+        </Button>
 
         <Button text="Limpiar"
-                onAction="#cargarCitas"/>
-
-        <Button text="Nueva Cita"
-                onAction="#nuevaCita"
-                style="-fx-background-color:#14B8A6;
-               -fx-text-fill:white;
-               -fx-font-weight:bold;
-               -fx-background-radius:10;">
-            <graphic>
-                <FontIcon iconLiteral="fas-plus"
-                          iconSize="14"
-                          iconColor="WHITE"/>
-            </graphic>
-        </Button>
-
-        <Button text="Editar"
-                onAction="#editarCita"
-                style="-fx-background-color:#2563EB;
-               -fx-text-fill:white;
-               -fx-font-weight:bold;
-               -fx-background-radius:10;">
-            <graphic>
-                <FontIcon iconLiteral="fas-edit"
-                          iconSize="14"
-                          iconColor="WHITE"/>
-            </graphic>
-        </Button>
-
-        <Button text="Cancelar"
-                onAction="#cancelarCita"
-                style="-fx-background-color:#F59E0B;
-               -fx-text-fill:white;
-               -fx-font-weight:bold;
-               -fx-background-radius:10;">
-            <graphic>
-                <FontIcon iconLiteral="fas-ban"
-                          iconSize="14"
-                          iconColor="WHITE"/>
-            </graphic>
-        </Button>
-
-        <Button text="Refrescar"
                 onAction="#cargarCitas"
-                style="-fx-background-color:#64748B;
-               -fx-text-fill:white;
-               -fx-font-weight:bold;
-               -fx-background-radius:10;">
+                prefWidth="120"
+                prefHeight="40"
+                styleClass="btn-secondary">
+
             <graphic>
                 <FontIcon iconLiteral="fas-sync"
                           iconSize="14"
                           iconColor="WHITE"/>
             </graphic>
+
         </Button>
 
-        <Button text="Exportat Citas"
-                onAction="#exportarCitas"/>
+        <Button text="Nueva Cita"
+                onAction="#nuevaCita"
+                prefWidth="140"
+                prefHeight="40"
+                styleClass="btn-primary">
+
+            <graphic>
+                <FontIcon iconLiteral="fas-plus"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+
+        </Button>
+
+        <Button text="Editar"
+                onAction="#editarCita"
+                prefWidth="120"
+                prefHeight="40"
+                styleClass="btn-warning">
+
+            <graphic>
+                <FontIcon iconLiteral="fas-edit"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+
+        </Button>
+
+        <Button text="Cancelar"
+                onAction="#cancelarCita"
+                prefWidth="130"
+                prefHeight="40"
+                styleClass="btn-danger">
+
+            <graphic>
+                <FontIcon iconLiteral="fas-ban"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+
+        </Button>
+
+        <Button text="Excel"
+                onAction="#exportarCitas"
+                prefWidth="120"
+                prefHeight="40"
+                styleClass="btn-info">
+
+            <graphic>
+                <FontIcon iconLiteral="fas-file-excel"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+
+        </Button>
+
     </HBox>
 
     <TableView fx:id="tablaCitas"

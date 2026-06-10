@@ -237,7 +237,7 @@ public class CitasController {
     }
 
     @FXML
-    private void exportarExcel() {
+    private void exportarCitas() {
         ExcelExporter.exportarCitas(
                 tablaCitas.getItems()
         );

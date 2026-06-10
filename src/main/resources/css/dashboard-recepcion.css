@@ -38,3 +38,44 @@
     -fx-text-fill: white;
 }
 
+.btn-primary {
+    -fx-background-color: #2563EB;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+.btn-success {
+    -fx-background-color: #10B981;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+.btn-warning {
+    -fx-background-color: #F59E0B;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+.btn-danger {
+    -fx-background-color: #EF4444;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+.btn-info {
+    -fx-background-color: #06B6D4;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+.btn-secondary {
+    -fx-background-color: #64748B;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
