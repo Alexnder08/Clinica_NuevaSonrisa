@@ -54,7 +54,7 @@ public class LoginController {
 
             if (user.getRol().equalsIgnoreCase("Administrador")) {
                 abrirPantalla("/fxml/dashboard_admin.fxml");
-            } else if (user.getRol().equalsIgnoreCase("RecepciÃ³n")) {
+            } else if (user.getRol().equalsIgnoreCase("Recepción")) {
                 abrirPantalla("/fxml/dashboard_recepcion.fxml");
             } else if (user.getRol().equalsIgnoreCase("Doctor")) {
                 abrirPantalla("/fxml/dashboard_doctor.fxml");

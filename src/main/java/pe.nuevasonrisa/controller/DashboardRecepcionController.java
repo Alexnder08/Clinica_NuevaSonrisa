@@ -53,7 +53,7 @@ public class DashboardRecepcionController {
     @FXML
     private void mostrarOdontologos() {
 
-        lblTitulo.setText("OdontÃ³logos");
+        lblTitulo.setText("Odontólogos");
 
         cargarVista(
                 "/fxml/odontologos.fxml"
