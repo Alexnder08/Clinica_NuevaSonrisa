@@ -70,10 +70,16 @@ public class CitasController {
     @FXML
     private void buscarCitas() {
 
-        String filtro =
-                txtBuscar.getText()
-                        .toLowerCase()
-                        .trim();
+        String filtro = txtBuscar.getText() == null
+                ? ""
+                : txtBuscar.getText().toLowerCase().trim();
+
+        if (filtro.isBlank()) {
+            tablaCitas.setItems(
+                    FXCollections.observableArrayList(citasCache)
+            );
+            return;
+        }
 
         tablaCitas.setItems(
                 FXCollections.observableArrayList(
@@ -82,6 +88,8 @@ public class CitasController {
                                         c.getPaciente().toLowerCase().contains(filtro)
                                                 || c.getDoctor().toLowerCase().contains(filtro)
                                                 || c.getServicio().toLowerCase().contains(filtro)
+                                                || c.getEstado().toLowerCase().contains(filtro)
+                                                || c.getFecha().toString().contains(filtro)
                                 )
                                 .toList()
                 )
@@ -179,7 +187,7 @@ public class CitasController {
 
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Cancelar cita");
-        dialog.setHeaderText("Ingrese el motivo de cancelaciÃ³n");
+        dialog.setHeaderText("Ingrese el motivo de cancelación");
         dialog.setContentText("Motivo:");
 
         dialog.showAndWait().ifPresent(motivo -> {

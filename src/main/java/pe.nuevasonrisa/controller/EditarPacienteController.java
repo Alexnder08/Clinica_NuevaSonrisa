@@ -64,14 +64,14 @@ public class EditarPacienteController {
 
         if (!paciente.getDni().matches("\\d{8}")) {
 
-            mostrarError("El DNI debe tener 8 dÃ­gitos.");
+            mostrarError("El DNI debe tener 8 dígitos.");
             return;
         }
 
         if (!paciente.getTelefono().matches("^9\\d{8}$")) {
 
             mostrarError(
-                    "El celular debe tener 9 dÃ­gitos y empezar con 9."
+                    "El celular debe tener 9 dígitos y empezar con 9."
             );
             return;
         }
@@ -80,7 +80,7 @@ public class EditarPacienteController {
                 "^[A-Za-z][A-Za-z0-9._%+-]{2,}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
         )) {
 
-            mostrarError("Ingrese un correo vÃ¡lido.");
+            mostrarError("Ingrese un correo válido.");
             return;
         }
 

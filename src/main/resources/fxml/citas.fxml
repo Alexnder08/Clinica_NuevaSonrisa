@@ -30,7 +30,8 @@
     <HBox spacing="10" alignment="CENTER_LEFT">
 
         <TextField fx:id="txtBuscar"
-                   promptText="Buscar cita..."
+                   promptText="Buscar Citas..."
+                   onKeyReleased="#buscarCitas"
                    prefWidth="280"
                    prefHeight="40"
                    styleClass="campo-busqueda"/>

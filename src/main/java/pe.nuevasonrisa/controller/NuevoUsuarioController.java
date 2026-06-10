@@ -56,17 +56,17 @@ public class NuevoUsuarioController {
         }
 
         if (!dni.matches("\\d{8}")) {
-            mostrarError("El DNI debe tener 8 dÃ­gitos.");
+            mostrarError("El DNI debe tener 8 dígitos.");
             return;
         }
 
         if (!celular.matches("^9\\d{8}$")) {
-            mostrarError("El celular debe tener 9 dÃ­gitos y empezar con 9.");
+            mostrarError("El celular debe tener 9 dígitos y empezar con 9.");
             return;
         }
 
         if (password.length() < 6) {
-            mostrarError("La contraseÃ±a debe tener mÃ­nimo 6 caracteres.");
+            mostrarError("La contraseña debe tener mínimo 6 caracteres.");
             return;
         }
 

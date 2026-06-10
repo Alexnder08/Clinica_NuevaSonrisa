@@ -20,7 +20,7 @@ public class CitaDAOImpl implements CitaDAO {
 
         String actualizarNoAsistio = """
                                     UPDATE citas
-                                    SET estado = 'No asistiÃ³'
+                                    SET estado = 'No asistió'
                                     WHERE estado = 'Pendiente'
                                     AND fecha = CURRENT_DATE
                                     AND (

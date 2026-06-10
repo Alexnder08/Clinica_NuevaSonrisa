@@ -72,7 +72,7 @@ public class NuevoPacienteController {
         }
 
         if (!dni.matches("\\d{8}")) {
-            mostrarError("El DNI debe tener 8 dÃ­gitos.");
+            mostrarError("El DNI debe tener 8 dígitos.");
             return false;
         }
 
@@ -90,7 +90,7 @@ public class NuevoPacienteController {
                 !telefono.matches("^9\\d{8}$")) {
 
             mostrarError(
-                    "El celular debe tener 9 dÃ­gitos y empezar con 9."
+                    "El celular debe tener 9 dígitos y empezar con 9."
             );
             return false;
         }
@@ -101,7 +101,7 @@ public class NuevoPacienteController {
                 )) {
 
             mostrarError(
-                    "Ingrese un correo vÃ¡lido."
+                    "Ingrese un correo válido."
             );
             return false;
         }

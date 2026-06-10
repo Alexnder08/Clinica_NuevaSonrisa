@@ -67,9 +67,9 @@ public class HorariosDoctorController {
                 "Lunes", "Martes", "MiÃ©rcoles", "Jueves", "Viernes", "SÃ¡bado", "Domingo"
         );
 
-        diaDialog.setTitle("Editar dÃ­a");
+        diaDialog.setTitle("Editar día");
         diaDialog.setHeaderText(null);
-        diaDialog.setContentText("DÃ­a:");
+        diaDialog.setContentText("Día:");
 
         diaDialog.showAndWait().ifPresent(dia -> {
             TextInputDialog inicioDialog =
@@ -132,7 +132,7 @@ public class HorariosDoctorController {
 
         diaDialog.setTitle("Nuevo Horario");
         diaDialog.setHeaderText(null);
-        diaDialog.setContentText("Seleccione el dÃ­a:");
+        diaDialog.setContentText("Seleccione el día:");
 
         diaDialog.showAndWait().ifPresent(dia -> {
 
