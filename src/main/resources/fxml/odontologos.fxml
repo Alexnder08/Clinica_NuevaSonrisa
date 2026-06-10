@@ -60,6 +60,21 @@
                           iconColor="WHITE"/>
             </graphic>
         </Button>
+
+        <Button text="Servicios"
+                onAction="#asignarServicios"
+                prefWidth="160"
+                style="-fx-background-color:#2563EB;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-tooth"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+
     </HBox>
 
     <TableView fx:id="tablaOdontologos"

@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import pe.nuevasonrisa.dao.impl.OdontologoDAOImpl;
 import pe.nuevasonrisa.model.OdontologoTabla;
 import pe.nuevasonrisa.service.OdontologoService;
+import pe.nuevasonrisa.controller.AsignarServiciosDoctorController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,5 +121,52 @@ public class OdontologosController {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void asignarServicios(){
+
+        OdontologoTabla doctor =
+                tablaOdontologos.getSelectionModel().getSelectedItem();
+
+        if (doctor == null){
+            mostrarInfo(
+                    "Aviso",
+                    "Seleccione un odontólogo"
+            );
+            return;
+        }
+
+        try {
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/fxml/asignar_servicios_doctor.fxml"
+                    )
+            );
+
+            Scene scene = new Scene(loader.load());
+
+            AsignarServiciosDoctorController controller =
+                    loader.getController();
+
+            controller.cargarDoctor(
+                    doctor.getId(),
+                    doctor.getNombre() + " " + doctor.getApellido()
+            );
+
+            Stage stage = new Stage();
+            stage.setTitle("Servicos del Doctor");
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            mostrarInfo(
+                    "Error",
+                    "No se pudo abrir la ventana de servicios"
+            );
+        }
     }
 }

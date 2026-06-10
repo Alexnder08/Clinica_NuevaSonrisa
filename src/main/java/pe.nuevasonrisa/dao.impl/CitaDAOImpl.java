@@ -101,9 +101,15 @@ public class CitaDAOImpl implements CitaDAO {
 
             return ps.executeUpdate() > 0;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        } catch (SQLException e) {
+
+            if ("23505".equals(e.getSQLState())) {
+                throw new RuntimeException(
+                        "El paciente ya tiene una cita registrada para esa fecha y hora."
+                );
+            }
+
+            throw new RuntimeException(e);
         }
     }
     @Override
