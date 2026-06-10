@@ -31,16 +31,23 @@ Sistema de gestión odontológica desarrollado en JavaFX, Maven y PostgreSQL/Sup
 - BCrypt
 
 USERS:
+
 ADMIN
+
 usuario: admin
+
 contraseña: 123
 
 DOCTOR
+
 usuario: doctor1
+
 contraseña: 123
 
 RECEPCIONISTA
+
 usuario: recepcion1
+
 contraseña: 123
 
 
