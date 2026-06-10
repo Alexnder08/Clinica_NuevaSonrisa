@@ -30,9 +30,27 @@ Sistema de gestión odontológica desarrollado en JavaFX, Maven y PostgreSQL/Sup
 - Ikonli FontAwesome
 - BCrypt
 
+USERS:
+ADMIN
+usuario: admin
+contraseña: 123
+
+DOCTOR
+usuario: doctor1
+contraseña: 123
+
+RECEPCIONISTA
+usuario: recepcion1
+contraseña: 123
+
+
 ## Comando para ejecutar
 
 En la raíz del proyecto:
 
 ```bash
 ./mvnw clean javafx:run
+
+
+
+
