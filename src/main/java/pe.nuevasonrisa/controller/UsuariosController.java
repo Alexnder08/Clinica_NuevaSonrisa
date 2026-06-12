@@ -1,6 +1,8 @@
 package pe.nuevasonrisa.controller;
 
 import javafx.collections.FXCollections;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -8,6 +10,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Alert;
 
@@ -22,6 +25,9 @@ import pe.nuevasonrisa.service.AuditoriaService;
 public class UsuariosController {
 
     private List<UsuarioTabla> usuariosCache = new ArrayList<>();
+
+    @FXML
+    private TextField txtBuscar;
 
     @FXML
     private TableView<UsuarioTabla> tablaUsuarios;
@@ -68,11 +74,19 @@ public class UsuariosController {
 
         usuariosCache = service.obtenerUsuarios();
 
-        tablaUsuarios.setItems(
-                FXCollections.observableArrayList(
-                        usuariosCache
-                )
-        );
+        // Crear FilteredList a partir del cache de usuarios
+        FilteredList<UsuarioTabla> filteredList = 
+                new FilteredList<>(FXCollections.observableArrayList(usuariosCache));
+
+        // Crear SortedList a partir de FilteredList para mantener el ordenamiento
+        SortedList<UsuarioTabla> sortedList = new SortedList<>(filteredList);
+        sortedList.comparatorProperty().bind(tablaUsuarios.comparatorProperty());
+
+        // Establecer la SortedList en la tabla
+        tablaUsuarios.setItems(sortedList);
+
+        // Limpiar el campo de búsqueda
+        txtBuscar.clear();
     }
 
     @FXML
@@ -181,6 +195,29 @@ public class UsuariosController {
                     "Error",
                     "No se pudo cambiar el estado del usuario."
             );
+        }
+    }
+
+    @FXML
+    private void buscarUsuarios() {
+        String filtro = txtBuscar.getText().toLowerCase().trim();
+
+        // Obtener el SortedList actual de la tabla
+        if (tablaUsuarios.getItems() instanceof SortedList<?>) {
+            SortedList<UsuarioTabla> sortedList = (SortedList<UsuarioTabla>) tablaUsuarios.getItems();
+            FilteredList<UsuarioTabla> filteredList = (FilteredList<UsuarioTabla>) sortedList.getSource();
+
+            // Establecer el predicate del FilteredList según el término de búsqueda
+            if (filtro.isBlank()) {
+                filteredList.setPredicate(null);
+            } else {
+                filteredList.setPredicate(usuario ->
+                        usuario.getUsuario().toLowerCase().contains(filtro)
+                                || usuario.getNombre().toLowerCase().contains(filtro)
+                                || usuario.getApellido().toLowerCase().contains(filtro)
+                                || usuario.getRol().toLowerCase().contains(filtro)
+                );
+            }
         }
     }
 

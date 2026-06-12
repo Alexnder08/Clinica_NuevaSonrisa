@@ -31,6 +31,12 @@
            style="-fx-font-size: 14px; -fx-text-fill: #546e7a; -fx-padding: 0 0 15 0;"/>
 
     <HBox spacing="12" alignment="CENTER_LEFT">
+        <TextField fx:id="txtBuscar"
+                   promptText="Buscar por usuario, nombre o apellido..."
+                   prefWidth="300"
+                   onKeyReleased="#buscarUsuarios"
+                   style="-fx-pref-height: 42px; -fx-font-size: 14px; -fx-padding: 0 12 0 12; -fx-background-radius: 8; -fx-border-color: #cfd8dc; -fx-border-radius: 8;"/>
+
         <Region HBox.hgrow="ALWAYS"/>
 
         <Button text="Nuevo Usuario"
