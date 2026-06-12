@@ -91,6 +91,19 @@
             </graphic>
         </Button>
 
+        <Button text="Exportar PDF"
+                onAction="#exportarPDF"
+                style="-fx-background-color:#DC2626;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-file-pdf"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+
     </HBox>
 
     <TableView fx:id="tablaUsuarios"
