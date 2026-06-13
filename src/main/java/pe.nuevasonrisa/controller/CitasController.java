@@ -192,7 +192,7 @@ public class CitasController {
 
         dialog.showAndWait().ifPresent(motivo -> {
             if (motivo.trim().isBlank()) {
-                mostrarInfo("Aviso", "El motivo de cancelaciÃ³n es obligatorio.");
+                mostrarInfo("Aviso", "El motivo de cancelación es obligatorio.");
                 return;
             }
 

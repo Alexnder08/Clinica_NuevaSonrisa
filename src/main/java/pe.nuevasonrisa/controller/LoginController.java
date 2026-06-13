@@ -69,7 +69,7 @@ public class LoginController {
 
             if (intentosFallidos >= 3) {
                 lblMensaje.setStyle("-fx-text-fill: #d32f2f;");
-                lblMensaje.setText("Demasiados intentos fallidos. El sistema se cerrarÃ¡.");
+                lblMensaje.setText("Demasiados intentos fallidos. El sistema se cerrará.");
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Acceso bloqueado");
@@ -83,7 +83,7 @@ public class LoginController {
 
             lblMensaje.setStyle("-fx-text-fill: #d32f2f;");
             lblMensaje.setText(
-                    "Usuario o contraseÃ±a incorrectos. Intento "
+                    "Usuario o contraseña incorrectos. Intento "
                             + intentosFallidos
                             + " de 3."
             );
@@ -121,13 +121,13 @@ public class LoginController {
                     new Scene(loader.load());
 
             Stage stage = new Stage();
-            stage.setTitle("Cambiar contraseÃ±a");
+            stage.setTitle("Cambiar contraseña");
             stage.setScene(scene);
             stage.showAndWait();
 
         } catch (Exception e) {
             e.printStackTrace();
-            lblMensaje.setText("No se pudo abrir cambio de contraseÃ±a.");
+            lblMensaje.setText("No se pudo abrir cambio de contraseña.");
         }
     }
 }

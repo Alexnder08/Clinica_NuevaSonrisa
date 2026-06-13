@@ -64,7 +64,7 @@ public class HorariosDoctorController {
 
         ChoiceDialog<String> diaDialog = new ChoiceDialog<>(
                 seleccionado.getDia(),
-                "Lunes", "Martes", "MiÃ©rcoles", "Jueves", "Viernes", "SÃ¡bado", "Domingo"
+                "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sabado", "Domingo"
         );
 
         diaDialog.setTitle("Editar día");
@@ -121,13 +121,13 @@ public class HorariosDoctorController {
     private void nuevoHorario() {
 
         if (doctorId <= 0) {
-            mostrarInfo("Error", "No se encontrÃ³ el doctor seleccionado.");
+            mostrarInfo("Error", "No se encontró el doctor seleccionado.");
             return;
         }
 
         ChoiceDialog<String> diaDialog = new ChoiceDialog<>(
                 "Lunes",
-                "Lunes", "Martes", "MiÃ©rcoles", "Jueves", "Viernes", "SÃ¡bado", "Domingo"
+                "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sabado", "Domingo"
         );
 
         diaDialog.setTitle("Nuevo Horario");
@@ -170,7 +170,7 @@ public class HorariosDoctorController {
                     );
 
                     if (validacion != null) {
-                        mostrarInfo("ValidaciÃ³n", validacion);
+                        mostrarInfo("Validación", validacion);
                         return;
                     }
 
@@ -204,10 +204,10 @@ public class HorariosDoctorController {
         return switch (dia) {
             case "Lunes" -> 1;
             case "Martes" -> 2;
-            case "MiÃ©rcoles" -> 3;
+            case "Miércoles" -> 3;
             case "Jueves" -> 4;
             case "Viernes" -> 5;
-            case "SÃ¡bado" -> 6;
+            case "Sabado" -> 6;
             case "Domingo" -> 7;
             default -> 1;
         };

@@ -146,7 +146,7 @@ public class CitaDAOImpl implements CitaDAO {
             WHERE doctor_id = ?
               AND fecha = ?
               AND hora = ?
-              AND estado NOT IN ('Cancelado', 'No asistiÃ³')
+              AND estado NOT IN ('Cancelado', 'No asistió')
         """;
 
         try (
@@ -178,7 +178,7 @@ public class CitaDAOImpl implements CitaDAO {
             WHERE paciente_id = ?
               AND fecha = ?
               AND hora = ?
-              AND estado NOT IN ('Cancelado', 'No asistiÃ³')
+              AND estado NOT IN ('Cancelado', 'No asistió')
         """;
 
         try (
