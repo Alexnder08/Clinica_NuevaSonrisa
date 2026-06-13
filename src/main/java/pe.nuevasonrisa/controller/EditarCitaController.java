@@ -181,7 +181,7 @@ public class EditarCitaController {
                         cita.getEstado().toUpperCase(),
                         "CITAS",
                         "Cita #" + cita.getId() +
-                                " cambiÃ³ de estado: " +
+                                " cambió de estado: " +
                                 estadoAnterior + " -> " +
                                 cita.getEstado()
                 );

@@ -54,6 +54,7 @@ contraseña: 123
 ## Comando para ejecutar
 
 En la raíz del proyecto:
+- Instalar Java 21
 
 ```bash
 ./mvnw clean javafx:run

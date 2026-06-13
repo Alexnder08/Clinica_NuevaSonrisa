@@ -55,7 +55,7 @@ public class CitaService {
         if (
                 cita.getEstado().equalsIgnoreCase("Realizado")
                         || cita.getEstado().equalsIgnoreCase("Cancelado")
-                        || cita.getEstado().equalsIgnoreCase("No asistiÃ³")
+                        || cita.getEstado().equalsIgnoreCase("No asistió")
         ) {
             return null;
         }

@@ -112,7 +112,7 @@ public class AsignarServiciosDoctorController {
         }
 
         if (seleccionados.isEmpty()) {
-            mostrarError("Debe asignar al menos un servicio al odontÃ³logo.");
+            mostrarError("Debe asignar al menos un servicio al odontólogo.");
             return;
         }
 

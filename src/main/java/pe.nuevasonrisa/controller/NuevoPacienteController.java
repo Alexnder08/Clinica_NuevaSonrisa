@@ -53,7 +53,7 @@ public class NuevoPacienteController {
                     "Paciente " + nombre + " " + apellido + " creado"
             );
 
-            mostrarInfo("Ã‰xito", "Paciente registrado correctamente.");
+            mostrarInfo("Exito", "Paciente registrado correctamente.");
             cerrar();
         } else {
             mostrarError("No se pudo registrar. Verifique si el DNI ya existe.");

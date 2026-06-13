@@ -22,7 +22,7 @@ public class NuevoUsuarioController {
         cbRol.setItems(FXCollections.observableArrayList(
                 "Administrador",
                 "Doctor",
-                "RecepciÃ³n"
+                "Recepción"
         ));
     }
 
