@@ -50,6 +50,19 @@
                           iconColor="WHITE"/>
             </graphic>
         </Button>
+
+        <Button text="Enviar recordatorios (pendiente)"
+                onAction="#enviarRecordatorios"
+                style="-fx-background-color:#2563EB;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-envelope"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
     </HBox>
 
     <TabPane VBox.vgrow="ALWAYS">

@@ -18,6 +18,8 @@ Sistema de gestión odontológica desarrollado en JavaFX, Maven y PostgreSQL/Sup
 - Auditoría de acciones.
 - Reportes administrativos.
 - Exportación de citas y reportes a Excel.
+- Recordatorios de citas por correo.
+- Recuperación de contraseñas con código temporal por correo.
 
 ## Tecnologías utilizadas
 
@@ -27,6 +29,7 @@ Sistema de gestión odontológica desarrollado en JavaFX, Maven y PostgreSQL/Sup
 - PostgreSQL alojado en Supabase
 - Supabase
 - Apache POI
+- Jakarta Mail
 - Ikonli FontAwesome
 - BCrypt
 
@@ -50,6 +53,18 @@ usuario: recepcion1
 
 contraseña: 123
 
+
+## Configuracion de correo
+
+Para enviar recordatorios y recuperar contrasenas, define estas variables de entorno:
+
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_USER`
+- `SMTP_PASS`
+- `SMTP_FROM` opcional
+
+Tambien puedes usar `FEATURE_EMAILS=false` para dejar estas funciones preparadas en el codigo pero desactivadas mientras la base de datos no se adapte.
 
 ## Comando para ejecutar
 
