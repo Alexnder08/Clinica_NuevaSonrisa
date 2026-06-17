@@ -103,6 +103,7 @@
                         <TableColumn fx:id="colPacienteHoy" text="Paciente" prefWidth="240"/>
                         <TableColumn fx:id="colHoraHoy" text="Hora" prefWidth="110"/>
                         <TableColumn fx:id="colDoctorHoy" text="Doctor" prefWidth="240"/>
+                        <TableColumn fx:id="colEstadoHoy" text="Estado" prefWidth="140"/>
                     </columns>
                 </TableView>
             </VBox>

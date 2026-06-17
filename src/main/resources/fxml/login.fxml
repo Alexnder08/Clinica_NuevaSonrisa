@@ -27,6 +27,9 @@
             </HBox>
             <Label text="Sistema de Gestión Dental"
                    style="-fx-font-size:16px; -fx-text-fill:#546e7a;"/>
+            <Button text="Olvidé mi contraseña (pendiente)"
+                    onAction="#recuperarPassword"
+                    style="-fx-background-color: transparent; -fx-text-fill: #1976D2; -fx-font-size: 13px; -fx-underline: true; -fx-cursor: hand;"/>
         </VBox>
 
         <VBox spacing="15"
