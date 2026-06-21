@@ -12,4 +12,5 @@ public interface PacienteDAO {
     boolean crearPaciente(Paciente paciente);
 
     boolean actualizarPaciente(Paciente paciente);
+    boolean cambiarEstado(int pacienteId, String estado);
 }

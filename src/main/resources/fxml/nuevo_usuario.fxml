@@ -33,6 +33,7 @@
             <RowConstraints minHeight="45"/>
             <RowConstraints minHeight="45"/>
             <RowConstraints minHeight="45"/>
+            <RowConstraints minHeight="45"/>
         </rowConstraints>
 
         <Label text="Usuario:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="0"/>
@@ -53,8 +54,11 @@
         <Label text="Celular:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="5"/>
         <TextField fx:id="txtCelular" promptText="Celular" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
 
-        <Label text="Rol:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="6"/>
-        <ComboBox fx:id="cbRol" promptText="Seleccione rol" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+        <Label text="Correo:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="6"/>
+        <TextField fx:id="txtEmail" promptText="usuario@correo.com" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+        <Label text="Rol:" style="-fx-font-weight: 500; -fx-text-fill: #37474f;" GridPane.rowIndex="7"/>
+        <ComboBox fx:id="cbRol" promptText="Seleccione rol" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
     </GridPane>
 
     <Region VBox.vgrow="ALWAYS"/>

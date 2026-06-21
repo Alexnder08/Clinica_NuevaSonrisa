@@ -26,4 +26,9 @@ public class PacienteService {
         return dao.actualizarPaciente(paciente);
     }
 
+    public boolean cambiarEstado(int pacienteId, String estadoActual) {
+        String nuevoEstado = "Activo".equalsIgnoreCase(estadoActual) ? "Inactivo" : "Activo";
+        return dao.cambiarEstado(pacienteId, nuevoEstado);
+    }
+
 }

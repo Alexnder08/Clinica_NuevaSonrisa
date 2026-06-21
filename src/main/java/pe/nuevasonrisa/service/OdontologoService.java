@@ -16,4 +16,8 @@ public class OdontologoService {
     public List<OdontologoTabla> obtenerOdontologos() {
         return dao.listarOdontologos();
     }
+
+    public List<OdontologoTabla> obtenerDisponiblesParaCita() {
+        return dao.listarDisponiblesParaCita();
+    }
 }

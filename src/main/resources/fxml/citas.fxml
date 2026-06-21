@@ -7,139 +7,76 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="pe.nuevasonrisa.controller.CitasController"
-      spacing="0"
-      style="-fx-background-color: #f5f7fa;">
-
-    <padding>
-        <Insets top="25" right="30" bottom="25" left="30"/>
-    </padding>
+      spacing="14" style="-fx-background-color:#F5F7FA;">
+    <padding><Insets top="24" right="28" bottom="24" left="28"/></padding>
 
     <HBox spacing="12" alignment="CENTER_LEFT">
-        <FontIcon iconLiteral="fas-calendar-alt"
-                  iconSize="28"
-                  iconColor="#14B8A6"/>
-        <Label text="Citas Dentales"
-               style="-fx-font-size:28px;
-                  -fx-font-weight:bold;
-                  -fx-text-fill:#0F172A;"/>
+        <FontIcon iconLiteral="fas-calendar-alt" iconSize="28" iconColor="#14B8A6"/>
+        <VBox spacing="2">
+            <Label text="Citas dentales" style="-fx-font-size:27px;-fx-font-weight:bold;-fx-text-fill:#0F172A;"/>
+            <Label text="Agenda, asistencia y seguimiento de tratamientos"
+                   style="-fx-font-size:13px;-fx-text-fill:#64748B;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Nueva cita" onAction="#nuevaCita" styleClass="btn-primary">
+            <graphic><FontIcon iconLiteral="fas-plus" iconSize="14" iconColor="WHITE"/></graphic>
+        </Button>
     </HBox>
 
-    <Label text="Gestión de citas y tratamientos odontológicos"
-           style="-fx-font-size:14px; -fx-text-fill:#546e7a; -fx-padding:0 0 15 0;"/>
+    <VBox spacing="10" style="-fx-background-color:white;-fx-padding:14;-fx-background-radius:12;-fx-border-color:#E2E8F0;-fx-border-radius:12;">
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="txtBuscar" promptText="Paciente, doctor, servicio o estado"
+                       onKeyReleased="#buscarCitas" prefWidth="260"/>
+            <ComboBox fx:id="cbFiltroServicio" promptText="Tratamiento" prefWidth="190" onAction="#aplicarFiltros"/>
+            <ComboBox fx:id="cbFiltroDoctor" promptText="Odontologo" prefWidth="190" onAction="#aplicarFiltros"/>
+            <ComboBox fx:id="cbFiltroEstado" promptText="Estado" prefWidth="160" onAction="#aplicarFiltros"/>
+        </HBox>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Desde" style="-fx-text-fill:#475569;-fx-font-weight:bold;"/>
+            <DatePicker fx:id="dpFechaDesde" promptText="Fecha inicial" prefWidth="150" onAction="#aplicarFiltros"/>
+            <Label text="Hasta" style="-fx-text-fill:#475569;-fx-font-weight:bold;"/>
+            <DatePicker fx:id="dpFechaHasta" promptText="Fecha final" prefWidth="150" onAction="#aplicarFiltros"/>
+            <Button text="Limpiar" onAction="#limpiarFiltros" styleClass="btn-secondary"/>
+            <Separator orientation="VERTICAL" prefHeight="30"/>
+            <Button text="Pendientes de hoy" onAction="#verPendientesHoy" styleClass="btn-warning"/>
+            <Button text="Pacientes en espera" onAction="#verPacientesEnEspera" styleClass="btn-info"/>
+            <Button text="Ver calendario" onAction="#verCalendario" styleClass="btn-primary"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblResultados" text="0 cita(s)" style="-fx-text-fill:#64748B;"/>
+        </HBox>
+    </VBox>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
-
-        <TextField fx:id="txtBuscar"
-                   promptText="Buscar Citas..."
-                   onKeyReleased="#buscarCitas"
-                   prefWidth="280"
-                   prefHeight="40"
-                   styleClass="campo-busqueda"/>
-
-        <DatePicker fx:id="dpFiltroFecha"
-                    prefWidth="150"
-                    prefHeight="40"
-                    styleClass="date-picker-modern"/>
-
-        <Button text="Filtrar"
-                onAction="#filtrarPorFecha"
-                prefWidth="120"
-                prefHeight="40"
-                styleClass="btn-success">
-
-            <graphic>
-                <FontIcon iconLiteral="fas-filter"
-                          iconSize="14"
-                          iconColor="WHITE"/>
-            </graphic>
-
-        </Button>
-
-        <Button text="Limpiar"
-                onAction="#cargarCitas"
-                prefWidth="120"
-                prefHeight="40"
-                styleClass="btn-secondary">
-
-            <graphic>
-                <FontIcon iconLiteral="fas-sync"
-                          iconSize="14"
-                          iconColor="WHITE"/>
-            </graphic>
-
-        </Button>
-
-        <Button text="Nueva Cita"
-                onAction="#nuevaCita"
-                prefWidth="140"
-                prefHeight="40"
-                styleClass="btn-primary">
-
-            <graphic>
-                <FontIcon iconLiteral="fas-plus"
-                          iconSize="14"
-                          iconColor="WHITE"/>
-            </graphic>
-
-        </Button>
-
-        <Button text="Editar"
-                onAction="#editarCita"
-                prefWidth="120"
-                prefHeight="40"
-                styleClass="btn-warning">
-
-            <graphic>
-                <FontIcon iconLiteral="fas-edit"
-                          iconSize="14"
-                          iconColor="WHITE"/>
-            </graphic>
-
-        </Button>
-
-        <Button text="Cancelar"
-                onAction="#cancelarCita"
-                prefWidth="130"
-                prefHeight="40"
-                styleClass="btn-danger">
-
-            <graphic>
-                <FontIcon iconLiteral="fas-ban"
-                          iconSize="14"
-                          iconColor="WHITE"/>
-            </graphic>
-
-        </Button>
-
-        <Button text="Excel"
-                onAction="#exportarCitas"
-                prefWidth="120"
-                prefHeight="40"
-                styleClass="btn-info">
-
-            <graphic>
-                <FontIcon iconLiteral="fas-file-excel"
-                          iconSize="14"
-                          iconColor="WHITE"/>
-            </graphic>
-
-        </Button>
-
-    </HBox>
-
-    <TableView fx:id="tablaCitas"
-               VBox.vgrow="ALWAYS"
-               style="-fx-background-radius: 10; -fx-border-color: #e0e0e0; -fx-border-radius: 10; -fx-pref-height: 450;">
-
+    <TableView fx:id="tablaCitas" VBox.vgrow="ALWAYS"
+               style="-fx-background-radius:10;-fx-border-color:#E2E8F0;-fx-border-radius:10;-fx-pref-height:430;">
         <columns>
-            <TableColumn fx:id="colId" text="ID" prefWidth="60" sortable="true"/>
-            <TableColumn fx:id="colPaciente" text="Paciente" prefWidth="180" sortable="true"/>
-            <TableColumn fx:id="colDoctor" text="Doctor" prefWidth="180" sortable="true"/>
-            <TableColumn fx:id="colServicio" text="Servicio" prefWidth="180" sortable="true"/>
-            <TableColumn fx:id="colFecha" text="Fecha" prefWidth="120" sortable="true"/>
-            <TableColumn fx:id="colHora" text="Hora" prefWidth="100" sortable="true"/>
-            <TableColumn fx:id="colEstado" text="Estado" prefWidth="120" sortable="true"/>
+            <TableColumn fx:id="colId" text="ID" prefWidth="55" sortable="true"/>
+            <TableColumn fx:id="colPaciente" text="Paciente" prefWidth="175" sortable="true"/>
+            <TableColumn fx:id="colDoctor" text="Odontologo" prefWidth="175" sortable="true"/>
+            <TableColumn fx:id="colServicio" text="Tratamiento" prefWidth="175" sortable="true"/>
+            <TableColumn fx:id="colFecha" text="Fecha" prefWidth="110" sortable="true"/>
+            <TableColumn fx:id="colHora" text="Hora" prefWidth="90" sortable="true"/>
+            <TableColumn fx:id="colEstado" text="Estado" prefWidth="115" sortable="true"/>
         </columns>
     </TableView>
 
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Confirmar asistencia" onAction="#confirmarAsistencia" styleClass="btn-success">
+            <graphic><FontIcon iconLiteral="fas-user-check" iconSize="14" iconColor="WHITE"/></graphic>
+        </Button>
+        <Button text="Reprogramar / editar" onAction="#editarCita" styleClass="btn-warning">
+            <graphic><FontIcon iconLiteral="fas-edit" iconSize="14" iconColor="WHITE"/></graphic>
+        </Button>
+        <Button text="Cancelar cita" onAction="#cancelarCita" styleClass="btn-danger">
+            <graphic><FontIcon iconLiteral="fas-ban" iconSize="14" iconColor="WHITE"/></graphic>
+        </Button>
+        <Button text="Exportar Excel" onAction="#exportarCitas" styleClass="btn-info">
+            <graphic><FontIcon iconLiteral="fas-file-excel" iconSize="14" iconColor="WHITE"/></graphic>
+        </Button>
+        <Button text="PDF" onAction="#exportarCitasPdf" styleClass="btn-danger">
+            <graphic><FontIcon iconLiteral="fas-file-pdf" iconSize="14" iconColor="WHITE"/></graphic>
+        </Button>
+        <Button text="Imprimir" onAction="#imprimirCitas" styleClass="btn-secondary">
+            <graphic><FontIcon iconLiteral="fas-print" iconSize="14" iconColor="#475569"/></graphic>
+        </Button>
+    </HBox>
 </VBox>

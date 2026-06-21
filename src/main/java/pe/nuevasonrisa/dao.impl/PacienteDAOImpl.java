@@ -23,7 +23,8 @@ public class PacienteDAOImpl implements PacienteDAO {
                 nombre,
                 apellido,
                 telefono,
-                correo
+                correo,
+                estado
             FROM pacientes
             ORDER BY id
         """;
@@ -43,7 +44,8 @@ public class PacienteDAOImpl implements PacienteDAO {
                                 rs.getString("nombre"),
                                 rs.getString("apellido"),
                                 rs.getString("telefono"),
-                                rs.getString("correo")
+                                rs.getString("correo"),
+                                rs.getString("estado")
                         )
                 );
             }
@@ -116,6 +118,20 @@ public class PacienteDAOImpl implements PacienteDAO {
 
             return ps.executeUpdate() > 0;
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean cambiarEstado(int pacienteId, String estado) {
+        String sql = "UPDATE pacientes SET estado = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, estado);
+            ps.setInt(2, pacienteId);
+            return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
             return false;

@@ -149,8 +149,8 @@ public class CitaDAOImpl implements CitaDAO {
               AND fecha = ?
               AND estado NOT IN ('Cancelado', 'No asistió')
               AND (? IS NULL OR id <> ?)
-              AND hora < (? + make_interval(mins => ?))
-              AND (hora + make_interval(mins => COALESCE(duracion, 1))) > ?
+              AND hora < (CAST(? AS time) + make_interval(mins => ?))
+              AND (hora + make_interval(mins => COALESCE(duracion, 1))) > CAST(? AS time)
         """;
 
         try (
@@ -166,9 +166,9 @@ public class CitaDAOImpl implements CitaDAO {
                 ps.setInt(3, citaIdExcluir);
                 ps.setInt(4, citaIdExcluir);
             }
-            ps.setTime(5, Time.valueOf(hora));
+            ps.setObject(5, hora, Types.TIME);
             ps.setInt(6, duracionMinutos);
-            ps.setTime(7, Time.valueOf(hora));
+            ps.setObject(7, hora, Types.TIME);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -177,10 +177,9 @@ public class CitaDAOImpl implements CitaDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException("No se pudo verificar la disponibilidad del odontologo.", e);
         }
-
-        return false;
+        throw new IllegalStateException("La consulta de disponibilidad del odontologo no devolvio resultados.");
     }
 
     @Override
@@ -192,8 +191,8 @@ public class CitaDAOImpl implements CitaDAO {
               AND fecha = ?
               AND estado NOT IN ('Cancelado', 'No asistió')
               AND (? IS NULL OR id <> ?)
-              AND hora < (? + make_interval(mins => ?))
-              AND (hora + make_interval(mins => COALESCE(duracion, 1))) > ?
+              AND hora < (CAST(? AS time) + make_interval(mins => ?))
+              AND (hora + make_interval(mins => COALESCE(duracion, 1))) > CAST(? AS time)
         """;
 
         try (
@@ -209,9 +208,9 @@ public class CitaDAOImpl implements CitaDAO {
                 ps.setInt(3, citaIdExcluir);
                 ps.setInt(4, citaIdExcluir);
             }
-            ps.setTime(5, Time.valueOf(hora));
+            ps.setObject(5, hora, Types.TIME);
             ps.setInt(6, duracionMinutos);
-            ps.setTime(7, Time.valueOf(hora));
+            ps.setObject(7, hora, Types.TIME);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -220,10 +219,9 @@ public class CitaDAOImpl implements CitaDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException("No se pudo verificar la disponibilidad del paciente.", e);
         }
-
-        return false;
+        throw new IllegalStateException("La consulta de disponibilidad del paciente no devolvio resultados.");
     }
 
     @Override
@@ -246,8 +244,8 @@ public class CitaDAOImpl implements CitaDAO {
         ) {
             ps.setInt(1, doctorId);
             ps.setInt(2, diaSemana);
-            ps.setTime(3, Time.valueOf(hora));
-            ps.setTime(4, Time.valueOf(horaFin));
+            ps.setObject(3, hora, Types.TIME);
+            ps.setObject(4, horaFin, Types.TIME);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -256,10 +254,85 @@ public class CitaDAOImpl implements CitaDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException("No se pudo verificar el horario del odontologo.", e);
         }
+        throw new IllegalStateException("La consulta de horario del odontologo no devolvio resultados.");
+    }
 
-        return false;
+    @Override
+    public List<LocalTime> listarHorasDisponibles(
+            int pacienteId,
+            int doctorId,
+            LocalDate fecha,
+            int duracionMinutos
+    ) {
+        List<LocalTime> horas = new ArrayList<>();
+        int diaSemana = convertirDiaSemana(fecha.getDayOfWeek());
+        String sql = """
+            WITH slots AS (
+                SELECT generate_series(
+                    ?::date + time '08:00',
+                    ?::date + time '18:00' - make_interval(mins => ?),
+                    interval '1 hour'
+                ) AS inicio
+            )
+            SELECT inicio::time AS hora
+            FROM slots
+            WHERE EXISTS (
+                SELECT 1
+                FROM horarios_doctor h
+                WHERE h.doctor_id = ?
+                  AND h.dia_semana = ?
+                  AND inicio::time >= h.hora_inicio
+                  AND (inicio + make_interval(mins => ?))::time <= h.hora_fin
+            )
+              AND NOT EXISTS (
+                SELECT 1
+                FROM citas c
+                WHERE c.doctor_id = ?
+                  AND c.fecha = ?
+                  AND lower(c.estado) <> lower('Cancelado')
+                  AND lower(c.estado) NOT LIKE 'no asist%'
+                  AND c.hora < (inicio + make_interval(mins => ?))::time
+                  AND (c.hora + make_interval(mins => COALESCE(c.duracion, 1))) > inicio::time
+            )
+              AND NOT EXISTS (
+                SELECT 1
+                FROM citas c
+                WHERE c.paciente_id = ?
+                  AND c.fecha = ?
+                  AND lower(c.estado) <> lower('Cancelado')
+                  AND lower(c.estado) NOT LIKE 'no asist%'
+                  AND c.hora < (inicio + make_interval(mins => ?))::time
+                  AND (c.hora + make_interval(mins => COALESCE(c.duracion, 1))) > inicio::time
+            )
+            ORDER BY inicio
+        """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDate(1, Date.valueOf(fecha));
+            ps.setDate(2, Date.valueOf(fecha));
+            ps.setInt(3, duracionMinutos);
+            ps.setInt(4, doctorId);
+            ps.setInt(5, diaSemana);
+            ps.setInt(6, duracionMinutos);
+            ps.setInt(7, doctorId);
+            ps.setDate(8, Date.valueOf(fecha));
+            ps.setInt(9, duracionMinutos);
+            ps.setInt(10, pacienteId);
+            ps.setDate(11, Date.valueOf(fecha));
+            ps.setInt(12, duracionMinutos);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    horas.add(rs.getTime("hora").toLocalTime());
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("No se pudieron calcular las horas disponibles: " + e.getMessage());
+        }
+        return horas;
     }
 
     @Override

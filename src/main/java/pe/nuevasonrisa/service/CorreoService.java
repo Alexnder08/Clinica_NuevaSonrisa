@@ -7,11 +7,88 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.Properties;
 
 public class CorreoService {
 
+    private static final String RESEND_ENDPOINT = "https://api.resend.com/emails";
+    private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(10))
+            .build();
+
     public boolean enviarCorreo(String destinatario, String asunto, String cuerpo) {
+        String html = "<div style=\"font-family:Arial,sans-serif;white-space:pre-line;color:#334155\">"
+                + escaparHtml(cuerpo)
+                + "</div>";
+        return enviarCorreoHtml(destinatario, asunto, html, null);
+    }
+
+    public boolean enviarCorreoHtml(String destinatario, String asunto, String html, String claveIdempotencia) {
+        String apiKey = System.getenv("RESEND_API_KEY");
+        if (apiKey != null && !apiKey.isBlank()) {
+            return enviarConResend(apiKey, destinatario, asunto, html, claveIdempotencia);
+        }
+
+        return enviarConSmtp(destinatario, asunto, html);
+    }
+
+    private boolean enviarConResend(
+            String apiKey,
+            String destinatario,
+            String asunto,
+            String html,
+            String claveIdempotencia
+    ) {
+        String remitente = System.getenv().getOrDefault(
+                "RESEND_FROM",
+                "Nueva Sonrisa <onboarding@resend.dev>"
+        );
+
+        String json = """
+                {"from":"%s","to":["%s"],"subject":"%s","html":"%s"}
+                """.formatted(
+                escaparJson(remitente),
+                escaparJson(destinatario),
+                escaparJson(asunto),
+                escaparJson(html)
+        );
+
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
+                .uri(URI.create(RESEND_ENDPOINT))
+                .timeout(Duration.ofSeconds(20))
+                .header("Authorization", "Bearer " + apiKey)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json));
+
+        if (claveIdempotencia != null && !claveIdempotencia.isBlank()) {
+            requestBuilder.header("Idempotency-Key", claveIdempotencia);
+        }
+
+        try {
+            HttpResponse<String> response = HTTP_CLIENT.send(
+                    requestBuilder.build(),
+                    HttpResponse.BodyHandlers.ofString()
+            );
+            if (response.statusCode() >= 200 && response.statusCode() < 300) {
+                return true;
+            }
+
+            System.err.println("Resend rechazo el correo (HTTP " + response.statusCode() + "): " + response.body());
+        } catch (Exception e) {
+            System.err.println("No se pudo conectar con Resend: " + e.getMessage());
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        return false;
+    }
+
+    private boolean enviarConSmtp(String destinatario, String asunto, String html) {
         String host = System.getenv("SMTP_HOST");
         String puerto = System.getenv("SMTP_PORT");
         String usuario = System.getenv("SMTP_USER");
@@ -23,7 +100,7 @@ public class CorreoService {
                 || usuario == null || usuario.isBlank()
                 || password == null || password.isBlank()
                 || remitente == null || remitente.isBlank()) {
-            System.out.println("SMTP no configurado. No se enviara correo a " + destinatario);
+            System.err.println("Correo no configurado. Defina RESEND_API_KEY o las variables SMTP.");
             return false;
         }
 
@@ -45,13 +122,34 @@ public class CorreoService {
             message.setFrom(new InternetAddress(remitente));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
             message.setSubject(asunto, "UTF-8");
-            message.setText(cuerpo, "UTF-8");
-
+            message.setContent(html, "text/html; charset=UTF-8");
             Transport.send(message);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("No se pudo enviar el correo por SMTP: " + e.getMessage());
             return false;
         }
+    }
+
+    private static String escaparJson(String texto) {
+        if (texto == null) {
+            return "";
+        }
+        return texto.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\r", "\\r")
+                .replace("\n", "\\n")
+                .replace("\t", "\\t");
+    }
+
+    public static String escaparHtml(String texto) {
+        if (texto == null) {
+            return "";
+        }
+        return texto.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
     }
 }

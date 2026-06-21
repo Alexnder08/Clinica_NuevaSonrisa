@@ -7,6 +7,7 @@ import pe.nuevasonrisa.model.ReporteCitasDoctor;
 import pe.nuevasonrisa.model.ReporteEstado;
 import pe.nuevasonrisa.model.ReporteServicio;
 import pe.nuevasonrisa.model.CitaTabla;
+import pe.nuevasonrisa.model.UsuarioTabla;
 
 import javafx.stage.FileChooser;
 import java.io.FileOutputStream;
@@ -14,6 +15,66 @@ import java.util.List;
 import java.io.File;
 
 public class ExcelExporter {
+
+    public static void exportarUsuarios(List<UsuarioTabla> usuarios) {
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Usuarios");
+            sheet.createFreezePane(0, 1);
+
+            CellStyle encabezado = workbook.createCellStyle();
+            encabezado.setFillForegroundColor(IndexedColors.TEAL.getIndex());
+            encabezado.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            Font fuente = workbook.createFont();
+            fuente.setBold(true);
+            fuente.setColor(IndexedColors.WHITE.getIndex());
+            encabezado.setFont(fuente);
+
+            String[] columnas = {"ID", "Usuario", "Nombre", "Apellido", "DNI", "Celular", "Correo", "Rol", "Estado"};
+            Row header = sheet.createRow(0);
+            for (int i = 0; i < columnas.length; i++) {
+                Cell cell = header.createCell(i);
+                cell.setCellValue(columnas[i]);
+                cell.setCellStyle(encabezado);
+            }
+
+            int fila = 1;
+            for (UsuarioTabla usuario : usuarios) {
+                Row row = sheet.createRow(fila++);
+                row.createCell(0).setCellValue(usuario.getId());
+                row.createCell(1).setCellValue(texto(usuario.getUsuario()));
+                row.createCell(2).setCellValue(texto(usuario.getNombre()));
+                row.createCell(3).setCellValue(texto(usuario.getApellido()));
+                row.createCell(4).setCellValue(texto(usuario.getDni()));
+                row.createCell(5).setCellValue(texto(usuario.getCelular()));
+                row.createCell(6).setCellValue(texto(usuario.getEmail()));
+                row.createCell(7).setCellValue(texto(usuario.getRol()));
+                row.createCell(8).setCellValue(texto(usuario.getEstado()));
+            }
+
+            sheet.setAutoFilter(new org.apache.poi.ss.util.CellRangeAddress(0, Math.max(0, fila - 1), 0, columnas.length - 1));
+            for (int i = 0; i < columnas.length; i++) {
+                sheet.autoSizeColumn(i);
+                sheet.setColumnWidth(i, Math.min(sheet.getColumnWidth(i) + 700, 8000));
+            }
+
+            FileChooser chooser = new FileChooser();
+            chooser.setTitle("Exportar usuarios a Excel");
+            chooser.setInitialFileName("Usuarios_NuevaSonrisa.xlsx");
+            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
+            File archivo = chooser.showSaveDialog(null);
+            if (archivo != null) {
+                try (FileOutputStream fos = new FileOutputStream(archivo)) {
+                    workbook.write(fos);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("No se pudo exportar el listado de usuarios.", e);
+        }
+    }
+
+    private static String texto(String valor) {
+        return valor == null ? "" : valor;
+    }
 
     public static void exportarReportes(
             List<ReporteCitasDoctor> doctores,

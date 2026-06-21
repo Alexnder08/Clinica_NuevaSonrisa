@@ -171,4 +171,37 @@ public class ServicioDAOImpl implements ServicioDAO {
             return false;
         }
     }
+
+    @Override
+    public boolean eliminarServicio(int servicioId) {
+        String eliminarAsignaciones = "DELETE FROM doctor_servicios WHERE servicio_id = ?";
+        String eliminarServicio = "DELETE FROM servicios WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            try (PreparedStatement psAsignaciones = conn.prepareStatement(eliminarAsignaciones);
+                 PreparedStatement psServicio = conn.prepareStatement(eliminarServicio)) {
+                psAsignaciones.setInt(1, servicioId);
+                psAsignaciones.executeUpdate();
+
+                psServicio.setInt(1, servicioId);
+                boolean eliminado = psServicio.executeUpdate() > 0;
+                if (eliminado) {
+                    conn.commit();
+                } else {
+                    conn.rollback();
+                }
+                return eliminado;
+            } catch (Exception e) {
+                conn.rollback();
+                System.err.println("No se puede eliminar el servicio: " + e.getMessage());
+                return false;
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        } catch (Exception e) {
+            System.err.println("Error al eliminar el servicio: " + e.getMessage());
+            return false;
+        }
+    }
 }

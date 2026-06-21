@@ -19,4 +19,6 @@ public interface CitaDoctorDAO {
             int doctorId,
             String notas
     );
+
+    boolean finalizarCita(int citaId, int doctorId);
 }

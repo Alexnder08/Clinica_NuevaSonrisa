@@ -28,7 +28,8 @@ public class UsuarioGestionDAOImpl implements UsuarioGestionDAO {
                 r.nombre as rol,
                 u.estado,
                 u.dni,
-                u.celular
+                u.celular,
+                u.email
             FROM usuarios u
             INNER JOIN roles r
             ON r.id = u.rol_id
@@ -52,7 +53,8 @@ public class UsuarioGestionDAOImpl implements UsuarioGestionDAO {
                                 rs.getString("rol"),
                                 rs.getString("estado"),
                                 rs.getString("dni"),
-                                rs.getString("celular")
+                                rs.getString("celular"),
+                                rs.getString("email")
                         )
                 );
             }
@@ -75,12 +77,14 @@ public class UsuarioGestionDAOImpl implements UsuarioGestionDAO {
             apellido,
             dni,
             celular,
+            email,
             estado,
             rol_id,
             servicio_id
         )
         VALUES
         (
+            ?,
             ?,
             ?,
             ?,
@@ -110,7 +114,8 @@ public class UsuarioGestionDAOImpl implements UsuarioGestionDAO {
             ps.setString(4, usuario.getApellido());
             ps.setString(5, usuario.getDni());
             ps.setString(6, usuario.getCelular());
-            ps.setString(7, usuario.getRol());
+            ps.setString(7, usuario.getEmail());
+            ps.setString(8, usuario.getRol());
 
             return ps.executeUpdate() > 0;
 
@@ -130,6 +135,7 @@ public class UsuarioGestionDAOImpl implements UsuarioGestionDAO {
             apellido = ?,
             dni = ?,
             celular = ?,
+            email = ?,
             rol_id = (SELECT id FROM roles WHERE nombre = ?)
         WHERE id = ?
     """;
@@ -143,8 +149,9 @@ public class UsuarioGestionDAOImpl implements UsuarioGestionDAO {
             ps.setString(3, usuario.getApellido());
             ps.setString(4, usuario.getDni());
             ps.setString(5, usuario.getCelular());
-            ps.setString(6, usuario.getRol());
-            ps.setInt(7, usuario.getId());
+            ps.setString(6, usuario.getEmail());
+            ps.setString(7, usuario.getRol());
+            ps.setInt(8, usuario.getId());
 
             return ps.executeUpdate() > 0;
 

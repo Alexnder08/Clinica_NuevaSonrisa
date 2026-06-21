@@ -104,6 +104,12 @@
             </graphic>
         </Button>
 
+        <Button text="Exportar Excel"
+                onAction="#exportarExcel"
+                style="-fx-background-color:#15803D;-fx-text-fill:white;-fx-font-weight:bold;-fx-background-radius:10;">
+            <graphic><FontIcon iconLiteral="fas-file-excel" iconSize="14" iconColor="WHITE"/></graphic>
+        </Button>
+
     </HBox>
 
     <TableView fx:id="tablaUsuarios"
@@ -114,6 +120,9 @@
             <TableColumn fx:id="colUsuario" text="Usuario" prefWidth="130" sortable="true"/>
             <TableColumn fx:id="colNombre" text="Nombre" prefWidth="150" sortable="true"/>
             <TableColumn fx:id="colApellido" text="Apellido" prefWidth="150" sortable="true"/>
+            <TableColumn fx:id="colDni" text="DNI" prefWidth="100" sortable="true"/>
+            <TableColumn fx:id="colCelular" text="Celular" prefWidth="110" sortable="true"/>
+            <TableColumn fx:id="colEmail" text="Correo" prefWidth="190" sortable="true"/>
             <TableColumn fx:id="colRol" text="Rol" prefWidth="130" sortable="true"/>
             <TableColumn fx:id="colEstado" text="Estado" prefWidth="110" sortable="true"/>
         </columns>

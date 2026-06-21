@@ -64,4 +64,35 @@ public class OdontologoDAOImpl implements OdontologoDAO {
 
         return lista;
     }
+
+    @Override
+    public List<OdontologoTabla> listarDisponiblesParaCita() {
+        List<OdontologoTabla> lista = new ArrayList<>();
+        String sql = """
+            SELECT u.id, u.usuario, u.nombre, u.apellido, u.dni, u.celular,
+                   'Servicios asignados' AS servicio, u.estado
+            FROM usuarios u
+            INNER JOIN roles r ON r.id = u.rol_id
+            WHERE lower(r.nombre) = lower('Doctor')
+              AND lower(u.estado) = lower('Activo')
+              AND EXISTS (SELECT 1 FROM doctor_servicios ds WHERE ds.doctor_id = u.id)
+              AND EXISTS (SELECT 1 FROM horarios_doctor h WHERE h.doctor_id = u.id)
+            ORDER BY u.nombre, u.apellido
+        """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                lista.add(new OdontologoTabla(
+                        rs.getInt("id"), rs.getString("usuario"), rs.getString("nombre"),
+                        rs.getString("apellido"), rs.getString("dni"), rs.getString("celular"),
+                        rs.getString("servicio"), rs.getString("estado")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
 }

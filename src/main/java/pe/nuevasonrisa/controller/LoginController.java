@@ -53,7 +53,13 @@ public class LoginController {
             return;
         }
 
-        Optional<Usuario> usuarioAutenticado = authService.login(usuario, password);
+        Optional<Usuario> usuarioAutenticado;
+        try {
+            usuarioAutenticado = authService.login(usuario, password);
+        } catch (IllegalStateException e) {
+            mostrarMensajeError("No se pudo conectar con la base de datos. Intente nuevamente en unos segundos.");
+            return;
+        }
 
         if (usuarioAutenticado.isPresent()) {
             Usuario user = usuarioAutenticado.get();
@@ -105,7 +111,11 @@ public class LoginController {
             Scene scene = new Scene(loader.load());
 
             Stage stage = (Stage) txtUsuario.getScene().getWindow();
+            stage.setResizable(true);
+            stage.setMinWidth(1100);
+            stage.setMinHeight(700);
             stage.setScene(scene);
+            stage.setMaximized(true);
             stage.centerOnScreen();
             stage.show();
 

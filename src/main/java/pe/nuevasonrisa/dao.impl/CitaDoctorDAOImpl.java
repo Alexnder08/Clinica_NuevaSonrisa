@@ -142,4 +142,25 @@ public class CitaDoctorDAOImpl implements CitaDoctorDAO {
             return false;
         }
     }
+
+    @Override
+    public boolean finalizarCita(int citaId, int doctorId) {
+        String sql = """
+            UPDATE citas
+            SET estado = 'Realizado'
+            WHERE id = ?
+              AND doctor_id = ?
+              AND estado = 'En espera'
+              AND btrim(COALESCE(notas, '')) <> ''
+        """;
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, citaId);
+            ps.setInt(2, doctorId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -54,9 +54,18 @@ usuario: recepcion1
 contraseña: 123
 
 
-## Configuracion de correo
+## Configuracion de correo con Resend
 
-Para enviar recordatorios y recuperar contrasenas, define estas variables de entorno:
+Para enviar confirmaciones de reserva, recordatorios y recuperaciones de contrasena, define:
+
+- `RESEND_API_KEY` clave privada creada en Resend.
+- `RESEND_FROM` remitente verificado, por ejemplo `Nueva Sonrisa <citas@tudominio.com>`.
+
+Cuando `RESEND_API_KEY` esta definida, el correo queda habilitado automaticamente. Para desactivarlo de forma explicita usa `FEATURE_EMAILS=false`.
+
+Durante pruebas se usa `Nueva Sonrisa <onboarding@resend.dev>` si no se define `RESEND_FROM`. Para produccion debes verificar el dominio en Resend.
+
+La configuracion SMTP anterior sigue disponible como respaldo:
 
 - `SMTP_HOST`
 - `SMTP_PORT`
@@ -64,7 +73,15 @@ Para enviar recordatorios y recuperar contrasenas, define estas variables de ent
 - `SMTP_PASS`
 - `SMTP_FROM` opcional
 
-Tambien puedes usar `FEATURE_EMAILS=false` para dejar estas funciones preparadas en el codigo pero desactivadas mientras la base de datos no se adapte.
+Para habilitar SMTP sin Resend define tambien `FEATURE_EMAILS=true`.
+
+## Copias de seguridad
+
+El Administrador puede crear y restaurar respaldos PostgreSQL en formato `.backup`. La aplicacion busca PostgreSQL 18 en Windows; para otra instalacion define `PG_BIN_DIR` con la carpeta que contiene `pg_dump.exe` y `pg_restore.exe`.
+
+La conexion puede configurarse con `DATABASE_URL`, `DATABASE_USER` y `DATABASE_PASSWORD`.
+
+Antes de usar adjuntos ejecuta `db/002_adjuntos_citas.sql` en el proyecto Supabase.
 
 ## Comando para ejecutar
 

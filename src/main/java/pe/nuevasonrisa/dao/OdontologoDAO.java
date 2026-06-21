@@ -7,5 +7,6 @@ import java.util.List;
 public interface OdontologoDAO {
 
     List<OdontologoTabla> listarOdontologos();
+    List<OdontologoTabla> listarDisponiblesParaCita();
 
 }

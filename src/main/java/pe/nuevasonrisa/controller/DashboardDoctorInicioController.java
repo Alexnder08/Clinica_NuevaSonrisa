@@ -38,6 +38,9 @@ public class DashboardDoctorInicioController {
     @FXML
     private TableColumn<CitaDoctorTabla,String> colEstado;
 
+    @FXML
+    private TableColumn<CitaDoctorTabla,String> colServicio;
+
     private final CitaDoctorService service =
             new CitaDoctorService(
                     new CitaDoctorDAOImpl()
@@ -100,6 +103,10 @@ public class DashboardDoctorInicioController {
 
         colEstado.setCellValueFactory(
                 new PropertyValueFactory<>("estado")
+        );
+
+        colServicio.setCellValueFactory(
+                new PropertyValueFactory<>("servicio")
         );
 
         tablaCitasHoy.setItems(

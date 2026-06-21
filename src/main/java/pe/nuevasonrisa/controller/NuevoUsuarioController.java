@@ -21,6 +21,7 @@ public class NuevoUsuarioController {
     @FXML private TextField txtApellido;
     @FXML private TextField txtDni;
     @FXML private TextField txtCelular;
+    @FXML private TextField txtEmail;
     @FXML private ComboBox<String> cbRol;
 
     @FXML
@@ -40,6 +41,7 @@ public class NuevoUsuarioController {
         String apellido = txtApellido.getText().trim();
         String dni = txtDni.getText().trim();
         String celular = txtCelular.getText().trim();
+        String email = txtEmail.getText().trim();
         String rol = cbRol.getValue();
 
         String camposFaltantes = camposFaltantes(
@@ -49,6 +51,7 @@ public class NuevoUsuarioController {
                 campoFaltante(apellido, "apellido"),
                 campoFaltante(dni, "DNI"),
                 campoFaltante(celular, "celular"),
+                campoFaltante(email, "correo"),
                 rol == null ? "rol" : null
         );
 
@@ -82,6 +85,11 @@ public class NuevoUsuarioController {
             return;
         }
 
+        if (!email.matches("^[A-Za-z][A-Za-z0-9._%+-]{2,}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            mostrarError("Ingrese un correo valido. Ejemplo: usuario@correo.com");
+            return;
+        }
+
         Usuario usuario = new Usuario();
         usuario.setUsuario(usuarioTexto);
         usuario.setPassword(password);
@@ -89,6 +97,7 @@ public class NuevoUsuarioController {
         usuario.setApellido(apellido);
         usuario.setDni(dni);
         usuario.setCelular(celular);
+        usuario.setEmail(email);
         usuario.setRol(rol);
 
         boolean creado = new UsuarioGestionDAOImpl().crearUsuario(usuario);

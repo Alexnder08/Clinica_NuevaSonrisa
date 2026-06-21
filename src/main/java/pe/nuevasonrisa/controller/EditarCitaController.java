@@ -19,6 +19,8 @@ import pe.nuevasonrisa.model.PacienteTabla;
 import pe.nuevasonrisa.model.ServicioTabla;
 import pe.nuevasonrisa.service.AuditoriaService;
 import pe.nuevasonrisa.service.CitaService;
+import pe.nuevasonrisa.service.CorreoService;
+import pe.nuevasonrisa.service.NotificacionCitaService;
 import pe.nuevasonrisa.service.OdontologoService;
 import pe.nuevasonrisa.service.PacienteService;
 import pe.nuevasonrisa.service.ServicioService;
@@ -47,11 +49,14 @@ public class EditarCitaController {
     private final ServicioService servicioService = new ServicioService(new ServicioDAOImpl());
     private final CitaService citaService = new CitaService(new CitaDAOImpl());
     private final AuditoriaService auditoriaService = new AuditoriaService();
+    private final NotificacionCitaService notificacionService =
+            new NotificacionCitaService(new CorreoService());
 
     @FXML
     public void initialize() {
         cbEstado.setItems(FXCollections.observableArrayList(
                 "Pendiente",
+                "En espera",
                 "Realizado"
         ));
 
@@ -205,6 +210,15 @@ public class EditarCitaController {
                         "Cita #" + cita.getId() + " actualizada"
                 );
             }
+
+            notificacionService.enviarModificacion(
+                    cita.getId(),
+                    cbPaciente.getValue(),
+                    cbDoctor.getValue(),
+                    cbServicio.getValue(),
+                    cita.getFecha(),
+                    cita.getHora()
+            );
 
             cerrar();
         } else {

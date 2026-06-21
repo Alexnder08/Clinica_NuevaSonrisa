@@ -6,6 +6,8 @@ import pe.nuevasonrisa.model.Cita;
 import pe.nuevasonrisa.model.CitaTabla;
 
 import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class CitaService {
 
@@ -33,8 +35,16 @@ public class CitaService {
         return dao.cambiarEstado(citaId, "Cancelado", motivo);
     }
 
+    public boolean cambiarEstado(int citaId, String estado) {
+        return dao.cambiarEstado(citaId, estado, null);
+    }
+
     public String validarCita(Cita cita) {
-        return validarCitaInterna(cita, null);
+        try {
+            return validarCitaInterna(cita, null);
+        } catch (IllegalStateException e) {
+            return e.getMessage();
+        }
     }
 
     public String validarEdicionCita(Cita cita) {
@@ -44,7 +54,11 @@ public class CitaService {
             return null;
         }
 
-        return validarCitaInterna(cita, cita.getId());
+        try {
+            return validarCitaInterna(cita, cita.getId());
+        } catch (IllegalStateException e) {
+            return e.getMessage();
+        }
     }
 
     private String validarCitaInterna(Cita cita, Integer citaIdExcluir) {
@@ -86,5 +100,14 @@ public class CitaService {
 
     public boolean actualizarCita(Cita cita) {
         return dao.actualizarCita(cita);
+    }
+
+    public List<LocalTime> obtenerHorasDisponibles(
+            int pacienteId,
+            int doctorId,
+            LocalDate fecha,
+            int duracionMinutos
+    ) {
+        return dao.listarHorasDisponibles(pacienteId, doctorId, fecha, duracionMinutos);
     }
 }

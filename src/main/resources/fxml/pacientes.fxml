@@ -65,6 +65,18 @@
             </graphic>
         </Button>
 
+        <Button text="Historial de citas"
+                onAction="#verHistorialCitas"
+                style="-fx-background-color:#7C3AED;-fx-text-fill:white;-fx-font-weight:bold;-fx-background-radius:10;">
+            <graphic><FontIcon iconLiteral="fas-history" iconSize="14" iconColor="WHITE"/></graphic>
+        </Button>
+
+        <Button text="Activar / Inhabilitar"
+                onAction="#cambiarEstadoPaciente"
+                style="-fx-background-color:#F59E0B;-fx-text-fill:white;-fx-font-weight:bold;-fx-background-radius:10;">
+            <graphic><FontIcon iconLiteral="fas-user-lock" iconSize="14" iconColor="WHITE"/></graphic>
+        </Button>
+
         <Button text="Refrescar"
                 onAction="#cargarPacientes"
                 style="-fx-background-color:#64748B;
@@ -89,6 +101,7 @@
             <TableColumn fx:id="colApellido" text="Apellido" prefWidth="150" sortable="true"/>
             <TableColumn fx:id="colTelefono" text="Teléfono" prefWidth="120" sortable="true"/>
             <TableColumn fx:id="colCorreo" text="Correo" prefWidth="220" sortable="true"/>
+            <TableColumn fx:id="colEstado" text="Estado" prefWidth="100" sortable="true"/>
         </columns>
     </TableView>
 
