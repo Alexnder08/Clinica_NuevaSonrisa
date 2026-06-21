@@ -8,6 +8,7 @@ public class PacienteTabla {
     private String apellido;
     private String telefono;
     private String correo;
+    private String estado;
 
     public PacienteTabla(int id,
                          String dni,
@@ -15,6 +16,10 @@ public class PacienteTabla {
                          String apellido,
                          String telefono,
                          String correo) {
+        this(id, dni, nombre, apellido, telefono, correo, "Activo");
+    }
+
+    public PacienteTabla(int id, String dni, String nombre, String apellido, String telefono, String correo, String estado) {
 
         this.id = id;
         this.dni = dni;
@@ -22,6 +27,7 @@ public class PacienteTabla {
         this.apellido = apellido;
         this.telefono = telefono;
         this.correo = correo;
+        this.estado = estado;
     }
 
     public int getId() { return id; }
@@ -35,4 +41,5 @@ public class PacienteTabla {
     public String getTelefono() { return telefono; }
 
     public String getCorreo() { return correo; }
+    public String getEstado() { return estado; }
 }

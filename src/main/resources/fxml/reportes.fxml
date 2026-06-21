@@ -51,6 +51,12 @@
             </graphic>
         </Button>
 
+        <Button text="Exportar PDF"
+                onAction="#exportarPdf"
+                style="-fx-background-color:#DC2626;-fx-text-fill:white;-fx-font-weight:bold;-fx-background-radius:10;">
+            <graphic><FontIcon iconLiteral="fas-file-pdf" iconSize="14" iconColor="WHITE"/></graphic>
+        </Button>
+
         <Button text="Enviar recordatorios (pendiente)"
                 onAction="#enviarRecordatorios"
                 style="-fx-background-color:#2563EB;

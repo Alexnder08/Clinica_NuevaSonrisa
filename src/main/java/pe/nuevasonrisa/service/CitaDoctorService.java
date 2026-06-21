@@ -43,4 +43,8 @@ public class CitaDoctorService {
         );
     }
 
+    public boolean finalizarCita(int citaId, int doctorId) {
+        return dao.finalizarCita(citaId, doctorId);
+    }
+
 }

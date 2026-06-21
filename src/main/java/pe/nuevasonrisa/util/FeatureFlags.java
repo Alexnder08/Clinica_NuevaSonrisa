@@ -6,6 +6,11 @@ public final class FeatureFlags {
     }
 
     public static boolean emailFeaturesEnabled() {
-        return Boolean.parseBoolean(System.getenv().getOrDefault("FEATURE_EMAILS", "false"));
+        String configuracion = System.getenv("FEATURE_EMAILS");
+        if (configuracion != null && !configuracion.isBlank()) {
+            return Boolean.parseBoolean(configuracion);
+        }
+        String resendApiKey = System.getenv("RESEND_API_KEY");
+        return resendApiKey != null && !resendApiKey.isBlank();
     }
 }

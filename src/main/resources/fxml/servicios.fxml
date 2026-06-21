@@ -65,6 +65,19 @@
             </graphic>
         </Button>
 
+        <Button text="Eliminar"
+                onAction="#eliminarServicio"
+                style="-fx-background-color:#DC2626;
+               -fx-text-fill:white;
+               -fx-font-weight:bold;
+               -fx-background-radius:10;">
+            <graphic>
+                <FontIcon iconLiteral="fas-trash-alt"
+                          iconSize="14"
+                          iconColor="WHITE"/>
+            </graphic>
+        </Button>
+
         <Button text="Refrescar"
                 onAction="#cargarServicios"
                 style="-fx-background-color:#64748B;

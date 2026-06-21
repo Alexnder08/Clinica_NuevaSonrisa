@@ -7,10 +7,11 @@
     -fx-text-fill: #E2E8F0;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-pref-height: 50px;
+    -fx-pref-height: 42px;
+    -fx-min-height: 38px;
     -fx-max-width: Infinity;
     -fx-alignment: CENTER_LEFT;
-    -fx-padding: 0 0 0 20;
+    -fx-padding: 0 0 0 16;
     -fx-background-radius: 14;
     -fx-cursor: hand;
 }

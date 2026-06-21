@@ -11,6 +11,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import pe.nuevasonrisa.dao.impl.PacienteDAOImpl;
 import pe.nuevasonrisa.model.PacienteTabla;
 import pe.nuevasonrisa.service.PacienteService;
+import pe.nuevasonrisa.dao.impl.CitaDAOImpl;
+import pe.nuevasonrisa.model.CitaTabla;
+import pe.nuevasonrisa.service.CitaService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,20 +30,25 @@ public class PacientesController {
     @FXML private TableColumn<PacienteTabla, String> colApellido;
     @FXML private TableColumn<PacienteTabla, String> colTelefono;
     @FXML private TableColumn<PacienteTabla, String> colCorreo;
+    @FXML private TableColumn<PacienteTabla, String> colEstado;
 
     private final PacienteService service =
             new PacienteService(new PacienteDAOImpl());
+
+    private final CitaService citaService = new CitaService(new CitaDAOImpl());
 
     private List<PacienteTabla> pacientesCache = new ArrayList<>();
 
     @FXML
     public void initialize() {
+        tablaPacientes.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colDni.setCellValueFactory(new PropertyValueFactory<>("dni"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colApellido.setCellValueFactory(new PropertyValueFactory<>("apellido"));
         colTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         colCorreo.setCellValueFactory(new PropertyValueFactory<>("correo"));
+        colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
         cargarPacientes();
     }
@@ -133,6 +141,57 @@ public class PacientesController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void verHistorialCitas() {
+        PacienteTabla paciente = tablaPacientes.getSelectionModel().getSelectedItem();
+        if (paciente == null) {
+            mostrarInfo("Aviso", "Seleccione un paciente para consultar su historial.");
+            return;
+        }
+
+        List<CitaTabla> historial = citaService.obtenerCitas().stream()
+                .filter(cita -> cita.getPacienteId() == paciente.getId())
+                .toList();
+
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Historial de citas");
+        dialog.setHeaderText(paciente.getNombre() + " " + paciente.getApellido() + " - DNI " + paciente.getDni());
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+
+        TableView<CitaTabla> tabla = new TableView<>(FXCollections.observableArrayList(historial));
+        tabla.setPrefSize(850, 420);
+        tabla.getColumns().add(columna("Fecha", "fecha", 110));
+        tabla.getColumns().add(columna("Hora", "hora", 90));
+        tabla.getColumns().add(columna("Odontologo", "doctor", 180));
+        tabla.getColumns().add(columna("Tratamiento", "servicio", 180));
+        tabla.getColumns().add(columna("Estado", "estado", 110));
+        tabla.getColumns().add(columna("Motivo", "motivoConsulta", 200));
+        dialog.getDialogPane().setContent(tabla);
+        dialog.showAndWait();
+    }
+
+    @FXML
+    private void cambiarEstadoPaciente() {
+        PacienteTabla paciente = tablaPacientes.getSelectionModel().getSelectedItem();
+        if (paciente == null) {
+            mostrarInfo("Aviso", "Seleccione un paciente.");
+            return;
+        }
+        if (service.cambiarEstado(paciente.getId(), paciente.getEstado())) {
+            cargarPacientes();
+            mostrarInfo("Estado actualizado", "El estado del paciente fue actualizado correctamente.");
+        } else {
+            mostrarInfo("Error", "No se pudo actualizar el estado del paciente.");
+        }
+    }
+
+    private <T> TableColumn<CitaTabla, T> columna(String titulo, String propiedad, double ancho) {
+        TableColumn<CitaTabla, T> columna = new TableColumn<>(titulo);
+        columna.setCellValueFactory(new PropertyValueFactory<>(propiedad));
+        columna.setPrefWidth(ancho);
+        return columna;
     }
 
     private void mostrarInfo(String titulo, String mensaje) {

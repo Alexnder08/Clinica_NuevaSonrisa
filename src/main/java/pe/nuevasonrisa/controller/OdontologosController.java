@@ -40,6 +40,7 @@ public class OdontologosController {
 
     @FXML
     public void initialize() {
+        tablaOdontologos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));

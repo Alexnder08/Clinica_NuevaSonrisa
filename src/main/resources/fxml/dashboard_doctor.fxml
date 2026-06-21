@@ -14,8 +14,8 @@
 
     <left>
         <VBox prefWidth="250"
-              spacing="12"
-              style="-fx-background-color:#0F172A; -fx-padding:25;">
+              spacing="7"
+              style="-fx-background-color:#0F172A; -fx-padding:18;">
 
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <FontIcon iconLiteral="fas-tooth" iconSize="26" iconColor="#14B8A6"/>
@@ -53,7 +53,7 @@
     <center>
         <VBox spacing="20">
             <padding>
-                <Insets top="30" right="30" bottom="30" left="30"/>
+                <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
 
             <Label fx:id="lblTitulo"
@@ -64,7 +64,7 @@
                        VBox.vgrow="ALWAYS"
                        style="-fx-background-color:white;
                               -fx-background-radius:18;
-                              -fx-padding:25;
+                              -fx-padding:18;
                               -fx-effect:dropshadow(gaussian, rgba(15,23,42,0.12), 16, 0, 0, 5);"/>
         </VBox>
     </center>

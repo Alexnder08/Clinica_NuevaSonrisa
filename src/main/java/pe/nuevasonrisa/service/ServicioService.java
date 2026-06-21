@@ -33,4 +33,8 @@ public class ServicioService {
     public boolean actualizarServicio(Servicio servicio) {
         return dao.actualizarServicio(servicio);
     }
+
+    public boolean eliminarServicio(int servicioId) {
+        return dao.eliminarServicio(servicioId);
+    }
 }

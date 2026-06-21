@@ -7,6 +7,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import pe.nuevasonrisa.model.Usuario;
 import pe.nuevasonrisa.util.SessionManager;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
+import javafx.stage.FileChooser;
+import pe.nuevasonrisa.service.BackupService;
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class DashboardAdminController {
 
@@ -18,6 +25,8 @@ public class DashboardAdminController {
 
     @FXML
     private StackPane contenedorContenido;
+
+    private final BackupService backupService = new BackupService();
 
     @FXML
     public void initialize() {
@@ -123,5 +132,41 @@ public class DashboardAdminController {
     private void cerrarSesion() {
         SessionManager.cerrarSesion();
         System.exit(0);
+    }
+
+    @FXML
+    private void crearCopiaSeguridad() {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Guardar copia de seguridad");
+        chooser.setInitialFileName("NuevaSonrisa_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm")) + ".backup");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Copia PostgreSQL (*.backup)", "*.backup"));
+        File destino = chooser.showSaveDialog(contenedorContenido.getScene().getWindow());
+        if (destino != null) {
+            mostrarResultado("Copia de seguridad", backupService.crearBackup(destino));
+        }
+    }
+
+    @FXML
+    private void restaurarCopiaSeguridad() {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Seleccionar copia de seguridad");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Copia PostgreSQL (*.backup)", "*.backup"));
+        File origen = chooser.showOpenDialog(contenedorContenido.getScene().getWindow());
+        if (origen == null) return;
+
+        TextInputDialog confirmacion = new TextInputDialog();
+        confirmacion.setTitle("Restaurar copia de seguridad");
+        confirmacion.setHeaderText("Esta operacion reemplazara los datos actuales.");
+        confirmacion.setContentText("Escriba RESTAURAR para continuar:");
+        confirmacion.showAndWait().filter("RESTAURAR"::equals).ifPresent(texto ->
+                mostrarResultado("Restauracion", backupService.restaurarBackup(origen)));
+    }
+
+    private void mostrarResultado(String titulo, BackupService.Resultado resultado) {
+        Alert alert = new Alert(resultado.exitoso() ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(resultado.exitoso() ? "Operacion completada" : "No se pudo completar");
+        alert.setContentText(resultado.mensaje());
+        alert.showAndWait();
     }
 }

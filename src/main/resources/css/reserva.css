@@ -1,0 +1,131 @@
+.reservation-root {
+    -fx-background-color: #F8FAFC;
+    -fx-font-family: "Segoe UI";
+}
+
+.reservation-header {
+    -fx-background-color: linear-gradient(to right, #F0FDFA, #FFFFFF);
+    -fx-padding: 24 28;
+    -fx-border-color: transparent transparent #CCFBF1 transparent;
+}
+
+.header-icon {
+    -fx-background-color: #CCFBF1;
+    -fx-background-radius: 12;
+    -fx-min-width: 46;
+    -fx-min-height: 46;
+}
+
+.reservation-title {
+    -fx-font-size: 23px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #0F172A;
+}
+
+.reservation-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748B;
+}
+
+.reservation-content {
+    -fx-padding: 24 28 28;
+}
+
+.field-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #334155;
+}
+
+.combo-box,
+.date-picker,
+.text-area {
+    -fx-font-size: 14px;
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 9;
+    -fx-background-radius: 9;
+}
+
+.combo-box,
+.date-picker {
+    -fx-pref-height: 42px;
+}
+
+.combo-box:hover,
+.date-picker:hover,
+.text-area:hover {
+    -fx-border-color: #94A3B8;
+}
+
+.combo-box:focused,
+.date-picker:focused,
+.text-area:focused {
+    -fx-border-color: #14B8A6;
+    -fx-border-width: 1.5;
+}
+
+.text-area {
+    -fx-pref-height: 68px;
+}
+
+.text-area .content {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 9;
+}
+
+.email-notice {
+    -fx-background-color: #F0FDFA;
+    -fx-border-color: #99F6E4;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 12 14;
+}
+
+.email-notice-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: #115E59;
+}
+
+.form-status {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748B;
+}
+
+.form-status-progress {
+    -fx-text-fill: #0F766E;
+    -fx-font-weight: 600;
+}
+
+.button-primary,
+.button-secondary {
+    -fx-padding: 11 18;
+    -fx-background-radius: 9;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+}
+
+.button-primary {
+    -fx-background-color: #0F766E;
+    -fx-text-fill: #FFFFFF;
+}
+
+.button-primary:hover {
+    -fx-background-color: #115E59;
+}
+
+.button-primary:disabled {
+    -fx-opacity: 0.65;
+}
+
+.button-secondary {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #475569;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 9;
+}
+
+.button-secondary:hover {
+    -fx-background-color: #F1F5F9;
+}

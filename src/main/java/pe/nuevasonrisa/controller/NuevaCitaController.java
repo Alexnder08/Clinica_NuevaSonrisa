@@ -1,10 +1,13 @@
 package pe.nuevasonrisa.controller;
 
 import javafx.collections.FXCollections;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
@@ -18,6 +21,8 @@ import pe.nuevasonrisa.model.PacienteTabla;
 import pe.nuevasonrisa.model.ServicioTabla;
 import pe.nuevasonrisa.service.AuditoriaService;
 import pe.nuevasonrisa.service.CitaService;
+import pe.nuevasonrisa.service.ConfirmacionReservaService;
+import pe.nuevasonrisa.service.CorreoService;
 import pe.nuevasonrisa.service.OdontologoService;
 import pe.nuevasonrisa.service.PacienteService;
 import pe.nuevasonrisa.service.ServicioService;
@@ -27,6 +32,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class NuevaCitaController {
 
@@ -37,6 +43,8 @@ public class NuevaCitaController {
     @FXML private ComboBox<String> cbHora;
     @FXML private TextArea txtMotivo;
     @FXML private TextArea txtNotas;
+    @FXML private Button btnGuardar;
+    @FXML private Label lblEstado;
 
     private final PacienteService pacienteService =
             new PacienteService(new PacienteDAOImpl());
@@ -53,16 +61,19 @@ public class NuevaCitaController {
     private final AuditoriaService auditoriaService =
             new AuditoriaService();
 
+    private final ConfirmacionReservaService confirmacionReservaService =
+            new ConfirmacionReservaService(new CorreoService());
+
     @FXML
     public void initialize() {
-        cbPaciente.setItems(FXCollections.observableArrayList(pacienteService.obtenerPacientes()));
-        cbDoctor.setItems(FXCollections.observableArrayList(odontologoService.obtenerOdontologos()));
-
-        cbHora.setItems(FXCollections.observableArrayList(
-                "08:00", "09:00", "10:00", "11:00",
-                "12:00", "13:00", "14:00", "15:00",
-                "16:00", "17:00", "18:00"
+        cbPaciente.setItems(FXCollections.observableArrayList(
+                pacienteService.obtenerPacientes().stream()
+                        .filter(paciente -> "Activo".equalsIgnoreCase(paciente.getEstado()))
+                        .toList()
         ));
+        cbDoctor.setItems(FXCollections.observableArrayList(odontologoService.obtenerDisponiblesParaCita()));
+
+        cbHora.setDisable(true);
 
         configurarVistaCombos();
 
@@ -79,7 +90,43 @@ public class NuevaCitaController {
             ));
 
             cbServicio.getSelectionModel().clearSelection();
+            actualizarHorasDisponibles();
         });
+
+        cbPaciente.setOnAction(event -> actualizarHorasDisponibles());
+        cbServicio.setOnAction(event -> actualizarHorasDisponibles());
+        dpFecha.setOnAction(event -> actualizarHorasDisponibles());
+    }
+
+    private void actualizarHorasDisponibles() {
+        PacienteTabla paciente = cbPaciente.getValue();
+        OdontologoTabla doctor = cbDoctor.getValue();
+        ServicioTabla servicio = cbServicio.getValue();
+        LocalDate fecha = dpFecha.getValue();
+
+        cbHora.getItems().clear();
+        cbHora.getSelectionModel().clearSelection();
+        if (paciente == null || doctor == null || servicio == null || fecha == null) {
+            cbHora.setDisable(true);
+            return;
+        }
+
+        LocalDate hoy = LocalDate.now(ZoneId.of("America/Lima"));
+        LocalTime ahora = LocalTime.now(ZoneId.of("America/Lima"));
+        List<String> horas = citaService.obtenerHorasDisponibles(
+                        paciente.getId(), doctor.getId(), fecha, servicio.getDuracion())
+                .stream()
+                .filter(hora -> !fecha.isEqual(hoy) || hora.isAfter(ahora))
+                .map(LocalTime::toString)
+                .toList();
+
+        cbHora.setItems(FXCollections.observableArrayList(horas));
+        cbHora.setDisable(horas.isEmpty());
+        if (horas.isEmpty()) {
+            lblEstado.setText("No hay horas disponibles para la seleccion actual.");
+        } else {
+            lblEstado.setText("Selecciona una de las " + horas.size() + " horas disponibles.");
+        }
     }
 
     @FXML
@@ -98,8 +145,7 @@ public class NuevaCitaController {
                 servicio == null ? "servicio" : null,
                 fecha == null ? "fecha" : null,
                 campoFaltante(horaTexto, "hora"),
-                campoFaltante(motivo, "motivo de consulta"),
-                campoFaltante(notas, "notas")
+                campoFaltante(motivo, "motivo de consulta")
         );
 
         if (camposFaltantes != null) {
@@ -135,7 +181,7 @@ public class NuevaCitaController {
         cita.setHora(hora);
         cita.setDuracion(servicio.getDuracion());
         cita.setMotivoConsulta(motivo);
-        cita.setNotas(notas);
+        cita.setNotas(notas.isBlank() ? null : notas);
 
         String resultado = citaService.validarCita(cita);
 
@@ -144,7 +190,16 @@ public class NuevaCitaController {
             return;
         }
 
-        boolean creado = citaService.crearCita(cita);
+        boolean creado;
+        try {
+            creado = citaService.crearCita(cita);
+        } catch (RuntimeException e) {
+            String mensaje = e.getMessage() == null || e.getMessage().isBlank()
+                    ? "No se pudo registrar la cita."
+                    : e.getMessage();
+            mostrarError(mensaje);
+            return;
+        }
 
         if (creado) {
             auditoriaService.registrar(
@@ -156,10 +211,42 @@ public class NuevaCitaController {
                             " el " + fecha +
                             " a las " + horaTexto
             );
-            cerrar();
+            enviarConfirmacion(paciente, doctor, servicio, fecha, hora);
         } else {
             mostrarError("No se pudo crear la cita. Verifique la disponibilidad del doctor y vuelva a intentar.");
         }
+    }
+
+    private void enviarConfirmacion(
+            PacienteTabla paciente,
+            OdontologoTabla doctor,
+            ServicioTabla servicio,
+            LocalDate fecha,
+            LocalTime hora
+    ) {
+        btnGuardar.setDisable(true);
+        lblEstado.setText("Reserva registrada. Enviando confirmacion por correo...");
+        lblEstado.getStyleClass().setAll("form-status", "form-status-progress");
+
+        CompletableFuture
+                .supplyAsync(() -> confirmacionReservaService.enviar(paciente, doctor, servicio, fecha, hora))
+                .exceptionally(error -> new ConfirmacionReservaService.Resultado(
+                        false,
+                        "La cita fue registrada, pero ocurrio un error al enviar la confirmacion."
+                ))
+                .thenAccept(resultado -> Platform.runLater(() -> {
+                    Alert.AlertType tipo = resultado.enviado()
+                            ? Alert.AlertType.INFORMATION
+                            : Alert.AlertType.WARNING;
+                    Alert alert = new Alert(tipo);
+                    alert.setTitle(resultado.enviado() ? "Reserva confirmada" : "Reserva registrada");
+                    alert.setHeaderText(resultado.enviado()
+                            ? "Todo listo para la cita"
+                            : "La cita se guardo correctamente");
+                    alert.setContentText(resultado.mensaje());
+                    alert.showAndWait();
+                    cerrar();
+                }));
     }
 
     private LocalTime parsearHora(String horaTexto) {
@@ -227,7 +314,7 @@ public class NuevaCitaController {
             protected void updateItem(OdontologoTabla item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? null :
-                        item.getNombre() + " " + item.getApellido() + " - " + item.getServicio());
+                        item.getNombre() + " " + item.getApellido());
             }
         });
 
@@ -236,7 +323,7 @@ public class NuevaCitaController {
             protected void updateItem(OdontologoTabla item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? null :
-                        item.getNombre() + " " + item.getApellido() + " - " + item.getServicio());
+                        item.getNombre() + " " + item.getApellido());
             }
         });
 

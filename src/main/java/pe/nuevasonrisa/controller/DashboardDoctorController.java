@@ -51,6 +51,7 @@ public class DashboardDoctorController {
 
     @FXML
     private void cerrarSesion() {
+        pe.nuevasonrisa.util.SessionManager.cerrarSesion();
         System.exit(0);
     }
 

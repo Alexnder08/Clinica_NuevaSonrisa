@@ -22,6 +22,7 @@ public class EditarUsuarioController {
     @FXML private TextField txtApellido;
     @FXML private TextField txtDni;
     @FXML private TextField txtCelular;
+    @FXML private TextField txtEmail;
     @FXML private ComboBox<String> cbRol;
 
     private UsuarioTabla usuarioSeleccionado;
@@ -43,6 +44,7 @@ public class EditarUsuarioController {
         txtApellido.setText(usuario.getApellido());
         txtDni.setText(usuario.getDni());
         txtCelular.setText(usuario.getCelular());
+        txtEmail.setText(usuario.getEmail());
         cbRol.setValue(normalizarRol(usuario.getRol()));
     }
 
@@ -57,6 +59,7 @@ public class EditarUsuarioController {
         String apellido = txtApellido.getText().trim();
         String dni = txtDni.getText().trim();
         String celular = txtCelular.getText().trim();
+        String email = txtEmail.getText().trim();
         String rol = cbRol.getValue();
 
         String camposFaltantes = camposFaltantes(
@@ -65,6 +68,7 @@ public class EditarUsuarioController {
                 campoFaltante(apellido, "apellido"),
                 campoFaltante(dni, "DNI"),
                 campoFaltante(celular, "celular"),
+                campoFaltante(email, "correo"),
                 rol == null ? "rol" : null
         );
 
@@ -93,6 +97,11 @@ public class EditarUsuarioController {
             return;
         }
 
+        if (!email.matches("^[A-Za-z][A-Za-z0-9._%+-]{2,}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            mostrarError("Ingrese un correo valido. Ejemplo: usuario@correo.com");
+            return;
+        }
+
         Usuario usuario = new Usuario();
         usuario.setId(usuarioSeleccionado.getId());
         usuario.setUsuario(usuarioTexto);
@@ -100,6 +109,7 @@ public class EditarUsuarioController {
         usuario.setApellido(apellido);
         usuario.setDni(dni);
         usuario.setCelular(celular);
+        usuario.setEmail(email);
         usuario.setRol(rol);
 
         boolean actualizado = new UsuarioGestionDAOImpl().actualizarUsuario(usuario);

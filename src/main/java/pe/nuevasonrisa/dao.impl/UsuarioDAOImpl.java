@@ -59,7 +59,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             }
 
         } catch (Exception e) {
-            System.out.println("Error al buscar usuario: " + e.getMessage());
+            throw new IllegalStateException("No se pudo consultar el usuario en la base de datos.", e);
         }
 
         return Optional.empty();

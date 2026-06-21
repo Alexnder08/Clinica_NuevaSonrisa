@@ -14,4 +14,5 @@ public interface ServicioDAO {
     boolean crearServicio(Servicio servicio);
 
     boolean actualizarServicio(Servicio servicio);
+    boolean eliminarServicio(int servicioId);
 }

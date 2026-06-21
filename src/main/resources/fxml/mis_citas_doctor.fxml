@@ -43,6 +43,19 @@
     </TableView>
 
     <HBox spacing="12" alignment="CENTER_RIGHT">
+        <Button text="Adjuntar archivo" onAction="#adjuntarArchivo"
+                style="-fx-background-color:#2563EB;-fx-text-fill:white;-fx-font-weight:bold;-fx-background-radius:10;">
+            <graphic><FontIcon iconLiteral="fas-paperclip" iconSize="14" iconColor="WHITE"/></graphic>
+        </Button>
+        <Button text="Ver adjuntos" onAction="#descargarAdjunto"
+                style="-fx-background-color:#7C3AED;-fx-text-fill:white;-fx-font-weight:bold;-fx-background-radius:10;">
+            <graphic><FontIcon iconLiteral="fas-folder-open" iconSize="14" iconColor="WHITE"/></graphic>
+        </Button>
+        <Button text="Finalizar cita"
+                onAction="#finalizarCita"
+                style="-fx-background-color:#15803D;-fx-text-fill:white;-fx-font-weight:bold;-fx-background-radius:10;">
+            <graphic><FontIcon iconLiteral="fas-check-circle" iconSize="14" iconColor="WHITE"/></graphic>
+        </Button>
         <Button text="Agregar Nota"
                 onAction="#agregarNota"
                 style="-fx-background-color:#14B8A6;

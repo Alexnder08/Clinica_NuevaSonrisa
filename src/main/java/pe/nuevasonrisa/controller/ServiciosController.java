@@ -35,6 +35,7 @@ public class ServiciosController {
     @FXML
     public void initialize() {
 
+        tablaServicios.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colDuracion.setCellValueFactory(new PropertyValueFactory<>("duracion"));
@@ -140,6 +141,29 @@ public class ServiciosController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void eliminarServicio() {
+        ServicioTabla seleccionado = tablaServicios.getSelectionModel().getSelectedItem();
+        if (seleccionado == null) {
+            mostrarInfo("Aviso", "Seleccione un servicio para eliminar.");
+            return;
+        }
+
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Eliminar servicio");
+        confirmacion.setHeaderText("Se eliminara el servicio " + seleccionado.getNombre());
+        confirmacion.setContentText("Los servicios usados por citas existentes no pueden eliminarse.");
+
+        confirmacion.showAndWait().filter(ButtonType.OK::equals).ifPresent(respuesta -> {
+            if (service.eliminarServicio(seleccionado.getId())) {
+                cargarServicios();
+                mostrarInfo("Servicio eliminado", "El servicio se elimino correctamente.");
+            } else {
+                mostrarInfo("No se pudo eliminar", "El servicio esta asociado a citas existentes o ya no existe.");
+            }
+        });
     }
 
     private void mostrarInfo(String titulo,

@@ -20,6 +20,7 @@ import pe.nuevasonrisa.model.ReporteServicio;
 import pe.nuevasonrisa.service.ReporteService;
 import pe.nuevasonrisa.service.RecordatorioService;
 import pe.nuevasonrisa.service.CorreoService;
+import pe.nuevasonrisa.util.PdfExporter;
 
 public class ReportesController {
 
@@ -119,6 +120,20 @@ public class ReportesController {
     private void enviarRecordatorios() {
         int enviados = recordatorioService.enviarRecordatoriosProximos();
         mostrarInfo("Recordatorios", "Se enviaron " + enviados + " recordatorios.");
+    }
+
+    @FXML
+    private void exportarPdf() {
+        try {
+            PdfExporter.exportarReportes(
+                    service.obtenerReporteCitasDoctor(),
+                    service.obtenerReporteServicios(),
+                    service.obtenerReporteEstados(),
+                    tablaDoctores.getScene().getWindow()
+            );
+        } catch (Exception e) {
+            mostrarInfo("Error", "No se pudo generar el reporte PDF: " + e.getMessage());
+        }
     }
 
     private void mostrarInfo(String titulo, String mensaje) {

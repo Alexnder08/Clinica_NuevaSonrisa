@@ -39,6 +39,7 @@ import pe.nuevasonrisa.dao.impl.UsuarioGestionDAOImpl;
 import pe.nuevasonrisa.model.UsuarioTabla;
 import pe.nuevasonrisa.service.UsuarioService;
 import pe.nuevasonrisa.service.AuditoriaService;
+import pe.nuevasonrisa.util.ExcelExporter;
 
 public class UsuariosController {
 
@@ -69,6 +70,10 @@ public class UsuariosController {
     @FXML
     private TableColumn<UsuarioTabla, String> colEstado;
 
+    @FXML private TableColumn<UsuarioTabla, String> colDni;
+    @FXML private TableColumn<UsuarioTabla, String> colCelular;
+    @FXML private TableColumn<UsuarioTabla, String> colEmail;
+
     private final UsuarioService service =
             new UsuarioService(new UsuarioGestionDAOImpl());
 
@@ -78,12 +83,16 @@ public class UsuariosController {
     @FXML
     public void initialize() {
 
+        tablaUsuarios.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colApellido.setCellValueFactory(new PropertyValueFactory<>("apellido"));
         colRol.setCellValueFactory(new PropertyValueFactory<>("rol"));
         colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+        colDni.setCellValueFactory(new PropertyValueFactory<>("dni"));
+        colCelular.setCellValueFactory(new PropertyValueFactory<>("celular"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 
         cargarUsuarios();
 
@@ -278,6 +287,18 @@ public class UsuariosController {
             mostrarInfo("Error", "No se pudo exportar el PDF: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void exportarExcel() {
+        List<UsuarioTabla> usuariosExportar = tablaUsuarios.getItems() == null
+                ? List.of()
+                : new ArrayList<>(tablaUsuarios.getItems());
+        if (usuariosExportar.isEmpty()) {
+            mostrarInfo("Aviso", "No hay usuarios para exportar.");
+            return;
+        }
+        ExcelExporter.exportarUsuarios(usuariosExportar);
     }
 
     private void generarPDF(File archivo, List<UsuarioTabla> usuarios) throws Exception {

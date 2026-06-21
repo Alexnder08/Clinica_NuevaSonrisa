@@ -23,6 +23,8 @@ public interface CitaDAO {
 
     boolean dentroHorarioDoctor(int doctorId, LocalDate fecha, LocalTime hora, int duracionMinutos);
 
+    List<LocalTime> listarHorasDisponibles(int pacienteId, int doctorId, LocalDate fecha, int duracionMinutos);
+
     boolean cambiarEstado(int citaid, String estado, String motivoCancelacion);
 
     List<RecordatorioCita> listarCitasPendientesParaRecordatorio(LocalDate desde, LocalDate hasta);

@@ -12,11 +12,11 @@ import java.util.List;
 public class RecordatorioService {
 
     private final CitaDAO citaDAO;
-    private final CorreoService correoService;
+    private final NotificacionCitaService notificacionService;
 
     public RecordatorioService(CitaDAO citaDAO, CorreoService correoService) {
         this.citaDAO = citaDAO;
-        this.correoService = correoService;
+        this.notificacionService = new NotificacionCitaService(correoService);
     }
 
     public List<RecordatorioCita> obtenerPendientes() {
@@ -34,14 +34,7 @@ public class RecordatorioService {
         List<RecordatorioCita> enviados = new ArrayList<>();
 
         for (RecordatorioCita cita : pendientes) {
-            String asunto = "Recordatorio de cita - Nueva Sonrisa";
-            String cuerpo = construirMensaje(cita);
-
-            boolean ok = correoService.enviarCorreo(
-                    cita.getCorreo(),
-                    asunto,
-                    cuerpo
-            );
+            boolean ok = notificacionService.enviarRecordatorio(cita);
 
             if (ok && citaDAO.marcarRecordatorioEnviado(cita.getId(), LocalDateTime.now())) {
                 enviados.add(cita);
@@ -51,23 +44,4 @@ public class RecordatorioService {
         return enviados.size();
     }
 
-    private String construirMensaje(RecordatorioCita cita) {
-        return """
-                Hola %s,
-
-                Te recordamos tu cita en Nueva Sonrisa:
-                - Doctor: %s
-                - Servicio: %s
-                - Fecha: %s
-                - Hora: %s
-
-                Si necesitas reprogramar, contacta a la clinica.
-                """.formatted(
-                cita.getPaciente(),
-                cita.getDoctor(),
-                cita.getServicio(),
-                cita.getFecha(),
-                cita.getHora()
-        );
-    }
 }
