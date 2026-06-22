@@ -21,6 +21,9 @@ public class CorreoService {
             .connectTimeout(Duration.ofSeconds(10))
             .build();
 
+    private String ultimoError;
+    private String proveedorUltimoIntento = "Sin configurar";
+
     public boolean enviarCorreo(String destinatario, String asunto, String cuerpo) {
         String html = "<div style=\"font-family:Arial,sans-serif;white-space:pre-line;color:#334155\">"
                 + escaparHtml(cuerpo)
@@ -29,12 +32,44 @@ public class CorreoService {
     }
 
     public boolean enviarCorreoHtml(String destinatario, String asunto, String html, String claveIdempotencia) {
+        ultimoError = null;
         String apiKey = System.getenv("RESEND_API_KEY");
         if (apiKey != null && !apiKey.isBlank()) {
-            return enviarConResend(apiKey, destinatario, asunto, html, claveIdempotencia);
+            proveedorUltimoIntento = "Resend";
+        } else {
+            proveedorUltimoIntento = "SMTP";
         }
 
-        return enviarConSmtp(destinatario, asunto, html);
+        String destinatarioNormalizado = normalizarDestinatario(destinatario);
+        if (destinatarioNormalizado == null) {
+            ultimoError = "El destinatario no contiene una dirección de correo válida.";
+            return false;
+        }
+
+        if (apiKey != null && !apiKey.isBlank()) {
+            return enviarConResend(apiKey, destinatarioNormalizado, asunto, html, claveIdempotencia);
+        }
+
+        return enviarConSmtp(destinatarioNormalizado, asunto, html);
+    }
+
+    public String getProveedorUltimoIntento() {
+        return proveedorUltimoIntento;
+    }
+
+    public String getUltimoError() {
+        return ultimoError;
+    }
+
+    static String normalizarDestinatario(String destinatario) {
+        if (destinatario == null) {
+            return null;
+        }
+
+        String correo = destinatario.trim();
+        return correo.matches("^[A-Za-z0-9._%+\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,}$")
+                ? correo
+                : null;
     }
 
     private boolean enviarConResend(
@@ -78,9 +113,11 @@ public class CorreoService {
                 return true;
             }
 
-            System.err.println("Resend rechazo el correo (HTTP " + response.statusCode() + "): " + response.body());
+            ultimoError = "HTTP " + response.statusCode() + ": " + response.body();
+            System.err.println("Resend rechazo el correo (" + ultimoError + ")");
         } catch (Exception e) {
-            System.err.println("No se pudo conectar con Resend: " + e.getMessage());
+            ultimoError = e.getMessage();
+            System.err.println("No se pudo conectar con Resend: " + ultimoError);
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
@@ -100,6 +137,7 @@ public class CorreoService {
                 || usuario == null || usuario.isBlank()
                 || password == null || password.isBlank()
                 || remitente == null || remitente.isBlank()) {
+            ultimoError = "No se encontraron credenciales SMTP.";
             System.err.println("Correo no configurado. Defina RESEND_API_KEY o las variables SMTP.");
             return false;
         }
@@ -126,7 +164,8 @@ public class CorreoService {
             Transport.send(message);
             return true;
         } catch (Exception e) {
-            System.err.println("No se pudo enviar el correo por SMTP: " + e.getMessage());
+            ultimoError = e.getMessage();
+            System.err.println("No se pudo enviar el correo por SMTP: " + ultimoError);
             return false;
         }
     }

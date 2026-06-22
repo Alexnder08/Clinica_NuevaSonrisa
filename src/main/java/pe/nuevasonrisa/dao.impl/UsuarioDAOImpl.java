@@ -25,6 +25,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                 u.estado,
                 u.dni,
                 u.celular,
+                u.email,
                 COALESCE(s.nombre, 'Ninguno') AS servicio
             FROM usuarios u
             INNER JOIN roles r ON r.id = u.rol_id
@@ -51,7 +52,8 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                             rs.getString("estado"),
                             rs.getString("dni"),
                             rs.getString("celular"),
-                            rs.getString("servicio")
+                            rs.getString("servicio"),
+                            rs.getString("email")
                     );
 
                     return Optional.of(user);
@@ -78,11 +80,12 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                 u.estado,
                 u.dni,
                 u.celular,
+                u.email,
                 COALESCE(s.nombre, 'Ninguno') AS servicio
             FROM usuarios u
             INNER JOIN roles r ON r.id = u.rol_id
             LEFT JOIN servicios s ON s.id = u.servicio_id
-            WHERE lower(u.email) = lower(?)
+            WHERE lower(btrim(u.email)) = lower(btrim(?))
             LIMIT 1
         """;
 
@@ -104,7 +107,8 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                             rs.getString("estado"),
                             rs.getString("dni"),
                             rs.getString("celular"),
-                            rs.getString("servicio")
+                            rs.getString("servicio"),
+                            rs.getString("email")
                     );
                     return Optional.of(user);
                 }

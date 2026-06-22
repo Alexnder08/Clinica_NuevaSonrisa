@@ -1,10 +1,14 @@
 package pe.nuevasonrisa.controller;
 
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
 import pe.nuevasonrisa.dao.impl.RecuperacionPasswordDAOImpl;
 import pe.nuevasonrisa.service.CorreoService;
@@ -20,12 +24,21 @@ public class RecuperarPasswordController {
     @FXML private PasswordField txtNueva;
     @FXML private PasswordField txtConfirmar;
     @FXML private Label lblMensaje;
+    @FXML private Button btnEnviarCodigo;
+    @FXML private ProgressIndicator progresoEnvio;
 
     private final PasswordRecoveryService service =
             new PasswordRecoveryService(
                     new RecuperacionPasswordDAOImpl(),
                     new CorreoService()
             );
+
+    @FXML
+    public void initialize() {
+        txtCodigo.setTextFormatter(new TextFormatter<String>(cambio ->
+                cambio.getControlNewText().matches("\\d{0,6}") ? cambio : null
+        ));
+    }
 
     @FXML
     private void enviarCodigo() {
@@ -41,8 +54,35 @@ public class RecuperarPasswordController {
             return;
         }
 
-        String mensaje = service.solicitarRestablecimiento(correo);
-        mostrarMensaje(mensaje, mensaje.startsWith("Se envió") || mensaje.startsWith("Se generó"));
+        cambiarEstadoEnvio(true);
+        lblMensaje.setStyle("-fx-text-fill: #475569;");
+        lblMensaje.setText("Enviando código mediante Resend...");
+
+        Task<String> tarea = new Task<>() {
+            @Override
+            protected String call() {
+                return service.solicitarRestablecimiento(correo);
+            }
+        };
+
+        tarea.setOnSucceeded(event -> {
+            cambiarEstadoEnvio(false);
+            String mensaje = tarea.getValue();
+            mostrarMensaje(mensaje, mensaje.startsWith("Se envió"));
+        });
+
+        tarea.setOnFailed(event -> {
+            cambiarEstadoEnvio(false);
+            Throwable error = tarea.getException();
+            String detalle = error == null || error.getMessage() == null
+                    ? "Error inesperado durante el envío."
+                    : error.getMessage();
+            mostrarMensaje("No se pudo solicitar el código. " + detalle, false);
+        });
+
+        Thread hilo = new Thread(tarea, "recuperacion-password-resend");
+        hilo.setDaemon(true);
+        hilo.start();
     }
 
     @FXML
@@ -61,6 +101,11 @@ public class RecuperarPasswordController {
 
         if (camposFaltantes != null) {
             mostrarMensaje("Complete los campos obligatorios: " + camposFaltantes + ".", false);
+            return;
+        }
+
+        if (!codigo.matches("\\d{6}")) {
+            mostrarMensaje("El código debe contener exactamente 6 dígitos numéricos.", false);
             return;
         }
 
@@ -105,6 +150,14 @@ public class RecuperarPasswordController {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    private void cambiarEstadoEnvio(boolean enviando) {
+        btnEnviarCodigo.setDisable(enviando);
+        btnEnviarCodigo.setText(enviando ? "Enviando..." : "Enviar código");
+        progresoEnvio.setManaged(enviando);
+        progresoEnvio.setVisible(enviando);
+        txtCorreo.setDisable(enviando);
     }
 
     private void cerrar() {
