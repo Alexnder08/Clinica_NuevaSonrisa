@@ -8,10 +8,13 @@ import pe.nuevasonrisa.util.FeatureFlags;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.Base64;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class PasswordRecoveryService {
+
+    private static final DateTimeFormatter FORMATO_VENCIMIENTO =
+            DateTimeFormatter.ofPattern("dd/MM/yyyy 'a las' HH:mm");
 
     private final RecuperacionPasswordDAO dao;
     private final CorreoService correoService;
@@ -46,24 +49,13 @@ public class PasswordRecoveryService {
         }
 
         String asunto = "Recuperación de contraseña - Nueva Sonrisa";
-        String cuerpo = """
-                Hola %s,
+        String html = construirCorreoRecuperacion(usuario, token, expira);
 
-                Se solicitó un restablecimiento de contraseña para tu usuario %s.
-
-                Código de recuperación: %s
-                Vence: %s
-
-                Si no solicitaste este cambio, ignora este mensaje.
-                """.formatted(
-                usuario.getNombreCompleto(),
-                usuario.getUsuario(),
-                token,
-                expira
-        );
-
-        if (!correoService.enviarCorreo(usuario.getEmail(), asunto, cuerpo)) {
-            return "Se generó el código, pero no se pudo enviar el correo. Revise la configuración SMTP.";
+        if (!correoService.enviarCorreoHtml(usuario.getEmail(), asunto, html, null)) {
+            String detalle = correoService.getUltimoError();
+            String sufijo = detalle == null || detalle.isBlank() ? "" : " Detalle: " + detalle;
+            return "Se generó el código, pero " + correoService.getProveedorUltimoIntento()
+                    + " no pudo enviar el correo." + sufijo;
         }
 
         return "Se envió el código de recuperación al correo registrado.";
@@ -129,8 +121,43 @@ public class PasswordRecoveryService {
     }
 
     private String generarToken() {
-        byte[] buffer = new byte[9];
-        secureRandom.nextBytes(buffer);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(buffer);
+        return "%06d".formatted(secureRandom.nextInt(1_000_000));
+    }
+
+    static String construirCorreoRecuperacion(Usuario usuario, String token, LocalDateTime expira) {
+        return """
+                <!doctype html>
+                <html lang="es">
+                  <body style="margin:0;padding:0;background:#f1f5f9;font-family:Arial,Helvetica,sans-serif;color:#0f172a">
+                    <table role="presentation" width="100%%" cellspacing="0" cellpadding="0" style="background:#f1f5f9">
+                      <tr><td align="center" style="padding:32px 14px">
+                        <table role="presentation" width="100%%" cellspacing="0" cellpadding="0" style="max-width:600px;background:#ffffff;border:1px solid #e2e8f0;border-radius:18px;overflow:hidden">
+                          <tr><td style="padding:26px 30px;background:#1f4e78;color:#ffffff">
+                            <div style="font-size:20px;font-weight:700">Nueva Sonrisa</div>
+                            <div style="margin-top:7px;font-size:13px;opacity:.9">Seguridad de tu cuenta</div>
+                          </td></tr>
+                          <tr><td style="padding:32px 30px">
+                            <h1 style="margin:0 0 16px;font-size:25px">Recupera tu contraseña</h1>
+                            <p style="margin:0 0 10px;font-size:16px;line-height:1.6">Hola <strong>%s</strong>,</p>
+                            <p style="margin:0 0 22px;color:#475569;font-size:15px;line-height:1.7">Recibimos una solicitud para restablecer la contraseña del usuario <strong>%s</strong>.</p>
+                            <div style="padding:22px;text-align:center;background:#eff6ff;border:1px solid #bfdbfe;border-radius:13px">
+                              <div style="color:#64748b;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase">Código de recuperación</div>
+                              <div style="margin:12px 0;font-family:Consolas,monospace;font-size:30px;font-weight:700;letter-spacing:4px;color:#1f4e78">%s</div>
+                              <div style="color:#475569;font-size:13px">Válido hasta el %s</div>
+                            </div>
+                            <p style="margin:22px 0 0;color:#475569;font-size:14px;line-height:1.7">Ingresa este código en la aplicación. Si no solicitaste el cambio, ignora este mensaje y tu contraseña permanecerá igual.</p>
+                          </td></tr>
+                          <tr><td style="padding:18px 30px;background:#f8fafc;border-top:1px solid #e2e8f0;text-align:center;color:#64748b;font-size:12px">Este es un mensaje automático. No compartas este código.</td></tr>
+                        </table>
+                      </td></tr>
+                    </table>
+                  </body>
+                </html>
+                """.formatted(
+                CorreoService.escaparHtml(usuario.getNombreCompleto()),
+                CorreoService.escaparHtml(usuario.getUsuario()),
+                CorreoService.escaparHtml(token),
+                CorreoService.escaparHtml(FORMATO_VENCIMIENTO.format(expira))
+        );
     }
 }
