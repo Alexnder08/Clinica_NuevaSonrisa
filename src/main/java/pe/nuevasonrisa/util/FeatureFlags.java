@@ -1,5 +1,7 @@
 package pe.nuevasonrisa.util;
 
+import pe.nuevasonrisa.config.CorreoConfig;
+
 public final class FeatureFlags {
 
     private FeatureFlags() {
@@ -10,7 +12,7 @@ public final class FeatureFlags {
         if (configuracion != null && !configuracion.isBlank()) {
             return Boolean.parseBoolean(configuracion);
         }
-        String resendApiKey = System.getenv("RESEND_API_KEY");
+        String resendApiKey = CorreoConfig.resendApiKey();
         return resendApiKey != null && !resendApiKey.isBlank();
     }
 }

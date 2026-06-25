@@ -6,6 +6,7 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import pe.nuevasonrisa.config.CorreoConfig;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -33,7 +34,7 @@ public class CorreoService {
 
     public boolean enviarCorreoHtml(String destinatario, String asunto, String html, String claveIdempotencia) {
         ultimoError = null;
-        String apiKey = System.getenv("RESEND_API_KEY");
+        String apiKey = CorreoConfig.resendApiKey();
         if (apiKey != null && !apiKey.isBlank()) {
             proveedorUltimoIntento = "Resend";
         } else {
@@ -79,10 +80,7 @@ public class CorreoService {
             String html,
             String claveIdempotencia
     ) {
-        String remitente = System.getenv().getOrDefault(
-                "RESEND_FROM",
-                "Nueva Sonrisa <onboarding@resend.dev>"
-        );
+        String remitente = CorreoConfig.resendFrom();
 
         String json = """
                 {"from":"%s","to":["%s"],"subject":"%s","html":"%s"}
