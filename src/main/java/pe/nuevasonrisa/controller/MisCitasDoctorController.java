@@ -108,6 +108,8 @@ public class MisCitasDoctorController {
 
                     if (ok) {
                         cargarDatos();
+                    } else {
+                        mostrarAviso("No se pudo guardar la nota clinica. Verifique que la cita le pertenezca.");
                     }
                 });
     }

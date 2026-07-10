@@ -9,8 +9,8 @@ public final class CorreoConfig {
     }
 
     public static String resendApiKey() {
-    String variableEntorno = System.getenv("RESEND_API_KEY");
-    return valorConfigurado(variableEntorno, RESEND_API_KEY_INTERNA);
+        String variableEntorno = System.getenv("RESEND_API_KEY");
+        return valorConfigurado(variableEntorno, RESEND_API_KEY_INTERNA);
     }
 
     public static String resendFrom() {

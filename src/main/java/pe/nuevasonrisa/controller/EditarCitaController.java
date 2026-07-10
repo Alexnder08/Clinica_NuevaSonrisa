@@ -23,11 +23,12 @@ import pe.nuevasonrisa.service.CorreoService;
 import pe.nuevasonrisa.service.NotificacionCitaService;
 import pe.nuevasonrisa.service.OdontologoService;
 import pe.nuevasonrisa.service.PacienteService;
+import pe.nuevasonrisa.service.ResultadoOperacion;
 import pe.nuevasonrisa.service.ServicioService;
+import pe.nuevasonrisa.util.FechaSistema;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,11 +55,7 @@ public class EditarCitaController {
 
     @FXML
     public void initialize() {
-        cbEstado.setItems(FXCollections.observableArrayList(
-                "Pendiente",
-                "En espera",
-                "Realizado"
-        ));
+        cbEstado.setItems(FXCollections.observableArrayList("Pendiente"));
 
         configurarVistaCombos();
 
@@ -103,6 +100,9 @@ public class EditarCitaController {
 
         dpFecha.setValue(cita.getFecha());
         cbHora.setValue(cita.getHora().toString().substring(0, 5));
+        cbEstado.setItems(FXCollections.observableArrayList(
+                citaService.estadosPermitidosDesde(cita.getEstado())
+        ));
         cbEstado.setValue(cita.getEstado());
         txtMotivo.setText(cita.getMotivoConsulta() == null ? "" : cita.getMotivoConsulta());
         txtNotas.setText(cita.getNotas() == null ? "" : cita.getNotas());
@@ -127,13 +127,14 @@ public class EditarCitaController {
         }
 
         if ("Realizado".equalsIgnoreCase(citaActual.getEstado())
-                || "Cancelado".equalsIgnoreCase(citaActual.getEstado())) {
-            mostrarError("No se puede modificar una cita realizada o cancelada.");
+                || "Cancelado".equalsIgnoreCase(citaActual.getEstado())
+                || "No asistió".equalsIgnoreCase(citaActual.getEstado())) {
+            mostrarError("No se puede modificar una cita realizada, cancelada o marcada como no asistida.");
             return;
         }
 
-        String motivo = txtMotivo.getText().trim();
-        String notas = txtNotas.getText().trim();
+        String motivo = texto(txtMotivo.getText());
+        String notas = texto(txtNotas.getText());
 
         String camposFaltantes = camposFaltantes(
                 cbPaciente.getValue() == null ? "paciente" : null,
@@ -142,8 +143,7 @@ public class EditarCitaController {
                 dpFecha.getValue() == null ? "fecha" : null,
                 campoFaltante(cbHora.getValue(), "hora"),
                 cbEstado.getValue() == null ? "estado" : null,
-                campoFaltante(motivo, "motivo de consulta"),
-                campoFaltante(notas, "notas")
+                campoFaltante(motivo, "motivo de consulta")
         );
 
         if (camposFaltantes != null) {
@@ -157,10 +157,48 @@ public class EditarCitaController {
         }
 
         LocalDate fecha = dpFecha.getValue();
-        LocalDate hoy = LocalDate.now(ZoneId.of("America/Lima"));
-        LocalTime ahora = LocalTime.now(ZoneId.of("America/Lima"))
-                .withSecond(0)
-                .withNano(0);
+        String estadoAnterior = citaActual.getEstado();
+        String estadoNuevo = cbEstado.getValue();
+
+        if (!estadoAnterior.equalsIgnoreCase(estadoNuevo)) {
+            String validacionEstado = citaService.validarTransicionEstado(
+                    estadoAnterior,
+                    estadoNuevo,
+                    fecha,
+                    notas
+            );
+            if (validacionEstado != null) {
+                mostrarError(validacionEstado);
+                return;
+            }
+
+            if (soloCambioEstado(fecha, hora, motivo, notas)) {
+                ResultadoOperacion resultado = citaService.cambiarEstadoConResultado(
+                        citaActual.getId(),
+                        estadoAnterior,
+                        estadoNuevo,
+                        fecha,
+                        notas
+                );
+                if (resultado.exitoso()) {
+                    auditoriaService.registrar(
+                            estadoNuevo.toUpperCase(),
+                            "CITAS",
+                            "Cita #" + citaActual.getId() +
+                                    " cambio de estado: " +
+                                    estadoAnterior + " -> " +
+                                    estadoNuevo
+                    );
+                    cerrar();
+                } else {
+                    mostrarError(resultado.mensaje());
+                }
+                return;
+            }
+        }
+
+        LocalDate hoy = FechaSistema.hoy();
+        LocalTime ahora = FechaSistema.ahoraSinSegundos();
 
         if (fecha.isBefore(hoy)) {
             mostrarError("La fecha de la cita no puede ser anterior a hoy.");
@@ -172,8 +210,6 @@ public class EditarCitaController {
             return;
         }
 
-        String estadoAnterior = citaActual.getEstado();
-
         Cita cita = new Cita();
         cita.setId(citaActual.getId());
         cita.setPacienteId(cbPaciente.getValue().getId());
@@ -182,18 +218,12 @@ public class EditarCitaController {
         cita.setFecha(fecha);
         cita.setHora(hora);
         cita.setDuracion(cbServicio.getValue().getDuracion());
-        cita.setEstado(cbEstado.getValue());
+        cita.setEstado(estadoNuevo);
         cita.setMotivoConsulta(motivo);
-        cita.setNotas(notas);
+        cita.setNotas(notas.isBlank() ? null : notas);
 
-        String validacion = citaService.validarEdicionCita(cita);
-
-        if (validacion != null) {
-            mostrarError(validacion);
-            return;
-        }
-
-        if (citaService.actualizarCita(cita)) {
+        ResultadoOperacion resultado = citaService.actualizarCitaConResultado(cita);
+        if (resultado.exitoso()) {
             if (!estadoAnterior.equalsIgnoreCase(cita.getEstado())) {
                 auditoriaService.registrar(
                         cita.getEstado().toUpperCase(),
@@ -222,7 +252,7 @@ public class EditarCitaController {
 
             cerrar();
         } else {
-            mostrarError("No se pudo actualizar la cita. Verifique la disponibilidad del doctor y vuelva a intentar.");
+            mostrarError(resultado.mensaje());
         }
     }
 
@@ -249,6 +279,10 @@ public class EditarCitaController {
         return valor == null || valor.isBlank() ? nombreCampo : null;
     }
 
+    private String texto(String valor) {
+        return valor == null ? "" : valor.trim();
+    }
+
     private String camposFaltantes(String... campos) {
         List<String> faltantes = new ArrayList<>();
         for (String campo : campos) {
@@ -257,6 +291,22 @@ public class EditarCitaController {
             }
         }
         return faltantes.isEmpty() ? null : String.join(", ", faltantes);
+    }
+
+    private boolean soloCambioEstado(LocalDate fecha, LocalTime hora, String motivo, String notas) {
+        return cbPaciente.getValue().getId() == citaActual.getPacienteId()
+                && cbDoctor.getValue().getId() == citaActual.getDoctorId()
+                && cbServicio.getValue().getId() == citaActual.getServicioId()
+                && fecha.equals(citaActual.getFecha())
+                && hora.equals(citaActual.getHora())
+                && mismoTexto(motivo, citaActual.getMotivoConsulta())
+                && mismoTexto(notas, citaActual.getNotas());
+    }
+
+    private boolean mismoTexto(String valorFormulario, String valorActual) {
+        String formulario = valorFormulario == null ? "" : valorFormulario.trim();
+        String actual = valorActual == null ? "" : valorActual.trim();
+        return formulario.equals(actual);
     }
 
     private void mostrarError(String mensaje) {

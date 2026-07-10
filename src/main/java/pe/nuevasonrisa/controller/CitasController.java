@@ -18,7 +18,9 @@ import pe.nuevasonrisa.service.AuditoriaService;
 import pe.nuevasonrisa.service.CorreoService;
 import pe.nuevasonrisa.service.NotificacionCitaService;
 import pe.nuevasonrisa.service.PacienteService;
+import pe.nuevasonrisa.service.ResultadoOperacion;
 import pe.nuevasonrisa.util.ExcelExporter;
+import pe.nuevasonrisa.util.FechaSistema;
 import pe.nuevasonrisa.util.PdfExporter;
 import pe.nuevasonrisa.util.CalendarioCitasDialog;
 import javafx.print.PrinterJob;
@@ -171,8 +173,9 @@ public class CitasController {
         }
 
         if ("Realizado".equalsIgnoreCase(cita.getEstado())
-                || "Cancelado".equalsIgnoreCase(cita.getEstado())) {
-            mostrarInfo("Aviso", "No se puede cancelar una cita realizada o ya cancelada.");
+                || "Cancelado".equalsIgnoreCase(cita.getEstado())
+                || "No asistió".equalsIgnoreCase(cita.getEstado())) {
+            mostrarInfo("Aviso", "No se puede cancelar una cita realizada, ya cancelada o marcada como no asistida.");
             return;
         }
 
@@ -187,9 +190,13 @@ public class CitasController {
                 return;
             }
 
-            boolean ok = service.cancelarCita(cita.getId(), motivo.trim());
+            ResultadoOperacion resultado = service.cancelarCitaConResultado(
+                    cita.getId(),
+                    cita.getEstado(),
+                    motivo
+            );
 
-            if (ok) {
+            if (resultado.exitoso()) {
                 auditoriaService.registrar(
                         "CANCELAR",
                         "CITAS",
@@ -203,7 +210,7 @@ public class CitasController {
                         ));
                 cargarCitas();
             } else {
-                mostrarInfo("Error", "No se pudo cancelar la cita.");
+                mostrarInfo("Error", resultado.mensaje());
             }
         });
     }
@@ -270,7 +277,7 @@ public class CitasController {
     @FXML
     private void verPendientesHoy() {
         limpiarFiltros();
-        LocalDate hoy = LocalDate.now();
+        LocalDate hoy = FechaSistema.hoy();
         dpFechaDesde.setValue(hoy);
         dpFechaHasta.setValue(hoy);
         cbFiltroEstado.setValue("Pendiente");
@@ -280,7 +287,7 @@ public class CitasController {
     @FXML
     private void verPacientesEnEspera() {
         limpiarFiltros();
-        LocalDate hoy = LocalDate.now();
+        LocalDate hoy = FechaSistema.hoy();
         dpFechaDesde.setValue(hoy);
         dpFechaHasta.setValue(hoy);
         cbFiltroEstado.setValue("En espera");
@@ -294,16 +301,28 @@ public class CitasController {
             mostrarInfo("Aviso", "Seleccione la cita del paciente que acaba de llegar.");
             return;
         }
-        if (!LocalDate.now().equals(cita.getFecha())) {
-            mostrarInfo("Aviso", "Solo se puede confirmar la asistencia de citas del dia de hoy.");
-            return;
-        }
-        if (!"Pendiente".equalsIgnoreCase(cita.getEstado())) {
-            mostrarInfo("Aviso", "Solo una cita pendiente puede pasar a la lista de espera.");
+
+        String validacion = service.validarTransicionEstado(
+                cita.getEstado(),
+                "En espera",
+                cita.getFecha(),
+                null
+        );
+
+        if (validacion != null) {
+            mostrarInfo("Aviso", validacion);
             return;
         }
 
-        if (service.cambiarEstado(cita.getId(), "En espera")) {
+        ResultadoOperacion resultado = service.cambiarEstadoConResultado(
+                cita.getId(),
+                cita.getEstado(),
+                "En espera",
+                cita.getFecha(),
+                null
+        );
+
+        if (resultado.exitoso()) {
             auditoriaService.registrar(
                     "CONFIRMAR_ASISTENCIA",
                     "CITAS",
@@ -312,7 +331,7 @@ public class CitasController {
             cargarCitas();
             mostrarInfo("Asistencia confirmada", "El paciente fue agregado a la lista de espera.");
         } else {
-            mostrarInfo("Error", "No se pudo confirmar la asistencia del paciente.");
+            mostrarInfo("Error", resultado.mensaje());
         }
     }
 

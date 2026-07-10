@@ -86,6 +86,7 @@ El Administrador puede crear y restaurar respaldos PostgreSQL en formato `.backu
 La conexion puede configurarse con `DATABASE_URL`, `DATABASE_USER` y `DATABASE_PASSWORD`.
 
 Antes de usar adjuntos ejecuta `db/002_adjuntos_citas.sql` en el proyecto Supabase.
+Para reforzar estados y transiciones de citas ejecuta tambien `db/003_validaciones_citas.sql`.
 
 ## Comando para ejecutar
 
