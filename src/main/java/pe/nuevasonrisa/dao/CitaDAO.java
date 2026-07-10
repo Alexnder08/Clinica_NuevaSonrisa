@@ -13,6 +13,8 @@ public interface CitaDAO {
 
     List<CitaTabla> listarCitas();
 
+    int marcarPendientesVencidasComoNoAsistio();
+
     boolean crearCita(Cita cita);
 
     boolean actualizarCita(Cita cita);

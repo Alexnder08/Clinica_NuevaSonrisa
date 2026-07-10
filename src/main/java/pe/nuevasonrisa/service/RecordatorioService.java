@@ -2,6 +2,7 @@ package pe.nuevasonrisa.service;
 
 import pe.nuevasonrisa.dao.CitaDAO;
 import pe.nuevasonrisa.model.RecordatorioCita;
+import pe.nuevasonrisa.util.FechaSistema;
 import pe.nuevasonrisa.util.FeatureFlags;
 
 import java.time.LocalDate;
@@ -20,7 +21,7 @@ public class RecordatorioService {
     }
 
     public List<RecordatorioCita> obtenerPendientes() {
-        LocalDate desde = LocalDate.now();
+        LocalDate desde = FechaSistema.hoy();
         LocalDate hasta = desde.plusDays(1);
         return citaDAO.listarCitasPendientesParaRecordatorio(desde, hasta);
     }
@@ -36,7 +37,7 @@ public class RecordatorioService {
         for (RecordatorioCita cita : pendientes) {
             boolean ok = notificacionService.enviarRecordatorio(cita);
 
-            if (ok && citaDAO.marcarRecordatorioEnviado(cita.getId(), LocalDateTime.now())) {
+            if (ok && citaDAO.marcarRecordatorioEnviado(cita.getId(), LocalDateTime.now(FechaSistema.ZONA))) {
                 enviados.add(cita);
             }
         }

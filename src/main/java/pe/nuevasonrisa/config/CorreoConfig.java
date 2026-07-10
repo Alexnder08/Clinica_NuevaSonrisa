@@ -2,14 +2,14 @@ package pe.nuevasonrisa.config;
 
 public final class CorreoConfig {
 
-    private static final String RESEND_API_KEY_INTERNA = "";
+    private static final String RESEND_API_KEY_INTERNA = "re_ZFwKwQ9t_PCba6AyeRJuytarNqkgme5Y1";
     private static final String RESEND_FROM_INTERNO = "Nueva Sonrisa <onboarding@resend.dev>";
 
     private CorreoConfig() {
     }
 
     public static String resendApiKey() {
-        String variableEntorno = System.getenv("re_ZFwKwQ9t_PCba6AyeRJuytarNqkgme5Y1");
+        String variableEntorno = System.getenv("RESEND_API_KEY");
         return valorConfigurado(variableEntorno, RESEND_API_KEY_INTERNA);
     }
 

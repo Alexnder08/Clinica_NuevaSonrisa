@@ -17,83 +17,83 @@ import java.util.List;
 public class CitaDAOImpl implements CitaDAO {
 
     @Override
-    public List<CitaTabla> listarCitas(){
+    public List<CitaTabla> listarCitas() {
         List<CitaTabla> lista = new ArrayList<>();
-
-        String actualizarNoAsistio = """
-                                    UPDATE citas
-                                    SET estado = 'No asistió'
-                                    WHERE estado = 'Pendiente'
-                                    AND fecha = CURRENT_DATE
-                                    AND (
-                                        hora + INTERVAL '2 hour'
-                                    ) <= CURRENT_TIME
-                                    """;
-
-                                    try (
-                                            Connection conn =
-                                                    DatabaseConnection.getConnection()
-                                    ) {
-
-                                        PreparedStatement psUpdate =
-                                                conn.prepareStatement(
-                                                        actualizarNoAsistio
-                                                );
-
-                                        psUpdate.executeUpdate();
-
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-        }
+        marcarPendientesVencidasComoNoAsistio();
 
         String sql = """
-                    SELECT
-                        c.id,
-                        c.paciente_id,
-                        c.doctor_id,
-                        c.servicio_id,
-                        p.nombre || ' ' || p.apellido AS paciente,
-                        u.nombre || ' ' || u.apellido AS doctor,
-                        s.nombre AS servicio,
-                        c.fecha,
-                        c.hora,
-                        c.estado,
-                        c.motivo_consulta,
-                        c.notas
-                    FROM citas c
-                    INNER JOIN pacientes p ON p.id = c.paciente_id
-                    INNER JOIN usuarios u ON u.id = c.doctor_id
-                    INNER JOIN servicios s ON s.id = c.servicio_id
-                    ORDER BY c.fecha DESC, c.hora DESC
-                """;
+            SELECT
+                c.id,
+                c.paciente_id,
+                c.doctor_id,
+                c.servicio_id,
+                p.nombre || ' ' || p.apellido AS paciente,
+                u.nombre || ' ' || u.apellido AS doctor,
+                s.nombre AS servicio,
+                c.fecha,
+                c.hora,
+                c.estado,
+                c.motivo_consulta,
+                c.notas
+            FROM citas c
+            INNER JOIN pacientes p ON p.id = c.paciente_id
+            INNER JOIN usuarios u ON u.id = c.doctor_id
+            INNER JOIN servicios s ON s.id = c.servicio_id
+            ORDER BY c.fecha DESC, c.hora DESC
+        """;
 
-                try (
-                        Connection conn = DatabaseConnection.getConnection();
-                        PreparedStatement ps = conn.prepareStatement(sql);
-                        ResultSet rs = ps.executeQuery()
-                ){
-                    while (rs.next()){
-                        lista.add(new CitaTabla(
-                                rs.getInt("id"),
-                                rs.getInt("paciente_id"),
-                                rs.getInt("doctor_id"),
-                                rs.getInt("servicio_id"),
-                                rs.getString("paciente"),
-                                rs.getString("doctor"),
-                                rs.getString("servicio"),
-                                rs.getDate("fecha").toLocalDate(),
-                                rs.getTime("hora").toLocalTime(),
-                                rs.getString("estado"),
-                                rs.getString("motivo_consulta"),
-                                rs.getString("notas")
-                        ));
-                    }
+        try (
+                Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()
+        ) {
+            while (rs.next()) {
+                lista.add(new CitaTabla(
+                        rs.getInt("id"),
+                        rs.getInt("paciente_id"),
+                        rs.getInt("doctor_id"),
+                        rs.getInt("servicio_id"),
+                        rs.getString("paciente"),
+                        rs.getString("doctor"),
+                        rs.getString("servicio"),
+                        rs.getDate("fecha").toLocalDate(),
+                        rs.getTime("hora").toLocalTime(),
+                        rs.getString("estado"),
+                        rs.getString("motivo_consulta"),
+                        rs.getString("notas")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+        return lista;
+    }
 
-                return lista;
+    @Override
+    public int marcarPendientesVencidasComoNoAsistio() {
+        String sql = """
+            UPDATE citas
+            SET estado = 'No asistió'
+            WHERE estado = 'Pendiente'
+              AND (
+                    fecha < CURRENT_DATE
+                    OR (
+                        fecha = CURRENT_DATE
+                        AND (hora + INTERVAL '2 hour') <= CURRENT_TIME
+                    )
+              )
+        """;
+
+        try (
+                Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)
+        ) {
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override

@@ -26,10 +26,10 @@ import pe.nuevasonrisa.service.CorreoService;
 import pe.nuevasonrisa.service.OdontologoService;
 import pe.nuevasonrisa.service.PacienteService;
 import pe.nuevasonrisa.service.ServicioService;
+import pe.nuevasonrisa.util.FechaSistema;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -111,8 +111,8 @@ public class NuevaCitaController {
             return;
         }
 
-        LocalDate hoy = LocalDate.now(ZoneId.of("America/Lima"));
-        LocalTime ahora = LocalTime.now(ZoneId.of("America/Lima"));
+        LocalDate hoy = FechaSistema.hoy();
+        LocalTime ahora = FechaSistema.ahora();
         List<String> horas = citaService.obtenerHorasDisponibles(
                         paciente.getId(), doctor.getId(), fecha, servicio.getDuracion())
                 .stream()
@@ -136,8 +136,8 @@ public class NuevaCitaController {
         ServicioTabla servicio = cbServicio.getValue();
         LocalDate fecha = dpFecha.getValue();
         String horaTexto = cbHora.getValue();
-        String motivo = txtMotivo.getText().trim();
-        String notas = txtNotas.getText().trim();
+        String motivo = texto(txtMotivo.getText());
+        String notas = texto(txtNotas.getText());
 
         String camposFaltantes = camposFaltantes(
                 paciente == null ? "paciente" : null,
@@ -158,10 +158,8 @@ public class NuevaCitaController {
             return;
         }
 
-        LocalDate hoy = LocalDate.now(ZoneId.of("America/Lima"));
-        LocalTime ahora = LocalTime.now(ZoneId.of("America/Lima"))
-                .withSecond(0)
-                .withNano(0);
+        LocalDate hoy = FechaSistema.hoy();
+        LocalTime ahora = FechaSistema.ahoraSinSegundos();
 
         if (fecha.isBefore(hoy)) {
             mostrarError("La fecha de la cita no puede ser anterior a hoy.");
@@ -213,7 +211,7 @@ public class NuevaCitaController {
             );
             enviarConfirmacion(paciente, doctor, servicio, fecha, hora);
         } else {
-            mostrarError("No se pudo crear la cita. Verifique la disponibilidad del doctor y vuelva a intentar.");
+            mostrarError("No se pudo crear la cita. Verifique la disponibilidad del odontologo y del paciente.");
         }
     }
 
@@ -270,6 +268,10 @@ public class NuevaCitaController {
 
     private String campoFaltante(String valor, String nombreCampo) {
         return valor == null || valor.isBlank() ? nombreCampo : null;
+    }
+
+    private String texto(String valor) {
+        return valor == null ? "" : valor.trim();
     }
 
     private String camposFaltantes(String... campos) {
