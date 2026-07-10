@@ -2,8 +2,8 @@ package pe.nuevasonrisa.config;
 
 public final class CorreoConfig {
 
-    private static final String RESEND_API_KEY_INTERNA = "re_ZFwKwQ9t_PCba6AyeRJuytarNqkgme5Y1";
-    private static final String RESEND_FROM_INTERNO = "Nueva Sonrisa <onboarding@resend.dev>";
+    private static final String RESEND_API_KEY_INTERNA = "";
+    private static final String RESEND_FROM_INTERNO = "Nueva Sonrisa <citas@mail.misreservas.xyz>";
 
     private CorreoConfig() {
     }

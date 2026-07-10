@@ -39,7 +39,11 @@ ADMIN
 
 usuario: admin
 
-contraseña: 123
+contraseña: 159753
+
+usuario: admin2
+
+contraseña: 123456
 
 DOCTOR
 
