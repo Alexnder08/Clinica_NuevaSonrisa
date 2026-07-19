@@ -111,7 +111,7 @@ public class OdontologosController {
             stage.showAndWait();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             mostrarInfo("Error", "No se pudo abrir los horarios del doctor.");
         }
     }
@@ -162,7 +162,7 @@ public class OdontologosController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
 
             mostrarInfo(
                     "Error",

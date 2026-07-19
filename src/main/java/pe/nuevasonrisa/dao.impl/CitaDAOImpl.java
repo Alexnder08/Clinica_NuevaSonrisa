@@ -64,7 +64,7 @@ public class CitaDAOImpl implements CitaDAO {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return lista;
@@ -91,7 +91,7 @@ public class CitaDAOImpl implements CitaDAO {
         ) {
             return ps.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return 0;
         }
     }
@@ -330,7 +330,7 @@ public class CitaDAOImpl implements CitaDAO {
                 }
             }
         } catch (Exception e) {
-            System.err.println("No se pudieron calcular las horas disponibles: " + e.getMessage());
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Could not calculate available appointment times.", e);
         }
         return horas;
     }
@@ -361,7 +361,7 @@ public class CitaDAOImpl implements CitaDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }
@@ -403,7 +403,7 @@ public class CitaDAOImpl implements CitaDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }
@@ -454,7 +454,7 @@ public class CitaDAOImpl implements CitaDAO {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return lista;
@@ -476,7 +476,7 @@ public class CitaDAOImpl implements CitaDAO {
             ps.setInt(2, citaId);
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }

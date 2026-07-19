@@ -114,7 +114,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error al buscar usuario por email: " + e.getMessage());
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Could not look up user by email.", e);
         }
 
         return Optional.empty();
@@ -171,7 +171,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }
@@ -234,7 +234,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }
@@ -255,7 +255,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             ps.setInt(2, usuarioId);
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }

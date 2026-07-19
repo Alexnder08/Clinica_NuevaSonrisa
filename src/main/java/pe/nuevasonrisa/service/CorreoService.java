@@ -7,6 +7,8 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import pe.nuevasonrisa.config.CorreoConfig;
+import org.slf4j.Logger;
+import pe.nuevasonrisa.util.AppLogger;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -17,6 +19,7 @@ import java.util.Properties;
 
 public class CorreoService {
 
+    private static final Logger LOGGER = AppLogger.getLogger(CorreoService.class);
     private static final String RESEND_ENDPOINT = "https://api.resend.com/emails";
     private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
@@ -108,14 +111,15 @@ public class CorreoService {
                     HttpResponse.BodyHandlers.ofString()
             );
             if (response.statusCode() >= 200 && response.statusCode() < 300) {
+                LOGGER.info("Correo enviado mediante Resend.");
                 return true;
             }
 
             ultimoError = "HTTP " + response.statusCode() + ": " + response.body();
-            System.err.println("Resend rechazo el correo (" + ultimoError + ")");
+            LOGGER.error("Resend rechazó el envío del correo con estado HTTP {}.", response.statusCode());
         } catch (Exception e) {
             ultimoError = e.getMessage();
-            System.err.println("No se pudo conectar con Resend: " + ultimoError);
+            LOGGER.error("No se pudo conectar con Resend.");
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
@@ -136,7 +140,7 @@ public class CorreoService {
                 || password == null || password.isBlank()
                 || remitente == null || remitente.isBlank()) {
             ultimoError = "No se encontraron credenciales SMTP.";
-            System.err.println("Correo no configurado. Defina RESEND_API_KEY o las variables SMTP.");
+            LOGGER.warn("Se solicitó un correo, pero no hay credenciales configuradas para SMTP ni Resend.");
             return false;
         }
 
@@ -160,10 +164,11 @@ public class CorreoService {
             message.setSubject(asunto, "UTF-8");
             message.setContent(html, "text/html; charset=UTF-8");
             Transport.send(message);
+            LOGGER.info("Correo enviado mediante SMTP.");
             return true;
         } catch (Exception e) {
             ultimoError = e.getMessage();
-            System.err.println("No se pudo enviar el correo por SMTP: " + ultimoError);
+            LOGGER.error("No se pudo enviar el correo mediante SMTP.");
             return false;
         }
     }

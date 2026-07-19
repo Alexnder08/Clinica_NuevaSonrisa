@@ -23,6 +23,11 @@ public class AuditoriaService {
         dao.registrar(usuario, accion, modulo, detalle);
     }
 
+    public void registrarParaUsuario(String usuario, String accion, String modulo, String detalle) {
+        String usuarioAuditoria = usuario == null || usuario.isBlank() ? "SISTEMA" : usuario.trim();
+        dao.registrar(usuarioAuditoria, accion, modulo, detalle);
+    }
+
     public List<Auditoria> listar() {
         return dao.listar();
     }

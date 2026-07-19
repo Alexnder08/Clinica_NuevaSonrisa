@@ -51,7 +51,7 @@ public class NuevoPacienteController {
             auditoriaService.registrar(
                     "CREAR",
                     "PACIENTES",
-                    "Paciente " + nombre + " " + apellido + " creado"
+                    "Paciente creado."
             );
 
             mostrarInfo("Éxito", "Paciente registrado correctamente.");

@@ -45,7 +45,7 @@ public class ServicioDAOImpl implements ServicioDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return lista;
@@ -69,7 +69,7 @@ public class ServicioDAOImpl implements ServicioDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }
@@ -96,7 +96,7 @@ public class ServicioDAOImpl implements ServicioDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }
@@ -140,7 +140,7 @@ public class ServicioDAOImpl implements ServicioDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return lista;
@@ -167,7 +167,7 @@ public class ServicioDAOImpl implements ServicioDAO {
                 return rs.next();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }
@@ -194,13 +194,13 @@ public class ServicioDAOImpl implements ServicioDAO {
                 return eliminado;
             } catch (Exception e) {
                 conn.rollback();
-                System.err.println("No se puede eliminar el servicio: " + e.getMessage());
+                pe.nuevasonrisa.util.AppLogger.error(getClass(), "Could not delete service.", e);
                 return false;
             } finally {
                 conn.setAutoCommit(true);
             }
         } catch (Exception e) {
-            System.err.println("Error al eliminar el servicio: " + e.getMessage());
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Could not delete service.", e);
             return false;
         }
     }

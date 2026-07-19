@@ -51,7 +51,7 @@ public class PacienteDAOImpl implements PacienteDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return lista;
@@ -85,7 +85,7 @@ public class PacienteDAOImpl implements PacienteDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }
@@ -119,7 +119,7 @@ public class PacienteDAOImpl implements PacienteDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }
@@ -133,7 +133,7 @@ public class PacienteDAOImpl implements PacienteDAO {
             ps.setInt(2, pacienteId);
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }

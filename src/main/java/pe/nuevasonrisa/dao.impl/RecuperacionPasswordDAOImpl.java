@@ -41,7 +41,7 @@ public class RecuperacionPasswordDAOImpl implements RecuperacionPasswordDAO {
             ps.setTimestamp(3, Timestamp.valueOf(expiresAt));
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }
@@ -76,7 +76,7 @@ public class RecuperacionPasswordDAOImpl implements RecuperacionPasswordDAO {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return Optional.empty();
@@ -98,7 +98,7 @@ public class RecuperacionPasswordDAOImpl implements RecuperacionPasswordDAO {
             ps.setInt(2, tokenId);
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }
@@ -123,7 +123,7 @@ public class RecuperacionPasswordDAOImpl implements RecuperacionPasswordDAO {
             ps.setTimestamp(1, Timestamp.valueOf(ahora));
             return ps.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return 0;
         }
     }

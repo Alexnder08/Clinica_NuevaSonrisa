@@ -203,11 +203,7 @@ public class NuevaCitaController {
             auditoriaService.registrar(
                     "CREAR",
                     "CITAS",
-                    "Cita creada para " +
-                            paciente.getNombre() + " " +
-                            paciente.getApellido() +
-                            " el " + fecha +
-                            " a las " + horaTexto
+                    "Cita creada."
             );
             enviarConfirmacion(paciente, doctor, servicio, fecha, hora);
         } else {

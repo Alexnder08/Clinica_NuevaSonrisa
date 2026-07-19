@@ -144,7 +144,7 @@ public class UsuariosController {
             cargarUsuarios();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
     }
 
@@ -176,7 +176,7 @@ public class UsuariosController {
             cargarUsuarios();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
     }
 
@@ -207,9 +207,7 @@ public class UsuariosController {
             auditoriaService.registrar(
                     "CAMBIAR ESTADO",
                     "USUARIOS",
-                    "Usuario "
-                            + usuario.getUsuario()
-                            + " cambió de estado"
+                    "Cuenta de usuario ID " + usuario.getId() + " cambio de estado."
             );
 
             cargarUsuarios();
@@ -285,7 +283,7 @@ public class UsuariosController {
 
         } catch (Exception e) {
             mostrarInfo("Error", "No se pudo exportar el PDF: " + e.getMessage());
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
     }
 
@@ -426,7 +424,7 @@ public class UsuariosController {
             try {
                 document.add(pageNumParagraph);
             } catch (Exception e) {
-                e.printStackTrace();
+                pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             }
         }
     }

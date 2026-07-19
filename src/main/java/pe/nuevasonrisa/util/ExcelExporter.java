@@ -96,7 +96,7 @@ public class ExcelExporter {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AppLogger.error(ExcelExporter.class, "Could not export Excel file.", e);
         }
     }
 
@@ -253,7 +253,7 @@ public class ExcelExporter {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            AppLogger.error(ExcelExporter.class, "Could not export Excel file.", e);
         }
     }
 }

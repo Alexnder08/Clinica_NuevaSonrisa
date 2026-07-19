@@ -14,6 +14,7 @@ import pe.nuevasonrisa.service.PacienteService;
 import pe.nuevasonrisa.dao.impl.CitaDAOImpl;
 import pe.nuevasonrisa.model.CitaTabla;
 import pe.nuevasonrisa.service.CitaService;
+import pe.nuevasonrisa.service.AuditoriaService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ public class PacientesController {
             new PacienteService(new PacienteDAOImpl());
 
     private final CitaService citaService = new CitaService(new CitaDAOImpl());
+    private final AuditoriaService auditoriaService = new AuditoriaService();
 
     private List<PacienteTabla> pacientesCache = new ArrayList<>();
 
@@ -106,7 +108,7 @@ public class PacientesController {
             cargarPacientes();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
     }
 
@@ -139,7 +141,7 @@ public class PacientesController {
             cargarPacientes();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
     }
 
@@ -180,6 +182,7 @@ public class PacientesController {
             return;
         }
         if (service.cambiarEstado(paciente.getId(), paciente.getEstado())) {
+            auditoriaService.registrar("CAMBIAR_ESTADO", "PACIENTES", "Paciente ID " + paciente.getId() + " cambio de estado.");
             cargarPacientes();
             mostrarInfo("Estado actualizado", "El estado del paciente fue actualizado correctamente.");
         } else {

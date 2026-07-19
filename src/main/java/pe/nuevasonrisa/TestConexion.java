@@ -10,7 +10,7 @@ public class TestConexion {
             System.out.println("Conexion exitosa");
             System.out.println(conn.getMetaData().getDatabaseProductName());
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(TestConexion.class, "Database connection test failed.", e);
         }
     }
 }

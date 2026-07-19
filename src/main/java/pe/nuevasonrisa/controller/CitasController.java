@@ -107,7 +107,7 @@ public class CitasController {
             cargarCitas();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
     }
 
@@ -159,7 +159,7 @@ public class CitasController {
             cargarCitas();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
     }
 
@@ -200,7 +200,7 @@ public class CitasController {
                 auditoriaService.registrar(
                         "CANCELAR",
                         "CITAS",
-                        "Cita #" + cita.getId() + " cancelada. Motivo: " + motivo
+                        "Cita ID " + cita.getId() + " cancelada."
                 );
                 pacienteService.obtenerPacientes().stream()
                         .filter(paciente -> paciente.getId() == cita.getPacienteId())
@@ -326,7 +326,7 @@ public class CitasController {
             auditoriaService.registrar(
                     "CONFIRMAR_ASISTENCIA",
                     "CITAS",
-                    "Asistencia confirmada para la cita #" + cita.getId() + " de " + cita.getPaciente()
+                    "Asistencia confirmada para cita ID " + cita.getId() + "."
             );
             cargarCitas();
             mostrarInfo("Asistencia confirmada", "El paciente fue agregado a la lista de espera.");

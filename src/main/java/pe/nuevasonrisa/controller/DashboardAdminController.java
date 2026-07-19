@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import pe.nuevasonrisa.service.BackupService;
+import pe.nuevasonrisa.service.AuditoriaService;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,6 +28,7 @@ public class DashboardAdminController {
     private StackPane contenedorContenido;
 
     private final BackupService backupService = new BackupService();
+    private final AuditoriaService auditoriaService = new AuditoriaService();
 
     @FXML
     public void initialize() {
@@ -119,7 +121,7 @@ public class DashboardAdminController {
                     .setAll(vista);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
 
             mostrarTexto(
                     "Error al cargar la vista: "
@@ -163,6 +165,10 @@ public class DashboardAdminController {
     }
 
     private void mostrarResultado(String titulo, BackupService.Resultado resultado) {
+        if (resultado.exitoso()) {
+            String accion = "Copia de seguridad".equals(titulo) ? "CREAR_BACKUP" : "RESTAURAR_BACKUP";
+            auditoriaService.registrar(accion, "RESPALDOS", "Operacion de respaldo completada.");
+        }
         Alert alert = new Alert(resultado.exitoso() ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
         alert.setTitle(titulo);
         alert.setHeaderText(resultado.exitoso() ? "Operacion completada" : "No se pudo completar");

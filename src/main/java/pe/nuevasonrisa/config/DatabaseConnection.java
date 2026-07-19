@@ -5,8 +5,12 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import org.slf4j.Logger;
+import pe.nuevasonrisa.util.AppLogger;
 
 public final class DatabaseConnection {
+
+    private static final Logger LOGGER = AppLogger.getLogger(DatabaseConnection.class);
 
     private static final Object POOL_LOCK = new Object();
     private static final String JDBC_URL = System.getenv().getOrDefault(
@@ -40,6 +44,7 @@ public final class DatabaseConnection {
                 }
                 return connection;
             } catch (SQLException e) {
+                LOGGER.warn("Fallo el intento {} de conexion a la base de datos.", intento + 1);
                 if (primerError == null) {
                     primerError = e;
                 }
@@ -65,6 +70,7 @@ public final class DatabaseConnection {
     }
 
     private static HikariDataSource crearPool() {
+        LOGGER.info("Inicializacion del pool de conexiones PostgreSQL.");
         HikariConfig config = new HikariConfig();
         config.setPoolName("NuevaSonrisaPool");
         config.setDriverClassName("org.postgresql.Driver");
@@ -91,6 +97,7 @@ public final class DatabaseConnection {
             }
         }
         if (pool != null && !pool.isClosed()) {
+            LOGGER.warn("Se descarto un pool de conexiones PostgreSQL no válido.");
             pool.close();
         }
     }
@@ -103,4 +110,16 @@ public final class DatabaseConnection {
     public static String getJdbcUrl() { return JDBC_URL; }
     public static String getUsername() { return USERNAME; }
     public static String getPassword() { return PASSWORD; }
+
+    public static void closePool() {
+        HikariDataSource pool;
+        synchronized (POOL_LOCK) {
+            pool = dataSource;
+            dataSource = null;
+        }
+        if (pool != null && !pool.isClosed()) {
+            LOGGER.info("Cierre del pool de conexiones PostgreSQL.");
+            pool.close();
+        }
+    }
 }

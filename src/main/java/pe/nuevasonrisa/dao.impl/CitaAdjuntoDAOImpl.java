@@ -31,7 +31,7 @@ public class CitaAdjuntoDAOImpl implements CitaAdjuntoDAO {
             ps.setInt(7, usuarioId);
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
-            System.err.println("No se pudo guardar el adjunto: " + e.getMessage());
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Could not save appointment attachment.", e);
             return false;
         }
     }
@@ -60,7 +60,7 @@ public class CitaAdjuntoDAOImpl implements CitaAdjuntoDAO {
                 }
             }
         } catch (Exception e) {
-            System.err.println("No se pudieron listar los adjuntos: " + e.getMessage());
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Could not list appointment attachments.", e);
         }
         return adjuntos;
     }
@@ -81,7 +81,7 @@ public class CitaAdjuntoDAOImpl implements CitaAdjuntoDAO {
                 return rs.next() ? rs.getBytes("contenido") : null;
             }
         } catch (Exception e) {
-            System.err.println("No se pudo descargar el adjunto: " + e.getMessage());
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Could not download appointment attachment.", e);
             return null;
         }
     }

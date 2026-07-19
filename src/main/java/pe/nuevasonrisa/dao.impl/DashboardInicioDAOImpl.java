@@ -92,7 +92,7 @@ public class DashboardInicioDAOImpl
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return new DashboardResumen(
@@ -143,7 +143,7 @@ public class DashboardInicioDAOImpl
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return lista;
@@ -188,7 +188,7 @@ public class DashboardInicioDAOImpl
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return lista;
@@ -231,7 +231,7 @@ public class DashboardInicioDAOImpl
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return lista;
@@ -287,7 +287,7 @@ public class DashboardInicioDAOImpl
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return 0;

@@ -60,7 +60,7 @@ public class UsuarioGestionDAOImpl implements UsuarioGestionDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return lista;
@@ -120,7 +120,7 @@ public class UsuarioGestionDAOImpl implements UsuarioGestionDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }
@@ -158,11 +158,11 @@ public class UsuarioGestionDAOImpl implements UsuarioGestionDAO {
         } catch (Exception e) {
 
             if (e.getMessage() != null && e.getMessage().contains("usuarios_dni_key")) {
-                System.out.println("El DNI ingresado ya pertenece a otro usuario.");
+                pe.nuevasonrisa.util.AppLogger.getLogger(getClass()).warn("No se pudo crear el usuario porque el DNI ya está registrado.");
             } else if (e.getMessage() != null && e.getMessage().contains("usuarios_usuario_key")) {
-                System.out.println("El nombre de usuario ya existe.");
+                pe.nuevasonrisa.util.AppLogger.getLogger(getClass()).warn("No se pudo crear el usuario porque el nombre de usuario ya está registrado.");
             } else {
-                e.printStackTrace();
+                pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             }
 
             return false;
@@ -186,7 +186,7 @@ public class UsuarioGestionDAOImpl implements UsuarioGestionDAO {
             return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }

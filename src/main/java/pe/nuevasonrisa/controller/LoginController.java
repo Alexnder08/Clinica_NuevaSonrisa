@@ -14,12 +14,17 @@ import pe.nuevasonrisa.model.Usuario;
 import pe.nuevasonrisa.service.AuthService;
 import pe.nuevasonrisa.service.HistorialAccesoService;
 import pe.nuevasonrisa.util.SessionManager;
+import org.slf4j.Logger;
+import pe.nuevasonrisa.util.AppLogger;
+import pe.nuevasonrisa.service.AuditoriaService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class LoginController {
+
+    private static final Logger LOGGER = AppLogger.getLogger(LoginController.class);
 
     private static final String ROL_RECEPCION_LEGACY = "Recepci" + (char) 195 + (char) 179 + "n";
 
@@ -37,6 +42,7 @@ public class LoginController {
     private final UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
     private final AuthService authService = new AuthService(usuarioDAO);
     private final HistorialAccesoService historialAccesoService = new HistorialAccesoService();
+    private final AuditoriaService auditoriaService = new AuditoriaService();
 
     @FXML
     private void iniciarSesion() {
@@ -57,6 +63,7 @@ public class LoginController {
         try {
             usuarioAutenticado = authService.login(usuario, password);
         } catch (IllegalStateException e) {
+            LOGGER.error("No se pudo conectar a la base de datos durante el inicio de sesion.");
             mostrarMensajeError("No se pudo conectar con la base de datos. Intente nuevamente en unos segundos.");
             return;
         }
@@ -70,6 +77,8 @@ public class LoginController {
 
             SessionManager.setUsuarioActual(user);
             historialAccesoService.registrarLogin();
+            auditoriaService.registrar("LOGIN", "SEGURIDAD", "Inicio de sesion exitoso.");
+            LOGGER.info("Inicio de sesion exitoso.");
 
             if (user.getRol().equalsIgnoreCase("Administrador")) {
                 abrirPantalla("/fxml/dashboard_admin.fxml");
@@ -83,6 +92,8 @@ public class LoginController {
 
         } else {
             intentosFallidos++;
+            auditoriaService.registrarParaUsuario(usuario, "LOGIN_FALLIDO", "SEGURIDAD", "Credenciales invalidas.");
+            LOGGER.warn("Intento fallido de inicio de sesion {}.", intentosFallidos);
 
             if (intentosFallidos >= 3) {
                 mostrarMensajeError("Demasiados intentos fallidos. El sistema se cerrará.");
@@ -120,7 +131,7 @@ public class LoginController {
             stage.show();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             mostrarMensajeError("No se pudo abrir la pantalla: " + e.getMessage());
         }
     }
@@ -146,7 +157,7 @@ public class LoginController {
             stage.showAndWait();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             mostrarMensajeError("No se pudo abrir la ventana solicitada: " + titulo + ".");
         }
     }

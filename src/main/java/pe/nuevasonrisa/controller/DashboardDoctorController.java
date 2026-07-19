@@ -71,7 +71,7 @@ public class DashboardDoctorController {
                     .setAll(vista);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
     }
 }

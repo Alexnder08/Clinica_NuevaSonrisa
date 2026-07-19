@@ -9,11 +9,14 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import pe.nuevasonrisa.dao.impl.UsuarioGestionDAOImpl;
 import pe.nuevasonrisa.model.Usuario;
+import pe.nuevasonrisa.service.AuditoriaService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NuevoUsuarioController {
+
+    private final AuditoriaService auditoriaService = new AuditoriaService();
 
     @FXML private TextField txtUsuario;
     @FXML private PasswordField txtPassword;
@@ -103,6 +106,7 @@ public class NuevoUsuarioController {
         boolean creado = new UsuarioGestionDAOImpl().crearUsuario(usuario);
 
         if (creado) {
+            auditoriaService.registrar("CREAR", "USUARIOS", "Cuenta de usuario creada.");
             mostrarInfo("Usuario creado correctamente.");
             cerrar();
         } else {

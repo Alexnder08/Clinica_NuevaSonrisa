@@ -38,7 +38,7 @@ public class AuditoriaDAOImpl implements AuditoriaDAO {
             ps.executeUpdate();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
     }
     @Override
@@ -80,7 +80,7 @@ public class AuditoriaDAOImpl implements AuditoriaDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return lista;

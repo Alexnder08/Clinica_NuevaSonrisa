@@ -13,11 +13,16 @@ import javafx.stage.Stage;
 import pe.nuevasonrisa.dao.impl.RecuperacionPasswordDAOImpl;
 import pe.nuevasonrisa.service.CorreoService;
 import pe.nuevasonrisa.service.PasswordRecoveryService;
+import pe.nuevasonrisa.service.AuditoriaService;
+import org.slf4j.Logger;
+import pe.nuevasonrisa.util.AppLogger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecuperarPasswordController {
+
+    private static final Logger LOGGER = AppLogger.getLogger(RecuperarPasswordController.class);
 
     @FXML private TextField txtCorreo;
     @FXML private TextField txtCodigo;
@@ -32,6 +37,7 @@ public class RecuperarPasswordController {
                     new RecuperacionPasswordDAOImpl(),
                     new CorreoService()
             );
+    private final AuditoriaService auditoriaService = new AuditoriaService();
 
     @FXML
     public void initialize() {
@@ -69,6 +75,9 @@ public class RecuperarPasswordController {
             cambiarEstadoEnvio(false);
             String mensaje = tarea.getValue();
             mostrarMensaje(mensaje, mensaje.startsWith("Se envió"));
+            if (mensaje.startsWith("Se envió")) {
+                auditoriaService.registrarParaUsuario("SISTEMA", "SOLICITAR_RECUPERACION_PASSWORD", "SEGURIDAD", "Codigo de recuperacion enviado.");
+            }
         });
 
         tarea.setOnFailed(event -> {
@@ -77,6 +86,7 @@ public class RecuperarPasswordController {
             String detalle = error == null || error.getMessage() == null
                     ? "Error inesperado durante el envío."
                     : error.getMessage();
+            LOGGER.error("Falló la solicitud de recuperación de contraseña.");
             mostrarMensaje("No se pudo solicitar el código. " + detalle, false);
         });
 
@@ -115,6 +125,7 @@ public class RecuperarPasswordController {
         mostrarMensaje(mensaje, exito);
 
         if (exito) {
+            auditoriaService.registrarParaUsuario("SISTEMA", "RECUPERAR_PASSWORD", "SEGURIDAD", "Contrasena restablecida.");
             cerrar();
         }
     }

@@ -38,7 +38,7 @@ public class DoctorServicioDAOImpl implements DoctorServicioDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return lista;
@@ -89,14 +89,14 @@ public class DoctorServicioDAOImpl implements DoctorServicioDAO {
 
             } catch (Exception e) {
                 conn.rollback();
-                e.printStackTrace();
+                pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
                 return false;
             } finally {
                 conn.setAutoCommit(true);
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
     }
@@ -129,7 +129,7 @@ public class DoctorServicioDAOImpl implements DoctorServicioDAO {
                         .add(servicioId);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
             return false;
         }
 

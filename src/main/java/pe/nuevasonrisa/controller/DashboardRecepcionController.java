@@ -103,7 +103,7 @@ public class DashboardRecepcionController {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
     }
 }

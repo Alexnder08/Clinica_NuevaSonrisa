@@ -21,8 +21,13 @@ import pe.nuevasonrisa.service.ReporteService;
 import pe.nuevasonrisa.service.RecordatorioService;
 import pe.nuevasonrisa.service.CorreoService;
 import pe.nuevasonrisa.util.PdfExporter;
+import pe.nuevasonrisa.service.AuditoriaService;
+import org.slf4j.Logger;
+import pe.nuevasonrisa.util.AppLogger;
 
 public class ReportesController {
+
+    private static final Logger LOGGER = AppLogger.getLogger(ReportesController.class);
 
     @FXML private TableView<ReporteCitasDoctor> tablaDoctores;
     @FXML private TableView<ReporteServicio> tablaServicios;
@@ -47,6 +52,7 @@ public class ReportesController {
 
     private final RecordatorioService recordatorioService =
             new RecordatorioService(new CitaDAOImpl(), new CorreoService());
+    private final AuditoriaService auditoriaService = new AuditoriaService();
 
     @FXML
     public void initialize() {
@@ -114,11 +120,15 @@ public class ReportesController {
                 service.obtenerReporteEstados(),
                 archivo.getAbsolutePath()
         );
+        auditoriaService.registrar("EXPORTAR_EXCEL", "REPORTES", "Reporte exportado a Excel.");
+        LOGGER.info("Reporte exportado a Excel.");
     }
 
     @FXML
     private void enviarRecordatorios() {
         int enviados = recordatorioService.enviarRecordatoriosProximos();
+        auditoriaService.registrar("ENVIAR_RECORDATORIOS", "CORREOS", "Recordatorios procesados: " + enviados + ".");
+        LOGGER.info("Recordatorios de citas procesados: {}.", enviados);
         mostrarInfo("Recordatorios", "Se enviaron " + enviados + " recordatorios.");
     }
 
@@ -131,7 +141,10 @@ public class ReportesController {
                     service.obtenerReporteEstados(),
                     tablaDoctores.getScene().getWindow()
             );
+            auditoriaService.registrar("EXPORTAR_PDF", "REPORTES", "Reporte exportado a PDF.");
+            LOGGER.info("Reporte exportado a PDF.");
         } catch (Exception e) {
+            LOGGER.error("No se pudo exportar el reporte a PDF.");
             mostrarInfo("Error", "No se pudo generar el reporte PDF: " + e.getMessage());
         }
     }

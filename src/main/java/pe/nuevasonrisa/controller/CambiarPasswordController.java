@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import pe.nuevasonrisa.dao.impl.UsuarioDAOImpl;
 import pe.nuevasonrisa.service.AuthService;
+import pe.nuevasonrisa.service.AuditoriaService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class CambiarPasswordController {
 
     private final AuthService authService =
             new AuthService(new UsuarioDAOImpl());
+    private final AuditoriaService auditoriaService = new AuditoriaService();
 
     @FXML
     private void guardar() {
@@ -55,6 +57,7 @@ public class CambiarPasswordController {
         boolean ok = authService.cambiarPassword(usuario, actual, nueva);
 
         if (ok) {
+            auditoriaService.registrarParaUsuario(usuario, "CAMBIAR_PASSWORD", "SEGURIDAD", "Contrasena actualizada.");
             lblMensaje.setStyle("-fx-text-fill: green;");
             lblMensaje.setText("Contraseña actualizada.");
 

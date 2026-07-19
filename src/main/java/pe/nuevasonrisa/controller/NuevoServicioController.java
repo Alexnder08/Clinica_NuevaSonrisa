@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import pe.nuevasonrisa.dao.impl.ServicioDAOImpl;
 import pe.nuevasonrisa.model.Servicio;
 import pe.nuevasonrisa.service.ServicioService;
+import pe.nuevasonrisa.service.AuditoriaService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class NuevoServicioController {
 
     private final ServicioService service =
             new ServicioService(new ServicioDAOImpl());
+    private final AuditoriaService auditoriaService = new AuditoriaService();
 
     @FXML
     private void guardar() {
@@ -66,6 +68,7 @@ public class NuevoServicioController {
         boolean creado = service.crearServicio(servicio);
 
         if (creado) {
+            auditoriaService.registrar("CREAR", "SERVICIOS", "Servicio creado.");
             cerrar();
         } else {
             mostrarError("No se pudo crear el servicio. Verifique que el nombre no esté repetido.");

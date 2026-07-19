@@ -10,8 +10,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import pe.nuevasonrisa.util.AppLogger;
 
 public class BackupService {
+
+    private static final Logger LOGGER = AppLogger.getLogger(BackupService.class);
 
     public Resultado crearBackup(File destino) {
         return ejecutar("pg_dump.exe", List.of("--format=custom", "--no-owner", "--file=" + destino.getAbsolutePath()));
@@ -30,6 +34,7 @@ public class BackupService {
             Configuracion config = configuracion();
             Path ejecutable = resolverEjecutable(herramienta);
             if (ejecutable == null) {
+                LOGGER.warn("No se encontró el ejecutable de respaldo de PostgreSQL.");
                 return new Resultado(false, "No se encontro " + herramienta + ". Configure PG_BIN_DIR.");
             }
             List<String> comando = new ArrayList<>();
@@ -45,13 +50,18 @@ public class BackupService {
             Process proceso = builder.start();
             if (!proceso.waitFor(180, TimeUnit.SECONDS)) {
                 proceso.destroyForcibly();
+                LOGGER.error("La operación de respaldo excedió el tiempo máximo de 3 minutos.");
                 return new Resultado(false, "La operacion excedio el tiempo maximo de 3 minutos.");
             }
             String salida = new String(proceso.getInputStream().readAllBytes(), StandardCharsets.UTF_8).trim();
-            return proceso.exitValue() == 0
-                    ? new Resultado(true, "Operacion completada correctamente.")
-                    : new Resultado(false, salida.isBlank() ? "PostgreSQL devolvio un error." : salida);
+            if (proceso.exitValue() == 0) {
+                LOGGER.info("La operación de respaldo PostgreSQL finalizó correctamente.");
+                return new Resultado(true, "Operacion completada correctamente.");
+            }
+            LOGGER.error("La operación de respaldo PostgreSQL falló con código {}.", proceso.exitValue());
+            return new Resultado(false, salida.isBlank() ? "PostgreSQL devolvio un error." : salida);
         } catch (Exception e) {
+            LOGGER.error("No se pudo ejecutar la operación de respaldo PostgreSQL.");
             return new Resultado(false, "No se pudo ejecutar la operacion: " + e.getMessage());
         }
     }

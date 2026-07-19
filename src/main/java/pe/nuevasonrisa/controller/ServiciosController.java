@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import pe.nuevasonrisa.dao.impl.ServicioDAOImpl;
 import pe.nuevasonrisa.model.ServicioTabla;
 import pe.nuevasonrisa.service.ServicioService;
+import pe.nuevasonrisa.service.AuditoriaService;
 
 public class ServiciosController {
 
@@ -31,6 +32,7 @@ public class ServiciosController {
 
     private final ServicioService service =
             new ServicioService(new ServicioDAOImpl());
+    private final AuditoriaService auditoriaService = new AuditoriaService();
 
     @FXML
     public void initialize() {
@@ -107,7 +109,7 @@ public class ServiciosController {
             cargarServicios();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
     }
 
@@ -139,7 +141,7 @@ public class ServiciosController {
             cargarServicios();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
     }
 
@@ -158,6 +160,7 @@ public class ServiciosController {
 
         confirmacion.showAndWait().filter(ButtonType.OK::equals).ifPresent(respuesta -> {
             if (service.eliminarServicio(seleccionado.getId())) {
+                auditoriaService.registrar("ELIMINAR", "SERVICIOS", "Servicio ID " + seleccionado.getId() + " eliminado.");
                 cargarServicios();
                 mostrarInfo("Servicio eliminado", "El servicio se elimino correctamente.");
             } else {

@@ -12,6 +12,7 @@ import pe.nuevasonrisa.dao.impl.OdontologoDAOImpl;
 import pe.nuevasonrisa.model.OdontologoTabla;
 import pe.nuevasonrisa.service.HorarioDoctorService;
 import pe.nuevasonrisa.service.OdontologoService;
+import pe.nuevasonrisa.service.AuditoriaService;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class NuevoHorarioDoctorController {
 
     private final HorarioDoctorService horarioService =
             new HorarioDoctorService(new HorarioDoctorDAOImpl());
+    private final AuditoriaService auditoriaService = new AuditoriaService();
 
     @FXML
     public void initialize() {
@@ -82,6 +84,7 @@ public class NuevoHorarioDoctorController {
         );
 
         if (creado) {
+            auditoriaService.registrar("CREAR", "HORARIOS", "Horario creado para odontologo ID " + doctor.getId() + ".");
             cerrar();
         } else {
             mostrarError("No se pudo crear el horario. Verifique los datos e inténtelo nuevamente.");

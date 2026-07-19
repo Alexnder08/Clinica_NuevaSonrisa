@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import pe.nuevasonrisa.dao.impl.UsuarioGestionDAOImpl;
 import pe.nuevasonrisa.model.Usuario;
 import pe.nuevasonrisa.model.UsuarioTabla;
+import pe.nuevasonrisa.service.AuditoriaService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class EditarUsuarioController {
     @FXML private ComboBox<String> cbRol;
 
     private UsuarioTabla usuarioSeleccionado;
+    private final AuditoriaService auditoriaService = new AuditoriaService();
 
     @FXML
     public void initialize() {
@@ -115,6 +117,7 @@ public class EditarUsuarioController {
         boolean actualizado = new UsuarioGestionDAOImpl().actualizarUsuario(usuario);
 
         if (actualizado) {
+            auditoriaService.registrar("EDITAR", "USUARIOS", "Cuenta de usuario ID " + usuario.getId() + " actualizada.");
             cerrar();
         } else {
             mostrarError("No se pudo actualizar el usuario. Verifique que el usuario o el DNI no estén repetidos.");

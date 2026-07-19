@@ -45,7 +45,7 @@ public class HistorialAccesoDAOImpl
             ps.executeUpdate();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
     }
 
@@ -87,7 +87,7 @@ public class HistorialAccesoDAOImpl
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            pe.nuevasonrisa.util.AppLogger.error(getClass(), "Unhandled error while completing the operation.", e);
         }
 
         return lista;

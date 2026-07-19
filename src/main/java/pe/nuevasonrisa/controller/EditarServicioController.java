@@ -8,6 +8,7 @@ import pe.nuevasonrisa.dao.impl.ServicioDAOImpl;
 import pe.nuevasonrisa.model.Servicio;
 import pe.nuevasonrisa.model.ServicioTabla;
 import pe.nuevasonrisa.service.ServicioService;
+import pe.nuevasonrisa.service.AuditoriaService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class EditarServicioController {
 
     private final ServicioService service =
             new ServicioService(new ServicioDAOImpl());
+    private final AuditoriaService auditoriaService = new AuditoriaService();
 
     public void cargarServicio(ServicioTabla servicio) {
         idServicio = servicio.getId();
@@ -77,6 +79,7 @@ public class EditarServicioController {
         boolean actualizado = service.actualizarServicio(servicio);
 
         if (actualizado) {
+            auditoriaService.registrar("EDITAR", "SERVICIOS", "Servicio ID " + idServicio + " actualizado.");
             cerrar();
         } else {
             mostrarError("No se pudo actualizar el servicio. Verifique que el nombre no esté repetido.");

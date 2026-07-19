@@ -59,10 +59,7 @@ public class EditarPacienteController {
             auditoriaService.registrar(
                     "EDITAR",
                     "PACIENTES",
-                    "Paciente " +
-                            paciente.getNombre() + " " +
-                            paciente.getApellido() +
-                            " actualizado"
+                    "Paciente ID " + paciente.getId() + " actualizado."
             );
 
             cerrar();

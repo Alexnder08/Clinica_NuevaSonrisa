@@ -11,6 +11,7 @@ import pe.nuevasonrisa.dao.impl.ServicioDAOImpl;
 import pe.nuevasonrisa.model.ServicioTabla;
 import pe.nuevasonrisa.service.DoctorServicioService;
 import pe.nuevasonrisa.service.ServicioService;
+import pe.nuevasonrisa.service.AuditoriaService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class AsignarServiciosDoctorController {
             new DoctorServicioService(
                     new DoctorServicioDAOImpl()
             );
+    private final AuditoriaService auditoriaService = new AuditoriaService();
 
     private final List<CheckBox> checkBoxes =
             new ArrayList<>();
@@ -123,6 +125,7 @@ public class AsignarServiciosDoctorController {
         );
 
         if (ok) {
+            auditoriaService.registrar("ASIGNAR_SERVICIOS", "ODONTOLOGOS", "Servicios actualizados para odontologo ID " + doctorId + ".");
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
             alert.setContentText("Servicios actualizados correctamente.");
